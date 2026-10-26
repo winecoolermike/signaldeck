@@ -1,0 +1,73 @@
+# SignalDeck v1
+
+Personal, hobby-only stock signal dashboard. Dark-mode, one card per ticker, built as a **static site**
+(`site/index.html` + `style.css` + `app.js`) that reads a generated **`site/data.json`**.
+
+> **Not financial advice — for personal education only.** Signals are simple mechanical rules on
+> Yahoo Finance data. They describe the current state of price; they do not predict it.
+
+## Layout
+```
+config.json          tickers, timeframes, weights, options settings  <- edit this
+build_data.py        fetches data (yfinance) and writes site/data.json
+site/                static website (deploy this folder)
+screenshot.py        headless Playwright screenshot of the local site
+.github/workflows/refresh.yml   optional scheduled rebuild + GitHub Pages publish
+```
+
+## Setup & refresh
+```bash
+cd /workspace/signaldeck
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt            # + `pip install playwright && python -m playwright install chromium` for screenshots
+python build_data.py                       # refresh data -> site/data.json (~10-20 s)
+python -m http.server 8765 -d site         # open http://localhost:8765
+python screenshot.py                       # -> screenshot.png (site must be served)
+```
+The page must be served over HTTP (opening index.html as a file blocks `fetch("data.json")`).
+
+## Editing tickers
+Edit `"tickers"` in `config.json`, then rerun `python build_data.py`. Timeframe weights, indicator
+weights, the bias threshold and the options scan window (`max_dte`, strikes considered) live there too.
+
+## Data
+* Source: Yahoo Finance via `yfinance` (unofficial; quotes may be ~15 min delayed; may break or rate-limit).
+* History limits: 1m ≈ last 7 days, 5m/15m/30m ≈ 60 days, 60m ≈ 730 days, daily 2 years.
+* Regular-session bars only. When the market is closed, everything reflects the last session; each card shows its timestamp.
+* Missing values are `null` in JSON and `—` on the page. Nothing is fabricated or interpolated.
+* A ticker that returns no history gets a "No data available" card.
+
+## Rules (also on the page under "How signals work")
+**Per timeframe** (Main = daily, 60m, 30m, 15m, 5m, 1m) — votes of +1 / −1 / 0:
+
+| Component | Rule | Weight |
+|---|---|---|
+| EMA cross | EMA20 > EMA50 → +1 else −1 | 0.30 |
+| Long trend | Close > SMA200 (same timeframe) → +1 else −1 | 0.30 |
+| RSI(14, Wilder) | > 55 → +1, < 45 → −1, else 0 | 0.20 |
+| MACD(12,26,9) | histogram > 0 → +1, < 0 → −1 | 0.20 |
+
+Score `s = Σ w·vote / Σ w(available)` ∈ [−1, 1]. Components lacking bars (EMA 50, SMA200 200, RSI 30, MACD 35) are skipped and weights renormalised (listed under "Data notes").
+Bias: `s ≥ 0.25` CALL, `s ≤ −0.25` PUT, else NEUT. Confidence: CALL/PUT `50 + 50|s|`; NEUT `50 + 50(1 − |s|/0.25)`.
+ADX(14) tag per row: L < 20 ≤ OK < 25 ≤ H < 40 ≤ V.H (informational).
+
+**Total** = weighted mean of timeframe scores (daily .30, 60m .20, 30m .15, 15m .15, 5m .10, 1m .10). Trend label = Bullish/Bearish/Neutral, "Trend ~X%" = |Total|·100.
+
+**Main daily score** = `50 + 50·s_daily` (≥70 Strong CALL, 58–69 Moderate CALL, 43–57 Neutral, 31–42 Moderate PUT, ≤30 Strong PUT).
+
+**Levels** (daily ATR14 = A, last close C; direction = sign of Total):
+long — main entry C−0.5A, extended entry min(C−A, 10d low), main exit C+A, extended exit max(C+2A, 20d high);
+short — main entry C+0.5A, extended entry max(C+A, 10d high), main exit C−A, extended exit min(C−2A, 20d low).
+
+**Trade quality** = 100·(0.4·agreement + 0.3·min(ADX_daily/40,1) + 0.3·liquidity), agreement = |Σ w·sign(bias)|/Σ w,
+liquidity = max(0, 1 − avg relative spread/0.20) over best OTM call+put of the 3 nearest expiries. <30 Poor, 30–54 Fair, 55–74 Good, ≥75 Excellent.
+
+**Options "best"**: for each expiry ≤ 35 DTE, among the 3 nearest OTM strikes keep bid>0, ask>0 and (OI>0 or volume>0); choose the
+tightest relative spread `(ask−bid)/mid`, ties → nearest strike. Tabs: 0 = nearest expiry, 3D = 0–3 DTE, 7D = 0–7, 1W = 4–10, 21D = 8–21, 30D = 22–35 (max 3 expiries each). DTE is calendar days from the build date.
+
+## Hosting (recommended: GitHub Pages + GitHub Actions, free)
+1. Create a GitHub repo (public for free Pages; private needs a paid plan for Pages), push this folder.
+2. Settings → Pages → Source: **GitHub Actions**.
+3. `.github/workflows/refresh.yml` rebuilds `data.json` on every push to `main`, every 30 min during US market hours on weekdays plus once after close, and publishes `site/`. Run it manually via "Run workflow".
+Notes: GitHub cron is best-effort (can run minutes late); Yahoo may occasionally rate-limit cloud IPs — if the build fails or returns mostly empty data, the workflow deploys the last committed `site/data.json` instead of a broken page.
+Alternative: Cloudflare Pages / Netlify can host `site/`, but still need a scheduler (e.g. the same Action) to rebuild data.

@@ -1,0 +1,14 @@
+{
+  "tickers": ["SPCX", "AMT", "CCI", "SBAC", "VZ", "T", "TMUS"],
+  "timeframes": [
+    {"key": "Main", "label": "Main (1D)", "interval": "1d",  "period": "2y",   "weight": 0.30},
+    {"key": "60m",  "label": "60m",       "interval": "60m", "period": "730d", "weight": 0.20},
+    {"key": "30m",  "label": "30m",       "interval": "30m", "period": "60d",  "weight": 0.15},
+    {"key": "15m",  "label": "15m",       "interval": "15m", "period": "60d",  "weight": 0.15},
+    {"key": "5m",   "label": "5m",        "interval": "5m",  "period": "60d",  "weight": 0.10},
+    {"key": "1m",   "label": "1m",        "interval": "1m",  "period": "7d",   "weight": 0.10}
+  ],
+  "indicator_weights": {"ema_cross": 0.30, "sma200": 0.30, "rsi": 0.20, "macd": 0.20},
+  "bias_threshold": 0.25,
+  "options": {"max_dte": 35, "otm_strikes_considered": 3, "max_expiries_per_tab": 3}
+}

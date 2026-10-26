@@ -1,0 +1,2590 @@
+{
+ "generated_at": "2026-10-25T15:48:41-07:00",
+ "dte_reference_date": "2026-10-25",
+ "source": "Yahoo Finance via yfinance 1.7.0 (unofficial, may be delayed)",
+ "config": {
+  "tickers": [
+   "SPCX",
+   "AMT",
+   "CCI",
+   "SBAC",
+   "VZ",
+   "T",
+   "TMUS"
+  ],
+  "timeframes": [
+   {
+    "key": "Main",
+    "label": "Main (1D)",
+    "interval": "1d",
+    "period": "2y",
+    "weight": 0.3
+   },
+   {
+    "key": "60m",
+    "label": "60m",
+    "interval": "60m",
+    "period": "730d",
+    "weight": 0.2
+   },
+   {
+    "key": "30m",
+    "label": "30m",
+    "interval": "30m",
+    "period": "60d",
+    "weight": 0.15
+   },
+   {
+    "key": "15m",
+    "label": "15m",
+    "interval": "15m",
+    "period": "60d",
+    "weight": 0.15
+   },
+   {
+    "key": "5m",
+    "label": "5m",
+    "interval": "5m",
+    "period": "60d",
+    "weight": 0.1
+   },
+   {
+    "key": "1m",
+    "label": "1m",
+    "interval": "1m",
+    "period": "7d",
+    "weight": 0.1
+   }
+  ],
+  "indicator_weights": {
+   "ema_cross": 0.3,
+   "sma200": 0.3,
+   "rsi": 0.2,
+   "macd": 0.2
+  },
+  "bias_threshold": 0.25,
+  "options": {
+   "max_dte": 35,
+   "otm_strikes_considered": 3,
+   "max_expiries_per_tab": 3
+  }
+ },
+ "tickers": [
+  {
+   "ticker": "SPCX",
+   "status": "ok",
+   "notes": [
+    "Main: only 93 bars, skipped sma200 (weights renormalised)"
+   ],
+   "name": "Space Exploration Technologies Corp.",
+   "exchange": "NasdaqGS",
+   "market_cap": 2003071270912,
+   "price": {
+    "last": 147.49,
+    "prev_close": 144.75,
+    "change": 2.74,
+    "change_pct": 1.89,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 147.5778,
+    "post_market_time": "2026-10-23T16:59:59-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 93,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": 0.143,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 152.4561,
+       "ema50": 149.9078
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 46.7
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -1.7188
+      }
+     },
+     "missing": [
+      "sma200"
+     ],
+     "adx": 20.4,
+     "adx_label": "OK",
+     "bias": "NEUT",
+     "confidence": 71
+    },
+    "60m": {
+     "bars": 649,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 148.9786,
+       "ema50": 150.8403
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 154.0565
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 44.9
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.349
+      }
+     },
+     "missing": [],
+     "adx": 22.4,
+     "adx_label": "OK",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": -0.4,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 148.0357,
+       "ema50": 149.6534
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 156.9363
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 45.3
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.2176
+      }
+     },
+     "missing": [],
+     "adx": 24.2,
+     "adx_label": "OK",
+     "bias": "PUT",
+     "confidence": 70
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": -0.4,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 147.235,
+       "ema50": 148.4404
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 149.513
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 50.3
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0965
+      }
+     },
+     "missing": [],
+     "adx": 18.3,
+     "adx_label": "L",
+     "bias": "PUT",
+     "confidence": 70
+    },
+    "5m": {
+     "bars": 4680,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": -0.2,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 147.1056,
+       "ema50": 147.1614
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 150.4323
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 56.8
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.1484
+      }
+     },
+     "missing": [],
+     "adx": 19.5,
+     "adx_label": "L",
+     "bias": "NEUT",
+     "confidence": 60
+    },
+    "1m": {
+     "bars": 2730,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": 0.4,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 147.4503,
+       "ema50": 147.2153
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 147.0801
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 52.7
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0762
+      }
+     },
+     "missing": [],
+     "adx": 25.6,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 70
+    },
+    "Total": {
+     "score": -0.257,
+     "bias": "PUT",
+     "confidence": 63
+    }
+   },
+   "daily_score": 57,
+   "daily_label": "Neutral",
+   "trend": {
+    "label": "Bearish",
+    "strength_pct": 26,
+    "text": "Bearish (Trend ~26%)"
+   },
+   "levels": {
+    "main_entry": 151.54,
+    "ext_entry": 167.07,
+    "main_exit": 139.39,
+    "ext_exit": 131.29,
+    "direction": "short",
+    "atr14": 8.1,
+    "ref_close": 147.49,
+    "swing_high_10d": 167.07,
+    "swing_low_10d": 140.66,
+    "swing_high_20d": 176.42,
+    "swing_low_20d": 140.66,
+    "prior_day": {
+     "high": 154.26,
+     "low": 143.21,
+     "close": 144.75
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-10-26",
+      "dte": 1,
+      "call": {
+       "contract": "SPCX261026C00148000",
+       "strike": 148.0,
+       "bid": 1.89,
+       "ask": 1.98,
+       "last": 1.92,
+       "volume": 9837,
+       "oi": 494,
+       "iv": 0.5,
+       "rel_spread": 0.0465,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:58+00:00"
+      },
+      "put": {
+       "contract": "SPCX261026P00146000",
+       "strike": 146.0,
+       "bid": 1.5,
+       "ask": 1.57,
+       "last": 1.52,
+       "volume": 8749,
+       "oi": 2058,
+       "iv": 0.508,
+       "rel_spread": 0.0456,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:57+00:00"
+      }
+     },
+     {
+      "expiry": "2026-10-28",
+      "dte": 3,
+      "call": {
+       "contract": "SPCX261028C00149000",
+       "strike": 149.0,
+       "bid": 2.7,
+       "ask": 2.8,
+       "last": 2.71,
+       "volume": 1703,
+       "oi": 548,
+       "iv": 0.558,
+       "rel_spread": 0.0364,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:50+00:00"
+      },
+      "put": {
+       "contract": "SPCX261028P00145000",
+       "strike": 145.0,
+       "bid": 2.3,
+       "ask": 2.39,
+       "last": 2.44,
+       "volume": 2240,
+       "oi": 1097,
+       "iv": 0.564,
+       "rel_spread": 0.0384,
+       "otm_rank": 3,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:27+00:00"
+      }
+     },
+     {
+      "expiry": "2026-10-30",
+      "dte": 5,
+      "call": {
+       "contract": "SPCX261030C00148000",
+       "strike": 148.0,
+       "bid": 4.0,
+       "ask": 4.15,
+       "last": 4.05,
+       "volume": 3652,
+       "oi": 1338,
+       "iv": 0.573,
+       "rel_spread": 0.0368,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:58+00:00"
+      },
+      "put": {
+       "contract": "SPCX261030P00147000",
+       "strike": 147.0,
+       "bid": 3.95,
+       "ask": 4.2,
+       "last": 4.0,
+       "volume": 3055,
+       "oi": 3206,
+       "iv": 0.573,
+       "rel_spread": 0.0613,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:11+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-02",
+      "dte": 8,
+      "call": {
+       "contract": "SPCX261102C00150000",
+       "strike": 150.0,
+       "bid": 3.5,
+       "ask": 3.85,
+       "last": 3.62,
+       "volume": 306,
+       "oi": 793,
+       "iv": 0.518,
+       "rel_spread": 0.0952,
+       "otm_rank": 3,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:57:28+00:00"
+      },
+      "put": {
+       "contract": "SPCX261102P00147000",
+       "strike": 147.0,
+       "bid": 4.3,
+       "ask": 4.7,
+       "last": 5.0,
+       "volume": 55,
+       "oi": 98,
+       "iv": 0.514,
+       "rel_spread": 0.0889,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T18:49:02+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-04",
+      "dte": 10,
+      "call": {
+       "contract": "SPCX261104C00150000",
+       "strike": 150.0,
+       "bid": 3.8,
+       "ask": 4.8,
+       "last": 4.5,
+       "volume": 79,
+       "oi": 188,
+       "iv": 0.531,
+       "rel_spread": 0.2326,
+       "otm_rank": 3,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:41:00+00:00"
+      },
+      "put": {
+       "contract": "SPCX261104P00147000",
+       "strike": 147.0,
+       "bid": 4.55,
+       "ask": 5.75,
+       "last": 5.0,
+       "volume": 108,
+       "oi": 71,
+       "iv": 0.529,
+       "rel_spread": 0.233,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:53:38+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-06",
+      "dte": 12,
+      "call": {
+       "contract": "SPCX261106C00150000",
+       "strike": 150.0,
+       "bid": 5.0,
+       "ask": 5.25,
+       "last": 4.98,
+       "volume": 1773,
+       "oi": 2453,
+       "iv": 0.563,
+       "rel_spread": 0.0488,
+       "otm_rank": 3,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:58:45+00:00"
+      },
+      "put": {
+       "contract": "SPCX261106P00146000",
+       "strike": 146.0,
+       "bid": 5.25,
+       "ask": 5.55,
+       "last": 5.37,
+       "volume": 1617,
+       "oi": 965,
+       "iv": 0.554,
+       "rel_spread": 0.0556,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:43:54+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-13",
+      "dte": 19,
+      "call": {
+       "contract": "SPCX261113C00150000",
+       "strike": 150.0,
+       "bid": 6.3,
+       "ask": 6.6,
+       "last": 6.41,
+       "volume": 284,
+       "oi": 792,
+       "iv": 0.55,
+       "rel_spread": 0.0465,
+       "otm_rank": 3,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:58+00:00"
+      },
+      "put": {
+       "contract": "SPCX261113P00147000",
+       "strike": 147.0,
+       "bid": 7.0,
+       "ask": 7.35,
+       "last": 7.25,
+       "volume": 33,
+       "oi": 609,
+       "iv": 0.54,
+       "rel_spread": 0.0488,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:58:20+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "SPCX261120C00148000",
+       "strike": 148.0,
+       "bid": 8.35,
+       "ask": 8.65,
+       "last": 8.35,
+       "volume": 417,
+       "oi": 367,
+       "iv": 0.547,
+       "rel_spread": 0.0353,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:58:05+00:00"
+      },
+      "put": {
+       "contract": "SPCX261120P00146000",
+       "strike": 146.0,
+       "bid": 7.6,
+       "ask": 7.85,
+       "last": 7.64,
+       "volume": 858,
+       "oi": 483,
+       "iv": 0.531,
+       "rel_spread": 0.0324,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:19+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-27",
+      "dte": 33,
+      "call": {
+       "contract": "SPCX261127C00150000",
+       "strike": 150.0,
+       "bid": 8.15,
+       "ask": 8.45,
+       "last": 8.33,
+       "volume": 494,
+       "oi": 792,
+       "iv": 0.525,
+       "rel_spread": 0.0361,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:57+00:00"
+      },
+      "put": {
+       "contract": "SPCX261127P00145000",
+       "strike": 145.0,
+       "bid": 7.65,
+       "ask": 8.05,
+       "last": 8.0,
+       "volume": 425,
+       "oi": 1258,
+       "iv": 0.508,
+       "rel_spread": 0.051,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:57:32+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 55,
+    "label": "Good",
+    "agreement": 0.4,
+    "trend_strength": 0.51,
+    "options_liquidity": 0.779,
+    "avg_rel_spread": 0.0442
+   }
+  },
+  {
+   "ticker": "AMT",
+   "status": "ok",
+   "notes": [],
+   "name": "American Tower Corporation",
+   "exchange": "NYSE",
+   "market_cap": 88052473856,
+   "price": {
+    "last": 188.97,
+    "prev_close": 181.57,
+    "change": 7.4,
+    "change_pct": 4.08,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 189.266,
+    "post_market_time": "2026-10-23T16:51:42-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 501,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 177.8719,
+       "ema50": 175.1899
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 177.0747
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 65.7
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 1.3249
+      }
+     },
+     "missing": [],
+     "adx": 27.2,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "60m": {
+     "bars": 5076,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 185.14,
+       "ema50": 182.7097
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 174.1965
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 60.1
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.6862
+      }
+     },
+     "missing": [],
+     "adx": 29.1,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 0.6,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 186.8529,
+       "ema50": 184.6111
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 177.2196
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 57.6
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0637
+      }
+     },
+     "missing": [],
+     "adx": 29.3,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 80
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": 0.6,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 188.1068,
+       "ema50": 186.2598
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 183.0079
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 55.7
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.241
+      }
+     },
+     "missing": [],
+     "adx": 26.2,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 80
+    },
+    "5m": {
+     "bars": 4680,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 188.3888,
+       "ema50": 188.2756
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 183.9352
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 57.1
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.074
+      }
+     },
+     "missing": [],
+     "adx": 13.5,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "1m": {
+     "bars": 2706,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 188.6473,
+       "ema50": 188.4071
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 188.1252
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 60.5
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0693
+      }
+     },
+     "missing": [],
+     "adx": 23.3,
+     "adx_label": "OK",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "Total": {
+     "score": 0.88,
+     "bias": "CALL",
+     "confidence": 94
+    }
+   },
+   "daily_score": 100,
+   "daily_label": "Strong CALL",
+   "trend": {
+    "label": "Bullish",
+    "strength_pct": 88,
+    "text": "Bullish (Trend ~88%)"
+   },
+   "levels": {
+    "main_entry": 186.03,
+    "ext_entry": 176.42,
+    "main_exit": 194.85,
+    "ext_exit": 202.5,
+    "direction": "long",
+    "atr14": 5.876,
+    "ref_close": 188.97,
+    "swing_high_10d": 202.5,
+    "swing_low_10d": 176.42,
+    "swing_high_20d": 202.5,
+    "swing_low_20d": 160.3,
+    "prior_day": {
+     "high": 182.78,
+     "low": 177.18,
+     "close": 181.57
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "AMT261120C00190000",
+       "strike": 190.0,
+       "bid": 5.9,
+       "ask": 7.5,
+       "last": 6.9,
+       "volume": 104,
+       "oi": 1081,
+       "iv": 0.389,
+       "rel_spread": 0.2388,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:57:32+00:00"
+      },
+      "put": {
+       "contract": "AMT261120P00185000",
+       "strike": 185.0,
+       "bid": 4.3,
+       "ask": 5.4,
+       "last": 5.1,
+       "volume": 62,
+       "oi": 218,
+       "iv": 0.356,
+       "rel_spread": 0.2268,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:39:11+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 60,
+    "label": "Good",
+    "agreement": 1.0,
+    "trend_strength": 0.68,
+    "options_liquidity": 0.0,
+    "avg_rel_spread": 0.2328
+   }
+  },
+  {
+   "ticker": "CCI",
+   "status": "ok",
+   "notes": [],
+   "name": "Crown Castle Inc.",
+   "exchange": "NYSE",
+   "market_cap": 37568888832,
+   "price": {
+    "last": 85.97,
+    "prev_close": 78.83,
+    "change": 7.14,
+    "change_pct": 9.06,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 86.79,
+    "post_market_time": "2026-10-23T16:49:46-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 501,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 77.2212,
+       "ema50": 75.7833
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 82.2224
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 71.8
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.9934
+      }
+     },
+     "missing": [],
+     "adx": 39.4,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "60m": {
+     "bars": 5076,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 83.1466,
+       "ema50": 81.1658
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 73.8276
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 62.8
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.591
+      }
+     },
+     "missing": [],
+     "adx": 35.5,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 0.6,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 84.6362,
+       "ema50": 82.7144
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 77.0605
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 58.5
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0165
+      }
+     },
+     "missing": [],
+     "adx": 36.8,
+     "adx_label": "H",
+     "bias": "CALL",
+     "confidence": 80
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": 0.4,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 85.8838,
+       "ema50": 84.1997
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 81.363
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 53.7
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.352
+      }
+     },
+     "missing": [],
+     "adx": 24.2,
+     "adx_label": "OK",
+     "bias": "CALL",
+     "confidence": 70
+    },
+    "5m": {
+     "bars": 4680,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": -0.2,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 86.0548,
+       "ema50": 86.0673
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 82.3261
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 47.5
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0017
+      }
+     },
+     "missing": [],
+     "adx": 17.9,
+     "adx_label": "L",
+     "bias": "NEUT",
+     "confidence": 60
+    },
+    "1m": {
+     "bars": 2729,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": 0.2,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 85.9561,
+       "ema50": 85.9127
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 86.285
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 53.0
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0234
+      }
+     },
+     "missing": [],
+     "adx": 24.1,
+     "adx_label": "OK",
+     "bias": "NEUT",
+     "confidence": 60
+    },
+    "Total": {
+     "score": 0.65,
+     "bias": "CALL",
+     "confidence": 82
+    }
+   },
+   "daily_score": 100,
+   "daily_label": "Strong CALL",
+   "trend": {
+    "label": "Bullish",
+    "strength_pct": 65,
+    "text": "Bullish (Trend ~65%)"
+   },
+   "levels": {
+    "main_entry": 84.27,
+    "ext_entry": 76.29,
+    "main_exit": 89.37,
+    "ext_exit": 92.78,
+    "direction": "long",
+    "atr14": 3.404,
+    "ref_close": 85.97,
+    "swing_high_10d": 91.45,
+    "swing_low_10d": 76.29,
+    "swing_high_20d": 91.45,
+    "swing_low_20d": 65.32,
+    "prior_day": {
+     "high": 80.4,
+     "low": 76.29,
+     "close": 78.83
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "CCI261120C00090000",
+       "strike": 90.0,
+       "bid": 1.75,
+       "ask": 2.2,
+       "last": 1.95,
+       "volume": 612,
+       "oi": 1073,
+       "iv": 0.407,
+       "rel_spread": 0.2278,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:55+00:00"
+      },
+      "put": {
+       "contract": "CCI261120P00085000",
+       "strike": 85.0,
+       "bid": 2.6,
+       "ask": 3.1,
+       "last": 2.8,
+       "volume": 483,
+       "oi": 4,
+       "iv": 0.385,
+       "rel_spread": 0.1754,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:58:21+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 62,
+    "label": "Good",
+    "agreement": 0.8,
+    "trend_strength": 0.985,
+    "options_liquidity": 0.0,
+    "avg_rel_spread": 0.2016
+   }
+  },
+  {
+   "ticker": "SBAC",
+   "status": "ok",
+   "notes": [],
+   "name": "SBA Communications Corporation",
+   "exchange": "NasdaqGS",
+   "market_cap": 19599777792,
+   "price": {
+    "last": 184.75,
+    "prev_close": 178.39,
+    "change": 6.36,
+    "change_pct": 3.57,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 184.75,
+    "post_market_time": "2026-10-23T14:27:42-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 501,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": -0.2,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 177.8348,
+       "ema50": 178.7982
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 190.3054
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 57.7
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 1.0596
+      }
+     },
+     "missing": [],
+     "adx": 27.3,
+     "adx_label": "H",
+     "bias": "NEUT",
+     "confidence": 60
+    },
+    "60m": {
+     "bars": 5077,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 181.5422,
+       "ema50": 180.6834
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 174.4206
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 55.7
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.7291
+      }
+     },
+     "missing": [],
+     "adx": 24.2,
+     "adx_label": "OK",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 0.4,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 182.7984,
+       "ema50": 181.5677
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 177.3474
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 54.8
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.014
+      }
+     },
+     "missing": [],
+     "adx": 19.4,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 70
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": 0.4,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 183.7993,
+       "ema50": 182.3406
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 181.8761
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 54.3
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.2111
+      }
+     },
+     "missing": [],
+     "adx": 12.2,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 70
+    },
+    "5m": {
+     "bars": 4641,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": 0.8,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 184.0363,
+       "ema50": 183.9377
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 180.1102
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 54.9
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0862
+      }
+     },
+     "missing": [],
+     "adx": 15.5,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 90
+    },
+    "1m": {
+     "bars": 2201,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 184.4066,
+       "ema50": 184.0618
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 183.5593
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 58.5
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0675
+      }
+     },
+     "missing": [],
+     "adx": 23.3,
+     "adx_label": "OK",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "Total": {
+     "score": 0.44,
+     "bias": "CALL",
+     "confidence": 72
+    }
+   },
+   "daily_score": 40,
+   "daily_label": "Moderate PUT",
+   "trend": {
+    "label": "Bullish",
+    "strength_pct": 44,
+    "text": "Bullish (Trend ~44%)"
+   },
+   "levels": {
+    "main_entry": 181.29,
+    "ext_entry": 172.1,
+    "main_exit": 191.67,
+    "ext_exit": 198.59,
+    "direction": "long",
+    "atr14": 6.921,
+    "ref_close": 184.75,
+    "swing_high_10d": 196.84,
+    "swing_low_10d": 172.1,
+    "swing_high_20d": 196.84,
+    "swing_low_20d": 156.6,
+    "prior_day": {
+     "high": 178.99,
+     "low": 172.1,
+     "close": 178.39
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "SBAC261120C00185000",
+       "strike": 185.0,
+       "bid": 6.6,
+       "ask": 10.2,
+       "last": 8.04,
+       "volume": 7,
+       "oi": 4,
+       "iv": 0.515,
+       "rel_spread": 0.4286,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:13+00:00"
+      },
+      "put": {
+       "contract": "SBAC261120P00180000",
+       "strike": 180.0,
+       "bid": 4.8,
+       "ask": 8.5,
+       "last": 6.85,
+       "volume": 1,
+       "oi": 43,
+       "iv": 0.542,
+       "rel_spread": 0.5564,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-21T13:42:41+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 48,
+    "label": "Fair",
+    "agreement": 0.7,
+    "trend_strength": 0.682,
+    "options_liquidity": 0.0,
+    "avg_rel_spread": 0.4925
+   }
+  },
+  {
+   "ticker": "VZ",
+   "status": "ok",
+   "notes": [],
+   "name": "Verizon Communications Inc.",
+   "exchange": "NYSE",
+   "market_cap": 185552257024,
+   "price": {
+    "last": 44.66,
+    "prev_close": 45.2,
+    "change": -0.54,
+    "change_pct": -1.19,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 44.6,
+    "post_market_time": "2026-10-23T16:59:44-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 501,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": -0.4,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 45.1317,
+       "ema50": 46.2765
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 46.7243
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 45.4
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.1503
+      }
+     },
+     "missing": [],
+     "adx": 28.8,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 70
+    },
+    "60m": {
+     "bars": 5076,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 0.2,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 44.4461,
+       "ema50": 44.3734
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 45.8372
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 53.2
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0109
+      }
+     },
+     "missing": [],
+     "adx": 14.7,
+     "adx_label": "L",
+     "bias": "NEUT",
+     "confidence": 60
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": 0.4,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 44.4964,
+       "ema50": 44.3888
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 44.451
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 53.4
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.025
+      }
+     },
+     "missing": [],
+     "adx": 18.0,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 70
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": 0.8,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 44.5268,
+       "ema50": 44.4625
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 44.4168
+      },
+      "rsi": {
+       "vote": 0,
+       "rsi": 53.4
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0051
+      }
+     },
+     "missing": [],
+     "adx": 14.6,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 90
+    },
+    "5m": {
+     "bars": 4680,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": 1.0,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 44.5163,
+       "ema50": 44.5057
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 44.3248
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 55.1
+      },
+      "macd": {
+       "vote": 1,
+       "hist": 0.0175
+      }
+     },
+     "missing": [],
+     "adx": 9.1,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 100
+    },
+    "1m": {
+     "bars": 2730,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": 0.6,
+     "components": {
+      "ema_cross": {
+       "vote": 1,
+       "ema20": 44.563,
+       "ema50": 44.5311
+      },
+      "sma200": {
+       "vote": 1,
+       "sma200": 44.5184
+      },
+      "rsi": {
+       "vote": 1,
+       "rsi": 55.3
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0052
+      }
+     },
+     "missing": [],
+     "adx": 19.5,
+     "adx_label": "L",
+     "bias": "CALL",
+     "confidence": 80
+    },
+    "Total": {
+     "score": 0.26,
+     "bias": "CALL",
+     "confidence": 63
+    }
+   },
+   "daily_score": 30,
+   "daily_label": "Strong PUT",
+   "trend": {
+    "label": "Bullish",
+    "strength_pct": 26,
+    "text": "Bullish (Trend ~26%)"
+   },
+   "levels": {
+    "main_entry": 44.04,
+    "ext_entry": 41.87,
+    "main_exit": 45.9,
+    "ext_exit": 47.14,
+    "direction": "long",
+    "atr14": 1.241,
+    "ref_close": 44.66,
+    "swing_high_10d": 45.58,
+    "swing_low_10d": 41.87,
+    "swing_high_20d": 47.1,
+    "swing_low_20d": 40.81,
+    "prior_day": {
+     "high": 45.29,
+     "low": 43.78,
+     "close": 45.2
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-10-30",
+      "dte": 5,
+      "call": {
+       "contract": "VZ261030C00045500",
+       "strike": 45.5,
+       "bid": 0.58,
+       "ask": 0.7,
+       "last": 0.63,
+       "volume": 1757,
+       "oi": 541,
+       "iv": 0.463,
+       "rel_spread": 0.1875,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:03+00:00"
+      },
+      "put": {
+       "contract": "VZ261030P00044500",
+       "strike": 44.5,
+       "bid": 0.88,
+       "ask": 1.05,
+       "last": 0.94,
+       "volume": 793,
+       "oi": 402,
+       "iv": 0.495,
+       "rel_spread": 0.1762,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:16+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-06",
+      "dte": 12,
+      "call": {
+       "contract": "VZ261106C00045000",
+       "strike": 45.0,
+       "bid": 0.91,
+       "ask": 1.22,
+       "last": 1.05,
+       "volume": 3342,
+       "oi": 4178,
+       "iv": 0.41,
+       "rel_spread": 0.2911,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:36+00:00"
+      },
+      "put": {
+       "contract": "VZ261106P00044000",
+       "strike": 44.0,
+       "bid": 0.78,
+       "ask": 1.23,
+       "last": 1.13,
+       "volume": 84,
+       "oi": 166,
+       "iv": 0.461,
+       "rel_spread": 0.4478,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:01+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-13",
+      "dte": 19,
+      "call": {
+       "contract": "VZ261113C00046000",
+       "strike": 46.0,
+       "bid": 0.66,
+       "ask": 0.85,
+       "last": 0.68,
+       "volume": 208,
+       "oi": 779,
+       "iv": 0.335,
+       "rel_spread": 0.2517,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:54:41+00:00"
+      },
+      "put": {
+       "contract": "VZ261113P00044000",
+       "strike": 44.0,
+       "bid": 0.88,
+       "ask": 1.35,
+       "last": 1.17,
+       "volume": 160,
+       "oi": 266,
+       "iv": 0.401,
+       "rel_spread": 0.4215,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:01+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "VZ261120C00045000",
+       "strike": 45.0,
+       "bid": 1.23,
+       "ask": 1.36,
+       "last": 1.3,
+       "volume": 3619,
+       "oi": 8008,
+       "iv": 0.313,
+       "rel_spread": 0.1004,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:50+00:00"
+      },
+      "put": {
+       "contract": "VZ261120P00044500",
+       "strike": 44.5,
+       "bid": 1.26,
+       "ask": 1.81,
+       "last": 1.39,
+       "volume": 98,
+       "oi": 850,
+       "iv": 0.391,
+       "rel_spread": 0.3583,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:53:06+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-27",
+      "dte": 33,
+      "call": {
+       "contract": "VZ261127C00046000",
+       "strike": 46.0,
+       "bid": 0.65,
+       "ask": 1.81,
+       "last": 0.99,
+       "volume": 29,
+       "oi": 448,
+       "iv": 0.439,
+       "rel_spread": 0.9431,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:16:48+00:00"
+      },
+      "put": {
+       "contract": "VZ261127P00044000",
+       "strike": 44.0,
+       "bid": 0.81,
+       "ask": 1.8,
+       "last": 1.3,
+       "volume": 38,
+       "oi": 48,
+       "iv": 0.392,
+       "rel_spread": 0.7586,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T18:49:57+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 30,
+    "label": "Fair",
+    "agreement": 0.2,
+    "trend_strength": 0.72,
+    "options_liquidity": 0.0,
+    "avg_rel_spread": 0.296
+   }
+  },
+  {
+   "ticker": "T",
+   "status": "ok",
+   "notes": [],
+   "name": "AT&T Inc.",
+   "exchange": "NYSE",
+   "market_cap": 140994396160,
+   "price": {
+    "last": 20.93,
+    "prev_close": 22.74,
+    "change": -1.81,
+    "change_pct": -7.96,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 20.9685,
+    "post_market_time": "2026-10-23T16:59:46-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 501,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 23.3678,
+       "ema50": 24.0399
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 25.0555
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 31.1
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.1837
+      }
+     },
+     "missing": [],
+     "adx": 26.5,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "60m": {
+     "bars": 5076,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 21.951,
+       "ema50": 22.5478
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 24.1725
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 25.1
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.1185
+      }
+     },
+     "missing": [],
+     "adx": 29.7,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 21.6145,
+       "ema50": 22.1558
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 23.2405
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 21.0
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0667
+      }
+     },
+     "missing": [],
+     "adx": 31.8,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 21.3174,
+       "ema50": 21.7476
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 22.8563
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 21.2
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0015
+      }
+     },
+     "missing": [],
+     "adx": 46.9,
+     "adx_label": "V.H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "5m": {
+     "bars": 4680,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 21.0895,
+       "ema50": 21.2665
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 21.9706
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 27.8
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0007
+      }
+     },
+     "missing": [],
+     "adx": 48.6,
+     "adx_label": "V.H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "1m": {
+     "bars": 2730,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 21.0077,
+       "ema50": 21.044
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 21.2089
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 34.8
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.01
+      }
+     },
+     "missing": [],
+     "adx": 25.6,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "Total": {
+     "score": -1.0,
+     "bias": "PUT",
+     "confidence": 100
+    }
+   },
+   "daily_score": 0,
+   "daily_label": "Strong PUT",
+   "trend": {
+    "label": "Bearish",
+    "strength_pct": 100,
+    "text": "Bearish (Trend ~100%)"
+   },
+   "levels": {
+    "main_entry": 21.33,
+    "ext_entry": 23.85,
+    "main_exit": 20.14,
+    "ext_exit": 19.35,
+    "direction": "short",
+    "atr14": 0.792,
+    "ref_close": 20.93,
+    "swing_high_10d": 23.85,
+    "swing_low_10d": 20.92,
+    "swing_high_20d": 25.4,
+    "swing_low_20d": 20.92,
+    "prior_day": {
+     "high": 22.91,
+     "low": 22.03,
+     "close": 22.74
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-10-30",
+      "dte": 5,
+      "call": {
+       "contract": "T261030C00021000",
+       "strike": 21.0,
+       "bid": 0.34,
+       "ask": 0.37,
+       "last": 0.35,
+       "volume": 1755,
+       "oi": 251,
+       "iv": 0.377,
+       "rel_spread": 0.0845,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:50+00:00"
+      },
+      "put": {
+       "contract": "T261030P00020500",
+       "strike": 20.5,
+       "bid": 0.18,
+       "ask": 0.2,
+       "last": 0.19,
+       "volume": 860,
+       "oi": 159,
+       "iv": 0.355,
+       "rel_spread": 0.1053,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:50+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-06",
+      "dte": 12,
+      "call": {
+       "contract": "T261106C00021000",
+       "strike": 21.0,
+       "bid": 0.44,
+       "ask": 0.5,
+       "last": 0.5,
+       "volume": 1193,
+       "oi": 30,
+       "iv": 0.338,
+       "rel_spread": 0.1277,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:55+00:00"
+      },
+      "put": {
+       "contract": "T261106P00020500",
+       "strike": 20.5,
+       "bid": 0.26,
+       "ask": 0.38,
+       "last": 0.31,
+       "volume": 271,
+       "oi": 61,
+       "iv": 0.365,
+       "rel_spread": 0.375,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:22+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-13",
+      "dte": 19,
+      "call": {
+       "contract": "T261113C00021500",
+       "strike": 21.5,
+       "bid": 0.36,
+       "ask": 0.4,
+       "last": 0.4,
+       "volume": 408,
+       "oi": 31,
+       "iv": 0.326,
+       "rel_spread": 0.1053,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:55:59+00:00"
+      },
+      "put": {
+       "contract": "T261113P00020500",
+       "strike": 20.5,
+       "bid": 0.3,
+       "ask": 0.4,
+       "last": 0.32,
+       "volume": 74,
+       "oi": 94,
+       "iv": 0.305,
+       "rel_spread": 0.2857,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:47:06+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "T261120C00021000",
+       "strike": 21.0,
+       "bid": 0.64,
+       "ask": 0.73,
+       "last": 0.68,
+       "volume": 434,
+       "oi": 221,
+       "iv": 0.336,
+       "rel_spread": 0.1314,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:33+00:00"
+      },
+      "put": {
+       "contract": "T261120P00020500",
+       "strike": 20.5,
+       "bid": 0.43,
+       "ask": 0.49,
+       "last": 0.43,
+       "volume": 611,
+       "oi": 616,
+       "iv": 0.305,
+       "rel_spread": 0.1304,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:22+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-27",
+      "dte": 33,
+      "call": {
+       "contract": "T261127C00021000",
+       "strike": 21.0,
+       "bid": 0.72,
+       "ask": 0.9,
+       "last": 0.75,
+       "volume": 84,
+       "oi": 44,
+       "iv": 0.366,
+       "rel_spread": 0.2222,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:57:38+00:00"
+      },
+      "put": {
+       "contract": "T261127P00020000",
+       "strike": 20.0,
+       "bid": 0.22,
+       "ask": 0.39,
+       "last": 0.28,
+       "volume": 24,
+       "oi": 272,
+       "iv": 0.308,
+       "rel_spread": 0.5574,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T18:58:11+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 63,
+    "label": "Good",
+    "agreement": 1.0,
+    "trend_strength": 0.662,
+    "options_liquidity": 0.097,
+    "avg_rel_spread": 0.1806
+   }
+  },
+  {
+   "ticker": "TMUS",
+   "status": "ok",
+   "notes": [],
+   "name": "T-Mobile US, Inc.",
+   "exchange": "NasdaqGS",
+   "market_cap": 157189292032,
+   "price": {
+    "last": 146.54,
+    "prev_close": 158.79,
+    "change": -12.25,
+    "change_pct": -7.71,
+    "session_date": "2026-10-23",
+    "as_of": "2026-10-23T16:00:00-04:00",
+    "post_market": 146.96,
+    "post_market_time": "2026-10-23T16:59:25-07:00"
+   },
+   "signals": {
+    "Main": {
+     "bars": 501,
+     "last_bar": "2026-10-23T00:00:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 159.3323,
+       "ema50": 167.1858
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 188.1219
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 35.5
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.223
+      }
+     },
+     "missing": [],
+     "adx": 23.0,
+     "adx_label": "OK",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "60m": {
+     "bars": 5077,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 152.9462,
+       "ema50": 155.3187
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 162.2776
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 27.4
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -1.0087
+      }
+     },
+     "missing": [],
+     "adx": 28.7,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "30m": {
+     "bars": 780,
+     "last_bar": "2026-10-23T15:30:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 151.3456,
+       "ema50": 153.9641
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 158.4809
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 20.3
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.627
+      }
+     },
+     "missing": [],
+     "adx": 42.8,
+     "adx_label": "V.H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "15m": {
+     "bars": 1560,
+     "last_bar": "2026-10-23T15:45:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 149.4235,
+       "ema50": 152.137
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 156.4703
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 18.8
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.044
+      }
+     },
+     "missing": [],
+     "adx": 55.8,
+     "adx_label": "V.H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "5m": {
+     "bars": 4680,
+     "last_bar": "2026-10-23T15:55:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 147.6811,
+       "ema50": 149.0313
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 153.8695
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 24.6
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0226
+      }
+     },
+     "missing": [],
+     "adx": 50.2,
+     "adx_label": "V.H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "1m": {
+     "bars": 2727,
+     "last_bar": "2026-10-23T15:59:00-04:00",
+     "score": -1.0,
+     "components": {
+      "ema_cross": {
+       "vote": -1,
+       "ema20": 146.9091,
+       "ema50": 147.2458
+      },
+      "sma200": {
+       "vote": -1,
+       "sma200": 148.579
+      },
+      "rsi": {
+       "vote": -1,
+       "rsi": 36.5
+      },
+      "macd": {
+       "vote": -1,
+       "hist": -0.0635
+      }
+     },
+     "missing": [],
+     "adx": 35.6,
+     "adx_label": "H",
+     "bias": "PUT",
+     "confidence": 100
+    },
+    "Total": {
+     "score": -1.0,
+     "bias": "PUT",
+     "confidence": 100
+    }
+   },
+   "daily_score": 0,
+   "daily_label": "Strong PUT",
+   "trend": {
+    "label": "Bearish",
+    "strength_pct": 100,
+    "text": "Bearish (Trend ~100%)"
+   },
+   "levels": {
+    "main_entry": 149.47,
+    "ext_entry": 163.17,
+    "main_exit": 140.69,
+    "ext_exit": 134.83,
+    "direction": "short",
+    "atr14": 5.855,
+    "ref_close": 146.54,
+    "swing_high_10d": 163.17,
+    "swing_low_10d": 146.32,
+    "swing_high_20d": 171.8,
+    "swing_low_20d": 146.32,
+    "prior_day": {
+     "high": 159.41,
+     "low": 155.44,
+     "close": 158.79
+    }
+   },
+   "options": {
+    "expiries": [
+     {
+      "expiry": "2026-10-30",
+      "dte": 5,
+      "call": {
+       "contract": "TMUS261030C00147000",
+       "strike": 147.0,
+       "bid": 4.1,
+       "ask": 4.6,
+       "last": 4.2,
+       "volume": 26,
+       "oi": 0,
+       "iv": 0.61,
+       "rel_spread": 0.1149,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:58:57+00:00"
+      },
+      "put": {
+       "contract": "TMUS261030P00145000",
+       "strike": 145.0,
+       "bid": 3.3,
+       "ask": 4.0,
+       "last": 3.58,
+       "volume": 168,
+       "oi": 240,
+       "iv": 0.587,
+       "rel_spread": 0.1918,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:58:51+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-06",
+      "dte": 12,
+      "call": {
+       "contract": "TMUS261106C00150000",
+       "strike": 150.0,
+       "bid": 3.6,
+       "ask": 4.2,
+       "last": 4.0,
+       "volume": 123,
+       "oi": 205,
+       "iv": 0.517,
+       "rel_spread": 0.1538,
+       "otm_rank": 3,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:55:53+00:00"
+      },
+      "put": {
+       "contract": "TMUS261106P00146000",
+       "strike": 146.0,
+       "bid": 4.4,
+       "ask": 5.9,
+       "last": 4.57,
+       "volume": 1,
+       "oi": 0,
+       "iv": 0.56,
+       "rel_spread": 0.2913,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:17:43+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-13",
+      "dte": 19,
+      "call": {
+       "contract": "TMUS261113C00155000",
+       "strike": 155.0,
+       "bid": 2.75,
+       "ask": 4.2,
+       "last": 3.0,
+       "volume": 7,
+       "oi": 17,
+       "iv": 0.548,
+       "rel_spread": 0.4173,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:55:07+00:00"
+      },
+      "put": {
+       "contract": "TMUS261113P00145000",
+       "strike": 145.0,
+       "bid": 3.8,
+       "ask": 6.4,
+       "last": 4.77,
+       "volume": 28,
+       "oi": 52,
+       "iv": 0.525,
+       "rel_spread": 0.5098,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:43:20+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-20",
+      "dte": 26,
+      "call": {
+       "contract": "TMUS261120C00150000",
+       "strike": 150.0,
+       "bid": 5.0,
+       "ask": 5.6,
+       "last": 5.3,
+       "volume": 34,
+       "oi": 324,
+       "iv": 0.448,
+       "rel_spread": 0.1132,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:59:43+00:00"
+      },
+      "put": {
+       "contract": "TMUS261120P00146000",
+       "strike": 146.0,
+       "bid": 4.4,
+       "ask": 7.1,
+       "last": 4.71,
+       "volume": 1,
+       "oi": 52,
+       "iv": 0.464,
+       "rel_spread": 0.4696,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T16:36:14+00:00"
+      }
+     },
+     {
+      "expiry": "2026-11-27",
+      "dte": 33,
+      "call": {
+       "contract": "TMUS261127C00150000",
+       "strike": 150.0,
+       "bid": 4.6,
+       "ask": 7.7,
+       "last": 6.6,
+       "volume": 105,
+       "oi": 7,
+       "iv": 0.517,
+       "rel_spread": 0.5041,
+       "otm_rank": 1,
+       "eligible": true,
+       "last_trade": "2026-10-23T18:36:53+00:00"
+      },
+      "put": {
+       "contract": "TMUS261127P00140000",
+       "strike": 140.0,
+       "bid": 3.5,
+       "ask": 5.2,
+       "last": 4.3,
+       "volume": 41,
+       "oi": 28,
+       "iv": 0.462,
+       "rel_spread": 0.3908,
+       "otm_rank": 2,
+       "eligible": true,
+       "last_trade": "2026-10-23T19:13:07+00:00"
+      }
+     }
+    ]
+   },
+   "quality": {
+    "score": 57,
+    "label": "Good",
+    "agreement": 1.0,
+    "trend_strength": 0.575,
+    "options_liquidity": 0.0,
+    "avg_rel_spread": 0.2798
+   }
+  }
+ ]
+}

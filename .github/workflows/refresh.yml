@@ -1,0 +1,63 @@
+# Rebuilds site/data.json and publishes ./site to GitHub Pages.
+# If the data build fails or returns no usable data, the committed site/data.json is deployed instead.
+name: refresh-data
+on:
+  schedule:
+    - cron: "*/30 13-21 * * 1-5"   # every 30 min, 13:00-21:30 UTC Mon-Fri (covers US market hours in EDT and EST)
+    - cron: "15 22 * * 1-5"        # one post-close build (22:15 UTC)
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency: { group: pages, cancel-in-progress: false }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: Back up committed data.json
+        run: cp site/data.json "$RUNNER_TEMP/data.json.bak"
+      - name: Install requirements
+        id: install
+        continue-on-error: true
+        run: pip install -r requirements.txt
+      - name: Build data
+        id: build
+        if: steps.install.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 10
+        run: python build_data.py
+      - name: Validate data (fall back to committed data.json if bad)
+        run: |
+          python - <<'PY'
+          import json, os, shutil, sys
+          bak = os.path.join(os.environ["RUNNER_TEMP"], "data.json.bak")
+          ok = False
+          try:
+              d = json.load(open("site/data.json"))
+              t = d.get("tickers") or []
+              good = [x for x in t if x.get("status") == "ok"]
+              print(f"built {len(t)} tickers, {len(good)} ok")
+              ok = "${{ steps.build.outcome }}" == "success" and len(t) > 0 and len(good) >= max(1, len(t) // 2)
+          except Exception as e:
+              print("invalid data.json:", e)
+          if not ok:
+              print("::warning::Data build failed or incomplete; deploying last committed data.json")
+              shutil.copy(bak, "site/data.json")
+          PY
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SignalDeck</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="nfa">⚠ Not financial advice — for personal education only. Data from Yahoo Finance (unofficial, may be delayed or incomplete). Signals are mechanical rules, not predictions.</div>
+<header class="top">
+  <div class="brand"><span class="logo">◆</span> SignalDeck</div>
+  <nav><a href="#cards">Dashboard</a><a href="#how">How signals work</a></nav>
+  <div class="meta" id="meta">loading…</div>
+</header>
+<main id="cards" class="cards"></main>
+<section id="how" class="how">
+  <h2>How signals work</h2>
+  <p>Every number on this page is computed by <code>build_data.py</code> from Yahoo Finance data (via the open-source <code>yfinance</code> library). Nothing is estimated or filled in by hand — if a value can't be computed, it shows <b>—</b>. Rules are deliberately simple and fixed; they describe the current state of price, they do not predict it.</p>
+
+  <h3>1. Per-timeframe bias (rows Main, 60m, 30m, 15m, 5m, 1m)</h3>
+  <p>For each timeframe we download bars (regular session only) and take the most recent completed bar. Four indicators each cast a vote of +1 (bullish), −1 (bearish) or 0:</p>
+  <table class="rules">
+    <tr><th>Component</th><th>Rule</th><th>Weight</th></tr>
+    <tr><td>EMA trend cross</td><td>EMA(20) &gt; EMA(50) → +1, otherwise −1. EMA uses α = 2/(n+1).</td><td>30%</td></tr>
+    <tr><td>Long trend</td><td>Close &gt; SMA(200) of that timeframe → +1, otherwise −1.</td><td>30%</td></tr>
+    <tr><td>Momentum zone</td><td>RSI(14, Wilder) &gt; 55 → +1, &lt; 45 → −1, 45–55 → 0.</td><td>20%</td></tr>
+    <tr><td>MACD</td><td>MACD(12,26,9) histogram &gt; 0 → +1, &lt; 0 → −1.</td><td>20%</td></tr>
+  </table>
+  <p><b>Score</b> <i>s</i> = Σ(weight × vote) / Σ(weights of available components), so −1 ≤ <i>s</i> ≤ +1. A component needs enough bars (EMA cross 50, SMA200 200, RSI 30, MACD 35); if there aren't enough, it is skipped, the remaining weights are renormalised and the card lists it under "Data notes".</p>
+  <p><b>Bias</b>: <i>s</i> ≥ +0.25 → <span class="call">CALL</span>; <i>s</i> ≤ −0.25 → <span class="put">PUT</span>; otherwise <span class="neut">NEUT</span>.<br>
+  <b>Confidence</b>: CALL/PUT → 50 + 50·|<i>s</i>| (50–100%). NEUT → 50 + 50·(1 − |<i>s</i>|/0.25), i.e. 100% when the votes cancel exactly, ~50% when it's about to tip.</p>
+  <p><b>Trend-strength tag</b> next to each row is ADX(14, Wilder) on that timeframe: L &lt; 20 ≤ OK &lt; 25 ≤ H &lt; 40 ≤ V.H. It is informational and does not change the bias.</p>
+
+  <h3>2. Total row &amp; overall trend label</h3>
+  <p>Total score = weighted average of the timeframe scores: Main (daily) 30%, 60m 20%, 30m 15%, 15m 15%, 5m 10%, 1m 10% (renormalised if a timeframe is missing). Same bias/confidence thresholds as above. The trend label is Bullish / Bearish / Neutral from the Total bias and "Trend ~X%" = |Total score| × 100.</p>
+
+  <h3>3. Main daily signal score (0–100)</h3>
+  <p>Daily score = 50 + 50 × <i>s</i><sub>daily</sub>. Labels: ≥ 70 Strong CALL, 58–69 Moderate CALL, 43–57 Neutral, 31–42 Moderate PUT, ≤ 30 Strong PUT.</p>
+
+  <h3>4. Entry &amp; exit levels (daily bars)</h3>
+  <p>Direction follows the sign of the Total score (≥ 0 = long/CALL idea, &lt; 0 = short/PUT idea). ATR = ATR(14, Wilder) on daily bars; C = last daily close.</p>
+  <table class="rules">
+    <tr><th>Level</th><th>Long idea</th><th>Short idea</th></tr>
+    <tr><td>Main entry</td><td>C − 0.5·ATR (pullback)</td><td>C + 0.5·ATR (bounce)</td></tr>
+    <tr><td>Extended entry</td><td>lower of C − 1·ATR and 10-day swing low</td><td>higher of C + 1·ATR and 10-day swing high</td></tr>
+    <tr><td>Main exit (target)</td><td>C + 1·ATR</td><td>C − 1·ATR</td></tr>
+    <tr><td>Extended exit</td><td>higher of C + 2·ATR and 20-day swing high</td><td>lower of C − 2·ATR and 20-day swing low</td></tr>
+  </table>
+  <p>Prior-day high / low / close and ATR are shown for reference. Percentages next to levels are distance from C.</p>
+
+  <h3>5. Trade quality meter (0–100)</h3>
+  <p>Quality = 40% × timeframe agreement + 30% × trend strength + 30% × options liquidity, where</p>
+  <ul>
+    <li><b>Agreement</b> = |Σ w<sub>tf</sub>·sign(bias<sub>tf</sub>)| / Σ w<sub>tf</sub> (CALL = +1, PUT = −1, NEUT = 0). 1.0 = all timeframes point the same way.</li>
+    <li><b>Trend strength</b> = min(daily ADX / 40, 1).</li>
+    <li><b>Options liquidity</b> = max(0, 1 − avg relative spread / 20%), using the best OTM call &amp; put of the 3 nearest expiries. Relative spread = (ask − bid) / mid. No usable quotes → 0.</li>
+  </ul>
+  <p>Labels: &lt; 30 Poor, 30–54 Fair, 55–74 Good, ≥ 75 Excellent.</p>
+
+  <h3>6. Options panel — what "best" means</h3>
+  <p>For each expiry up to 35 days out, we look at the <b>3 nearest out-of-the-money strikes</b> (calls: strike &gt; last price, puts: strike &lt; last price). A contract is eligible only if bid &gt; 0, ask &gt; 0 and open interest or volume &gt; 0. The "best" is the eligible strike with the <b>tightest relative spread</b> (ties → nearest strike). DTE = calendar days from the build date to expiry.</p>
+  <p>Tabs filter expiries by DTE: <b>0</b> = nearest listed expiry (0DTE when one exists); <b>3D</b> = 0–3 days; <b>7D</b> = 0–7 days; <b>1W</b> = 4–10 days (roughly next week's expiry); <b>21D</b> = 8–21 days; <b>30D</b> = 22–35 days. Up to 3 expiries per tab are shown. Option quotes reflect the last session; weekend/after-hours bid/ask can be stale or wide.</p>
+
+  <h3>7. Data caveats</h3>
+  <ul>
+    <li>Yahoo Finance is unofficial and quotes may be delayed ~15 min; intraday history limits: 1m ≈ last 7 days, 5m/15m/30m ≈ 60 days, 60m ≈ 730 days.</li>
+    <li>When markets are closed, all values are from the most recent session (timestamp shown on each card).</li>
+    <li>Newly listed tickers may lack 200 daily bars, so the daily SMA200 vote is skipped.</li>
+  </ul>
+  <p class="nfa-inline">Not financial advice — for personal education only.</p>
+</section>
+<footer class="foot">SignalDeck v1 · static site + data.json · <span id="src"></span></footer>
+<script src="app.js"></script>
+</body>
+</html>
