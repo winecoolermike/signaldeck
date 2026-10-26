@@ -10,6 +10,7 @@ and shown as '—' on the site. Not financial advice.
 """
 import json, math, sys, datetime as dt, warnings, traceback
 from pathlib import Path
+from zoneinfo import ZoneInfo
 import numpy as np, pandas as pd, yfinance as yf
 
 warnings.filterwarnings("ignore")
@@ -239,7 +240,7 @@ def quality(frames, total, opts, daily):
 
 
 def main():
-    asof = dt.datetime.now().astimezone().date()
+    asof = dt.datetime.now(ZoneInfo("America/New_York")).date()  # US market date, independent of runner TZ (UTC on GitHub)
     out = {"generated_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
            "dte_reference_date": str(asof), "source": f"Yahoo Finance via yfinance {yf.__version__} (unofficial, may be delayed)",
            "config": CFG, "tickers": []}
