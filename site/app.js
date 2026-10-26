@@ -89,7 +89,7 @@ function card(t, cfg) {
 }
 
 fetch("data.json", { cache: "no-store" }).then(r => r.json()).then(d => {
-  document.getElementById("meta").innerHTML = `Built ${new Date(d.generated_at).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PT<br>DTE counted from ${d.dte_reference_date}`;
+  document.getElementById("meta").innerHTML = `<span>Built ${new Date(d.generated_at).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })} PT</span><span class="sep"> · </span><span>DTE counted from ${d.dte_reference_date}</span>`;
   document.getElementById("src").textContent = d.source;
   const root = document.getElementById("cards");
   d.tickers.forEach(t => root.appendChild(card(t, d.config)));
