@@ -1,0 +1,3 @@
+{"note": "Known SPY Pullback triggers in the fixture (close > SMA200 and RSI(2) < 10 on that close).",
+ "triggers": [{"date": "2023-08-03", "grade": "A"}, {"date": "2023-02-21", "grade": "B"}],
+ "not_fired": "2023-08-01"}

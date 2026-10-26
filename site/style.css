@@ -110,3 +110,20 @@ code{background:#161c26;padding:1px 5px;border-radius:4px}
   .bt-sum{padding:12px}.bt-sum .lead{font-size:14px}
 }
 .tkc .few{display:block;width:max-content;margin:3px 0 0}
+/* trend-state footnote + Pullback setup */
+.sig .sub{margin:-2px 0 3px}
+.sig-oos{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35;white-space:normal}
+.setup{border-radius:8px;margin:0 0 10px;font-size:11.5px}
+.setup.off{color:var(--muted);border:1px dashed var(--line);padding:6px 8px}
+.setup.on{border:1px solid #15803d;background:rgba(34,197,94,.07);padding:8px 10px}
+.setup .sh{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px}
+.sbadge{background:var(--green);color:#04120a;font-weight:800;font-size:11px;letter-spacing:.4px;border-radius:5px;padding:2px 7px}
+.setup .why{margin:2px 0}
+.setup .st{border-collapse:collapse;width:100%;margin:6px 0;font-size:11px}
+.setup .st th,.setup .st td{padding:3px 5px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.setup .st th{color:var(--muted);font-weight:700;font-size:10px}
+.setup .st tr.me td{background:rgba(34,197,94,.10)}
+.setup .own{margin:4px 0}.setup .own div{margin-left:8px}
+.setup .warnline{color:#f5c542;font-size:10.5px;margin-top:4px}
+.bt-t td.ok{color:var(--green);font-weight:700}.bt-t td.no{color:var(--red)}
+.note-box{border:1px solid #6b5313;background:#1c1606;color:#f5d77a;border-radius:8px;padding:8px 12px;font-size:12.5px;margin:6px 0 10px}

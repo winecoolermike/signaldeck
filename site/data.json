@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-25T15:48:41-07:00",
- "dte_reference_date": "2026-10-25",
+ "generated_at": "2026-10-25T21:17:41-07:00",
+ "dte_reference_date": "2026-10-26",
  "source": "Yahoo Finance via yfinance 1.7.0 (unofficial, may be delayed)",
  "config": {
   "tickers": [
@@ -297,7 +297,7 @@
     "expiries": [
      {
       "expiry": "2026-10-26",
-      "dte": 1,
+      "dte": 0,
       "call": {
        "contract": "SPCX261026C00148000",
        "strike": 148.0,
@@ -306,7 +306,7 @@
        "last": 1.92,
        "volume": 9837,
        "oi": 494,
-       "iv": 0.5,
+       "iv": 0.707,
        "rel_spread": 0.0465,
        "otm_rank": 1,
        "eligible": true,
@@ -320,7 +320,7 @@
        "last": 1.52,
        "volume": 8749,
        "oi": 2058,
-       "iv": 0.508,
+       "iv": 0.718,
        "rel_spread": 0.0456,
        "otm_rank": 2,
        "eligible": true,
@@ -329,7 +329,7 @@
      },
      {
       "expiry": "2026-10-28",
-      "dte": 3,
+      "dte": 2,
       "call": {
        "contract": "SPCX261028C00149000",
        "strike": 149.0,
@@ -338,7 +338,7 @@
        "last": 2.71,
        "volume": 1703,
        "oi": 548,
-       "iv": 0.558,
+       "iv": 0.644,
        "rel_spread": 0.0364,
        "otm_rank": 2,
        "eligible": true,
@@ -352,7 +352,7 @@
        "last": 2.44,
        "volume": 2240,
        "oi": 1097,
-       "iv": 0.564,
+       "iv": 0.652,
        "rel_spread": 0.0384,
        "otm_rank": 3,
        "eligible": true,
@@ -361,7 +361,7 @@
      },
      {
       "expiry": "2026-10-30",
-      "dte": 5,
+      "dte": 4,
       "call": {
        "contract": "SPCX261030C00148000",
        "strike": 148.0,
@@ -370,7 +370,7 @@
        "last": 4.05,
        "volume": 3652,
        "oi": 1338,
-       "iv": 0.573,
+       "iv": 0.627,
        "rel_spread": 0.0368,
        "otm_rank": 1,
        "eligible": true,
@@ -384,7 +384,7 @@
        "last": 4.0,
        "volume": 3055,
        "oi": 3206,
-       "iv": 0.573,
+       "iv": 0.628,
        "rel_spread": 0.0613,
        "otm_rank": 1,
        "eligible": true,
@@ -393,7 +393,7 @@
      },
      {
       "expiry": "2026-11-02",
-      "dte": 8,
+      "dte": 7,
       "call": {
        "contract": "SPCX261102C00150000",
        "strike": 150.0,
@@ -402,7 +402,7 @@
        "last": 3.62,
        "volume": 306,
        "oi": 793,
-       "iv": 0.518,
+       "iv": 0.55,
        "rel_spread": 0.0952,
        "otm_rank": 3,
        "eligible": true,
@@ -416,7 +416,7 @@
        "last": 5.0,
        "volume": 55,
        "oi": 98,
-       "iv": 0.514,
+       "iv": 0.545,
        "rel_spread": 0.0889,
        "otm_rank": 1,
        "eligible": true,
@@ -425,7 +425,7 @@
      },
      {
       "expiry": "2026-11-04",
-      "dte": 10,
+      "dte": 9,
       "call": {
        "contract": "SPCX261104C00150000",
        "strike": 150.0,
@@ -434,7 +434,7 @@
        "last": 4.5,
        "volume": 79,
        "oi": 188,
-       "iv": 0.531,
+       "iv": 0.556,
        "rel_spread": 0.2326,
        "otm_rank": 3,
        "eligible": true,
@@ -448,7 +448,7 @@
        "last": 5.0,
        "volume": 108,
        "oi": 71,
-       "iv": 0.529,
+       "iv": 0.555,
        "rel_spread": 0.233,
        "otm_rank": 1,
        "eligible": true,
@@ -457,7 +457,7 @@
      },
      {
       "expiry": "2026-11-06",
-      "dte": 12,
+      "dte": 11,
       "call": {
        "contract": "SPCX261106C00150000",
        "strike": 150.0,
@@ -466,7 +466,7 @@
        "last": 4.98,
        "volume": 1773,
        "oi": 2453,
-       "iv": 0.563,
+       "iv": 0.586,
        "rel_spread": 0.0488,
        "otm_rank": 3,
        "eligible": true,
@@ -480,7 +480,7 @@
        "last": 5.37,
        "volume": 1617,
        "oi": 965,
-       "iv": 0.554,
+       "iv": 0.576,
        "rel_spread": 0.0556,
        "otm_rank": 2,
        "eligible": true,
@@ -489,7 +489,7 @@
      },
      {
       "expiry": "2026-11-13",
-      "dte": 19,
+      "dte": 18,
       "call": {
        "contract": "SPCX261113C00150000",
        "strike": 150.0,
@@ -498,7 +498,7 @@
        "last": 6.41,
        "volume": 284,
        "oi": 792,
-       "iv": 0.55,
+       "iv": 0.565,
        "rel_spread": 0.0465,
        "otm_rank": 3,
        "eligible": true,
@@ -512,7 +512,7 @@
        "last": 7.25,
        "volume": 33,
        "oi": 609,
-       "iv": 0.54,
+       "iv": 0.554,
        "rel_spread": 0.0488,
        "otm_rank": 1,
        "eligible": true,
@@ -521,7 +521,7 @@
      },
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "SPCX261120C00148000",
        "strike": 148.0,
@@ -530,7 +530,7 @@
        "last": 8.35,
        "volume": 417,
        "oi": 367,
-       "iv": 0.547,
+       "iv": 0.557,
        "rel_spread": 0.0353,
        "otm_rank": 1,
        "eligible": true,
@@ -544,7 +544,7 @@
        "last": 7.64,
        "volume": 858,
        "oi": 483,
-       "iv": 0.531,
+       "iv": 0.541,
        "rel_spread": 0.0324,
        "otm_rank": 2,
        "eligible": true,
@@ -553,7 +553,7 @@
      },
      {
       "expiry": "2026-11-27",
-      "dte": 33,
+      "dte": 32,
       "call": {
        "contract": "SPCX261127C00150000",
        "strike": 150.0,
@@ -562,7 +562,7 @@
        "last": 8.33,
        "volume": 494,
        "oi": 792,
-       "iv": 0.525,
+       "iv": 0.533,
        "rel_spread": 0.0361,
        "otm_rank": 1,
        "eligible": true,
@@ -576,7 +576,7 @@
        "last": 8.0,
        "volume": 425,
        "oi": 1258,
-       "iv": 0.508,
+       "iv": 0.516,
        "rel_spread": 0.051,
        "otm_rank": 1,
        "eligible": true,
@@ -592,6 +592,20 @@
     "trend_strength": 0.51,
     "options_liquidity": 0.779,
     "avg_rel_spread": 0.0442
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 93,
+    "close": 147.49,
+    "sma200": null,
+    "sma5": 149.46,
+    "rsi2": 43.4,
+    "adx": 20.4,
+    "last_fired": null,
+    "status": "insufficient_history",
+    "fired": false,
+    "reason": "only 93 daily bars; SMA(200) needs 200",
+    "ticker_stats": null
    }
   },
   {
@@ -821,7 +835,7 @@
     "expiries": [
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "AMT261120C00190000",
        "strike": 190.0,
@@ -830,7 +844,7 @@
        "last": 6.9,
        "volume": 104,
        "oi": 1081,
-       "iv": 0.389,
+       "iv": 0.397,
        "rel_spread": 0.2388,
        "otm_rank": 1,
        "eligible": true,
@@ -844,7 +858,7 @@
        "last": 5.1,
        "volume": 62,
        "oi": 218,
-       "iv": 0.356,
+       "iv": 0.362,
        "rel_spread": 0.2268,
        "otm_rank": 1,
        "eligible": true,
@@ -860,6 +874,53 @@
     "trend_strength": 0.68,
     "options_liquidity": 0.0,
     "avg_rel_spread": 0.2328
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 7209,
+    "close": 188.97,
+    "sma200": 173.88,
+    "sma5": 182.95,
+    "rsi2": 85.5,
+    "adx": 28.0,
+    "last_fired": "2026-06-17",
+    "status": "ok",
+    "above_sma200": true,
+    "fired": false,
+    "grade": null,
+    "ticker_stats": {
+     "all": {
+      "n": 15,
+      "hit": 0.5333,
+      "exp_net_pct": -0.638,
+      "avg_win_net_pct": 1.884,
+      "avg_loss_net_pct": -2.845,
+      "avg_hold_days": 4.7,
+      "few": true
+     },
+     "grade_a": {
+      "n": 5,
+      "hit": 0.6,
+      "exp_net_pct": 0.058,
+      "avg_win_net_pct": 1.564,
+      "avg_loss_net_pct": -2.201,
+      "avg_hold_days": 4.4,
+      "few": true
+     },
+     "random_same_exit": {
+      "n": 230,
+      "hit": 0.587,
+      "exp_net_pct": -0.197,
+      "avg_win_net_pct": 1.02,
+      "avg_loss_net_pct": -1.671,
+      "avg_hold_days": 2.0,
+      "few": false
+     },
+     "window": [
+      "2023-01-01",
+      "2026-10-23"
+     ]
+    }
    }
   },
   {
@@ -1089,7 +1150,7 @@
     "expiries": [
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "CCI261120C00090000",
        "strike": 90.0,
@@ -1098,7 +1159,7 @@
        "last": 1.95,
        "volume": 612,
        "oi": 1073,
-       "iv": 0.407,
+       "iv": 0.415,
        "rel_spread": 0.2278,
        "otm_rank": 2,
        "eligible": true,
@@ -1112,7 +1173,7 @@
        "last": 2.8,
        "volume": 483,
        "oi": 4,
-       "iv": 0.385,
+       "iv": 0.392,
        "rel_spread": 0.1754,
        "otm_rank": 1,
        "eligible": true,
@@ -1128,6 +1189,53 @@
     "trend_strength": 0.985,
     "options_liquidity": 0.0,
     "avg_rel_spread": 0.2016
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 7090,
+    "close": 85.97,
+    "sma200": 80.43,
+    "sma5": 81.13,
+    "rsi2": 91.2,
+    "adx": 39.2,
+    "last_fired": "2026-06-16",
+    "status": "ok",
+    "above_sma200": true,
+    "fired": false,
+    "grade": null,
+    "ticker_stats": {
+     "all": {
+      "n": 14,
+      "hit": 0.5714,
+      "exp_net_pct": -0.76,
+      "avg_win_net_pct": 1.765,
+      "avg_loss_net_pct": -3.285,
+      "avg_hold_days": 5.4,
+      "few": true
+     },
+     "grade_a": {
+      "n": 7,
+      "hit": 0.7143,
+      "exp_net_pct": -0.217,
+      "avg_win_net_pct": 1.322,
+      "avg_loss_net_pct": -4.065,
+      "avg_hold_days": 4.7,
+      "few": true
+     },
+     "random_same_exit": {
+      "n": 195,
+      "hit": 0.5692,
+      "exp_net_pct": -0.283,
+      "avg_win_net_pct": 1.03,
+      "avg_loss_net_pct": -1.785,
+      "avg_hold_days": 2.1,
+      "few": false
+     },
+     "window": [
+      "2023-01-01",
+      "2026-10-23"
+     ]
+    }
    }
   },
   {
@@ -1357,7 +1465,7 @@
     "expiries": [
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "SBAC261120C00185000",
        "strike": 185.0,
@@ -1366,7 +1474,7 @@
        "last": 8.04,
        "volume": 7,
        "oi": 4,
-       "iv": 0.515,
+       "iv": 0.525,
        "rel_spread": 0.4286,
        "otm_rank": 1,
        "eligible": true,
@@ -1380,7 +1488,7 @@
        "last": 6.85,
        "volume": 1,
        "oi": 43,
-       "iv": 0.542,
+       "iv": 0.552,
        "rel_spread": 0.5564,
        "otm_rank": 1,
        "eligible": true,
@@ -1396,6 +1504,53 @@
     "trend_strength": 0.682,
     "options_liquidity": 0.0,
     "avg_rel_spread": 0.4925
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 6882,
+    "close": 184.75,
+    "sma200": 188.45,
+    "sma5": 180.12,
+    "rsi2": 78.8,
+    "adx": 27.3,
+    "last_fired": "2026-05-27",
+    "status": "ok",
+    "above_sma200": false,
+    "fired": false,
+    "grade": null,
+    "ticker_stats": {
+     "all": {
+      "n": 13,
+      "hit": 0.6154,
+      "exp_net_pct": -0.487,
+      "avg_win_net_pct": 1.402,
+      "avg_loss_net_pct": -3.51,
+      "avg_hold_days": 4.6,
+      "few": true
+     },
+     "grade_a": {
+      "n": 4,
+      "hit": 0.25,
+      "exp_net_pct": -2.281,
+      "avg_win_net_pct": 1.489,
+      "avg_loss_net_pct": -3.537,
+      "avg_hold_days": 5.0,
+      "few": true
+     },
+     "random_same_exit": {
+      "n": 178,
+      "hit": 0.5393,
+      "exp_net_pct": -0.339,
+      "avg_win_net_pct": 1.087,
+      "avg_loss_net_pct": -1.702,
+      "avg_hold_days": 2.1,
+      "few": false
+     },
+     "window": [
+      "2023-01-01",
+      "2026-10-23"
+     ]
+    }
    }
   },
   {
@@ -1625,7 +1780,7 @@
     "expiries": [
      {
       "expiry": "2026-10-30",
-      "dte": 5,
+      "dte": 4,
       "call": {
        "contract": "VZ261030C00045500",
        "strike": 45.5,
@@ -1634,7 +1789,7 @@
        "last": 0.63,
        "volume": 1757,
        "oi": 541,
-       "iv": 0.463,
+       "iv": 0.508,
        "rel_spread": 0.1875,
        "otm_rank": 2,
        "eligible": true,
@@ -1648,7 +1803,7 @@
        "last": 0.94,
        "volume": 793,
        "oi": 402,
-       "iv": 0.495,
+       "iv": 0.501,
        "rel_spread": 0.1762,
        "otm_rank": 1,
        "eligible": true,
@@ -1657,7 +1812,7 @@
      },
      {
       "expiry": "2026-11-06",
-      "dte": 12,
+      "dte": 11,
       "call": {
        "contract": "VZ261106C00045000",
        "strike": 45.0,
@@ -1666,7 +1821,7 @@
        "last": 1.05,
        "volume": 3342,
        "oi": 4178,
-       "iv": 0.41,
+       "iv": 0.427,
        "rel_spread": 0.2911,
        "otm_rank": 1,
        "eligible": true,
@@ -1680,7 +1835,7 @@
        "last": 1.13,
        "volume": 84,
        "oi": 166,
-       "iv": 0.461,
+       "iv": 0.479,
        "rel_spread": 0.4478,
        "otm_rank": 2,
        "eligible": true,
@@ -1689,7 +1844,7 @@
      },
      {
       "expiry": "2026-11-13",
-      "dte": 19,
+      "dte": 18,
       "call": {
        "contract": "VZ261113C00046000",
        "strike": 46.0,
@@ -1698,7 +1853,7 @@
        "last": 0.68,
        "volume": 208,
        "oi": 779,
-       "iv": 0.335,
+       "iv": 0.344,
        "rel_spread": 0.2517,
        "otm_rank": 2,
        "eligible": true,
@@ -1712,7 +1867,7 @@
        "last": 1.17,
        "volume": 160,
        "oi": 266,
-       "iv": 0.401,
+       "iv": 0.411,
        "rel_spread": 0.4215,
        "otm_rank": 1,
        "eligible": true,
@@ -1721,7 +1876,7 @@
      },
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "VZ261120C00045000",
        "strike": 45.0,
@@ -1730,7 +1885,7 @@
        "last": 1.3,
        "volume": 3619,
        "oi": 8008,
-       "iv": 0.313,
+       "iv": 0.319,
        "rel_spread": 0.1004,
        "otm_rank": 1,
        "eligible": true,
@@ -1744,7 +1899,7 @@
        "last": 1.39,
        "volume": 98,
        "oi": 850,
-       "iv": 0.391,
+       "iv": 0.398,
        "rel_spread": 0.3583,
        "otm_rank": 1,
        "eligible": true,
@@ -1753,7 +1908,7 @@
      },
      {
       "expiry": "2026-11-27",
-      "dte": 33,
+      "dte": 32,
       "call": {
        "contract": "VZ261127C00046000",
        "strike": 46.0,
@@ -1762,7 +1917,7 @@
        "last": 0.99,
        "volume": 29,
        "oi": 448,
-       "iv": 0.439,
+       "iv": 0.446,
        "rel_spread": 0.9431,
        "otm_rank": 2,
        "eligible": true,
@@ -1776,7 +1931,7 @@
        "last": 1.3,
        "volume": 38,
        "oi": 48,
-       "iv": 0.392,
+       "iv": 0.398,
        "rel_spread": 0.7586,
        "otm_rank": 1,
        "eligible": true,
@@ -1792,6 +1947,53 @@
     "trend_strength": 0.72,
     "options_liquidity": 0.0,
     "avg_rel_spread": 0.296
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 10815,
+    "close": 44.66,
+    "sma200": 45.35,
+    "sma5": 44.42,
+    "rsi2": 51.9,
+    "adx": 26.8,
+    "last_fired": "2026-09-30",
+    "status": "ok",
+    "above_sma200": false,
+    "fired": false,
+    "grade": null,
+    "ticker_stats": {
+     "all": {
+      "n": 28,
+      "hit": 0.6071,
+      "exp_net_pct": 0.375,
+      "avg_win_net_pct": 1.828,
+      "avg_loss_net_pct": -1.87,
+      "avg_hold_days": 4.4,
+      "few": true
+     },
+     "grade_a": {
+      "n": 8,
+      "hit": 0.375,
+      "exp_net_pct": -0.346,
+      "avg_win_net_pct": 1.965,
+      "avg_loss_net_pct": -1.732,
+      "avg_hold_days": 5.2,
+      "few": true
+     },
+     "random_same_exit": {
+      "n": 355,
+      "hit": 0.5859,
+      "exp_net_pct": -0.064,
+      "avg_win_net_pct": 0.893,
+      "avg_loss_net_pct": -1.217,
+      "avg_hold_days": 1.9,
+      "few": false
+     },
+     "window": [
+      "2023-01-01",
+      "2026-10-23"
+     ]
+    }
    }
   },
   {
@@ -2021,7 +2223,7 @@
     "expiries": [
      {
       "expiry": "2026-10-30",
-      "dte": 5,
+      "dte": 4,
       "call": {
        "contract": "T261030C00021000",
        "strike": 21.0,
@@ -2030,7 +2232,7 @@
        "last": 0.35,
        "volume": 1755,
        "oi": 251,
-       "iv": 0.377,
+       "iv": 0.412,
        "rel_spread": 0.0845,
        "otm_rank": 1,
        "eligible": true,
@@ -2044,7 +2246,7 @@
        "last": 0.19,
        "volume": 860,
        "oi": 159,
-       "iv": 0.355,
+       "iv": 0.389,
        "rel_spread": 0.1053,
        "otm_rank": 1,
        "eligible": true,
@@ -2053,7 +2255,7 @@
      },
      {
       "expiry": "2026-11-06",
-      "dte": 12,
+      "dte": 11,
       "call": {
        "contract": "T261106C00021000",
        "strike": 21.0,
@@ -2062,7 +2264,7 @@
        "last": 0.5,
        "volume": 1193,
        "oi": 30,
-       "iv": 0.338,
+       "iv": 0.353,
        "rel_spread": 0.1277,
        "otm_rank": 1,
        "eligible": true,
@@ -2076,7 +2278,7 @@
        "last": 0.31,
        "volume": 271,
        "oi": 61,
-       "iv": 0.365,
+       "iv": 0.38,
        "rel_spread": 0.375,
        "otm_rank": 1,
        "eligible": true,
@@ -2085,7 +2287,7 @@
      },
      {
       "expiry": "2026-11-13",
-      "dte": 19,
+      "dte": 18,
       "call": {
        "contract": "T261113C00021500",
        "strike": 21.5,
@@ -2094,7 +2296,7 @@
        "last": 0.4,
        "volume": 408,
        "oi": 31,
-       "iv": 0.326,
+       "iv": 0.334,
        "rel_spread": 0.1053,
        "otm_rank": 2,
        "eligible": true,
@@ -2108,7 +2310,7 @@
        "last": 0.32,
        "volume": 74,
        "oi": 94,
-       "iv": 0.305,
+       "iv": 0.313,
        "rel_spread": 0.2857,
        "otm_rank": 1,
        "eligible": true,
@@ -2117,7 +2319,7 @@
      },
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "T261120C00021000",
        "strike": 21.0,
@@ -2126,7 +2328,7 @@
        "last": 0.68,
        "volume": 434,
        "oi": 221,
-       "iv": 0.336,
+       "iv": 0.343,
        "rel_spread": 0.1314,
        "otm_rank": 1,
        "eligible": true,
@@ -2140,7 +2342,7 @@
        "last": 0.43,
        "volume": 611,
        "oi": 616,
-       "iv": 0.305,
+       "iv": 0.31,
        "rel_spread": 0.1304,
        "otm_rank": 1,
        "eligible": true,
@@ -2149,7 +2351,7 @@
      },
      {
       "expiry": "2026-11-27",
-      "dte": 33,
+      "dte": 32,
       "call": {
        "contract": "T261127C00021000",
        "strike": 21.0,
@@ -2158,7 +2360,7 @@
        "last": 0.75,
        "volume": 84,
        "oi": 44,
-       "iv": 0.366,
+       "iv": 0.372,
        "rel_spread": 0.2222,
        "otm_rank": 1,
        "eligible": true,
@@ -2172,7 +2374,7 @@
        "last": 0.28,
        "volume": 24,
        "oi": 272,
-       "iv": 0.308,
+       "iv": 0.313,
        "rel_spread": 0.5574,
        "otm_rank": 2,
        "eligible": true,
@@ -2188,6 +2390,53 @@
     "trend_strength": 0.662,
     "options_liquidity": 0.097,
     "avg_rel_spread": 0.1806
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 10815,
+    "close": 20.93,
+    "sma200": 24.49,
+    "sma5": 22.44,
+    "rsi2": 17.0,
+    "adx": 25.2,
+    "last_fired": "2026-09-22",
+    "status": "ok",
+    "above_sma200": false,
+    "fired": false,
+    "grade": null,
+    "ticker_stats": {
+     "all": {
+      "n": 25,
+      "hit": 0.68,
+      "exp_net_pct": 0.212,
+      "avg_win_net_pct": 1.808,
+      "avg_loss_net_pct": -3.179,
+      "avg_hold_days": 3.7,
+      "few": true
+     },
+     "grade_a": {
+      "n": 14,
+      "hit": 0.7857,
+      "exp_net_pct": 0.97,
+      "avg_win_net_pct": 1.825,
+      "avg_loss_net_pct": -2.163,
+      "avg_hold_days": 3.1,
+      "few": true
+     },
+     "random_same_exit": {
+      "n": 392,
+      "hit": 0.6071,
+      "exp_net_pct": 0.015,
+      "avg_win_net_pct": 0.9,
+      "avg_loss_net_pct": -1.228,
+      "avg_hold_days": 1.7,
+      "few": false
+     },
+     "window": [
+      "2023-01-01",
+      "2026-10-23"
+     ]
+    }
    }
   },
   {
@@ -2417,7 +2666,7 @@
     "expiries": [
      {
       "expiry": "2026-10-30",
-      "dte": 5,
+      "dte": 4,
       "call": {
        "contract": "TMUS261030C00147000",
        "strike": 147.0,
@@ -2426,7 +2675,7 @@
        "last": 4.2,
        "volume": 26,
        "oi": 0,
-       "iv": 0.61,
+       "iv": 0.668,
        "rel_spread": 0.1149,
        "otm_rank": 1,
        "eligible": true,
@@ -2440,7 +2689,7 @@
        "last": 3.58,
        "volume": 168,
        "oi": 240,
-       "iv": 0.587,
+       "iv": 0.643,
        "rel_spread": 0.1918,
        "otm_rank": 2,
        "eligible": true,
@@ -2449,7 +2698,7 @@
      },
      {
       "expiry": "2026-11-06",
-      "dte": 12,
+      "dte": 11,
       "call": {
        "contract": "TMUS261106C00150000",
        "strike": 150.0,
@@ -2458,7 +2707,7 @@
        "last": 4.0,
        "volume": 123,
        "oi": 205,
-       "iv": 0.517,
+       "iv": 0.509,
        "rel_spread": 0.1538,
        "otm_rank": 3,
        "eligible": true,
@@ -2472,7 +2721,7 @@
        "last": 4.57,
        "volume": 1,
        "oi": 0,
-       "iv": 0.56,
+       "iv": 0.512,
        "rel_spread": 0.2913,
        "otm_rank": 1,
        "eligible": true,
@@ -2481,7 +2730,7 @@
      },
      {
       "expiry": "2026-11-13",
-      "dte": 19,
+      "dte": 18,
       "call": {
        "contract": "TMUS261113C00155000",
        "strike": 155.0,
@@ -2490,7 +2739,7 @@
        "last": 3.0,
        "volume": 7,
        "oi": 17,
-       "iv": 0.548,
+       "iv": 0.503,
        "rel_spread": 0.4173,
        "otm_rank": 2,
        "eligible": true,
@@ -2504,7 +2753,7 @@
        "last": 4.77,
        "volume": 28,
        "oi": 52,
-       "iv": 0.525,
+       "iv": 0.539,
        "rel_spread": 0.5098,
        "otm_rank": 1,
        "eligible": true,
@@ -2513,7 +2762,7 @@
      },
      {
       "expiry": "2026-11-20",
-      "dte": 26,
+      "dte": 25,
       "call": {
        "contract": "TMUS261120C00150000",
        "strike": 150.0,
@@ -2522,7 +2771,7 @@
        "last": 5.3,
        "volume": 34,
        "oi": 324,
-       "iv": 0.448,
+       "iv": 0.456,
        "rel_spread": 0.1132,
        "otm_rank": 2,
        "eligible": true,
@@ -2536,7 +2785,7 @@
        "last": 4.71,
        "volume": 1,
        "oi": 52,
-       "iv": 0.464,
+       "iv": 0.473,
        "rel_spread": 0.4696,
        "otm_rank": 1,
        "eligible": true,
@@ -2545,7 +2794,7 @@
      },
      {
       "expiry": "2026-11-27",
-      "dte": 33,
+      "dte": 32,
       "call": {
        "contract": "TMUS261127C00150000",
        "strike": 150.0,
@@ -2554,7 +2803,7 @@
        "last": 6.6,
        "volume": 105,
        "oi": 7,
-       "iv": 0.517,
+       "iv": 0.525,
        "rel_spread": 0.5041,
        "otm_rank": 1,
        "eligible": true,
@@ -2568,7 +2817,7 @@
        "last": 4.3,
        "volume": 41,
        "oi": 28,
-       "iv": 0.462,
+       "iv": 0.469,
        "rel_spread": 0.3908,
        "otm_rank": 2,
        "eligible": true,
@@ -2584,6 +2833,53 @@
     "trend_strength": 0.575,
     "options_liquidity": 0.0,
     "avg_rel_spread": 0.2798
+   },
+   "setup": {
+    "bar_date": "2026-10-23",
+    "bars": 4911,
+    "close": 146.54,
+    "sma200": 186.55,
+    "sma5": 154.58,
+    "rsi2": 17.4,
+    "adx": 22.6,
+    "last_fired": "2025-09-09",
+    "status": "ok",
+    "above_sma200": false,
+    "fired": false,
+    "grade": null,
+    "ticker_stats": {
+     "all": {
+      "n": 20,
+      "hit": 0.55,
+      "exp_net_pct": 0.408,
+      "avg_win_net_pct": 1.688,
+      "avg_loss_net_pct": -1.156,
+      "avg_hold_days": 4.2,
+      "few": true
+     },
+     "grade_a": {
+      "n": 10,
+      "hit": 0.6,
+      "exp_net_pct": -0.27,
+      "avg_win_net_pct": 1.031,
+      "avg_loss_net_pct": -2.22,
+      "avg_hold_days": 4.6,
+      "few": true
+     },
+     "random_same_exit": {
+      "n": 323,
+      "hit": 0.6254,
+      "exp_net_pct": 0.038,
+      "avg_win_net_pct": 0.901,
+      "avg_loss_net_pct": -1.149,
+      "avg_hold_days": 1.8,
+      "few": false
+     },
+     "window": [
+      "2023-01-01",
+      "2026-10-23"
+     ]
+    }
    }
   }
  ]

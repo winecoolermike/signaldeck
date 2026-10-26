@@ -37,6 +37,11 @@ jobs:
         id: install
         continue-on-error: true
         run: pip install -r requirements.txt
+      - name: Setup-rule unit tests (fixture data only)
+        if: steps.install.outcome == 'success'
+        run: python tests/test_setup.py
+      # The Pullback setup rule is frozen in signals.py (SETUP) and its research stats in the committed
+      # site/setups.json. This job only recomputes per-ticker stats with new bars; it never re-tunes rules.
       - name: Build data
         id: build
         if: steps.install.outcome == 'success'

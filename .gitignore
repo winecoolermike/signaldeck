@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 /screenshot*.png
 /reference.png
+/research/

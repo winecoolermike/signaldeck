@@ -15,6 +15,21 @@
 <main class="bt" id="bt">
   <section class="bt-sum" id="summary"><p class="muted">Loading backtest…</p></section>
 
+  <section id="setups">
+    <h2>Setups: what survived out-of-sample research</h2>
+    <p class="muted" id="su-intro">Loading setups.json…</p>
+    <div class="note-box" id="su-warn"></div>
+    <h3>The Pullback setup (shown on the dashboard only when it fires)</h3>
+    <div class="tablewrap"><table class="bt-t" id="su-versions"></table></div>
+    <p class="muted" id="su-years"></p>
+    <h3>Every rule tested: survived vs failed</h3>
+    <p class="muted" id="su-rule"></p>
+    <div class="tablewrap"><table class="bt-t" id="su-variants"></table></div>
+    <h3>Hit rate vs number of trades</h3>
+    <p class="muted" id="su-ladder-note">Pre-declared selectivity ladder.</p>
+    <div class="tablewrap"><table class="bt-t" id="su-ladder"></table></div>
+  </section>
+
   <section>
     <h2>Daily (Main) signal — hit rate vs baseline</h2>
     <p class="muted">"Right" = CALL followed by a price rise, PUT by a fall, over the next N trading days. Baseline = how often the price simply rose (always-CALL) or fell over the same days. "Chance" = what random guessing with the same CALL/PUT mix would score.</p>
@@ -56,5 +71,6 @@
   <div class="foot-meta">SignalDeck v1 · backtest.json · <span id="src"></span></div>
 </footer>
 <script src="backtest.js"></script>
+<script src="setups.js"></script>
 </body>
 </html>

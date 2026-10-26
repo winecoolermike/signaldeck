@@ -15,7 +15,8 @@ import numpy as np, pandas as pd, yfinance as yf
 
 warnings.filterwarnings("ignore")
 from signals import (ROOT, CFG, NY, num, ema, rsi, macd_hist, atr, adx, adx_label,
-                     frame_signal, bias_conf, daily_label, history, levels)
+                     frame_signal, bias_conf, daily_label, history, levels,
+                     SETUP, pullback_setup, pullback_ticker_stats, completed_sessions)
 
 OUT = ROOT / "site" / "data.json"
 
@@ -109,7 +110,22 @@ def build_ticker(sym, asof):
     out["levels"] = levels(daily, 1 if (total or 0) >= 0 else -1)
     out["options"] = options(tk, last, asof)
     out["quality"] = quality(frames, total, out["options"], daily)
+    out["setup"] = setup_block(tk)
     return out
+
+
+def setup_block(tk):
+    """Pullback setup on the latest COMPLETED daily close (adjusted bars, full history, as in the research).
+    Rule parameters come from signals.SETUP and are never changed here; only the stats are recomputed."""
+    try:
+        d = tk.history(period="max", interval="1d", auto_adjust=True)[["Open", "High", "Low", "Close", "Volume"]].dropna()
+    except Exception as e:
+        return {"status": "error", "fired": False, "reason": f"adjusted history fetch failed: {e}"}
+    now_ny = dt.datetime.now(ZoneInfo(NY))
+    d = completed_sessions(d, now_ny.replace(tzinfo=None) if d.index.tz is None else now_ny)
+    st = pullback_setup(d)
+    st["ticker_stats"] = pullback_ticker_stats(d) if st.get("status") == "ok" else None
+    return st
 
 
 def quality(frames, total, opts, daily):
