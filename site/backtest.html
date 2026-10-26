@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SignalDeck · Backtest</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">◆</span> SignalDeck</div>
+  <nav><a href="./">Dashboard</a><a href="./#how">How signals work</a><a href="backtest.html" class="on">Backtest</a></nav>
+  <div class="meta" id="meta">loading…</div>
+</header>
+<main class="bt" id="bt">
+  <section class="bt-sum" id="summary"><p class="muted">Loading backtest…</p></section>
+
+  <section>
+    <h2>Daily (Main) signal — hit rate vs baseline</h2>
+    <p class="muted">"Right" = CALL followed by a price rise, PUT by a fall, over the next N trading days. Baseline = how often the price simply rose (always-CALL) or fell over the same days. "Chance" = what random guessing with the same CALL/PUT mix would score.</p>
+    <div class="tabs" id="tabs-daily"></div>
+    <div class="tablewrap"><table class="bt-t" id="t-daily"></table></div>
+    <h3>Average forward return by bias</h3>
+    <div class="tablewrap"><table class="bt-t" id="t-ret"></table></div>
+  </section>
+
+  <section>
+    <h2>Does higher confidence help?</h2>
+    <p class="muted">CALL/PUT signals grouped by their confidence %. A CALL/PUT needs score ≥ 0.25, so its confidence is always ≥ 63% — the &lt;60 bucket is empty by construction (only NEUT can be below 60).</p>
+    <div class="tabs" id="tabs-conf"></div>
+    <div class="tablewrap"><table class="bt-t" id="t-conf"></table></div>
+  </section>
+
+  <section>
+    <h2>60-minute signal on its own</h2>
+    <p class="muted">Same rules on 60m bars over the last ~year, forward 1 / 4 / 7 bars (7 bars ≈ one session).</p>
+    <div class="tabs" id="tabs-60"></div>
+    <div class="tablewrap"><table class="bt-t" id="t-60"></table></div>
+    <div id="skipped" class="skipped"></div>
+  </section>
+
+  <section>
+    <h2>Entry / exit levels test</h2>
+    <p class="muted">Entry at the signal day's close. Within the next 10 trading days, did price reach the <b>MAIN Potential Exit</b> before the <b>Extended Entry</b> (treated as a stop)? "Both" = both touched on the same day (order unknown from daily bars). Baseline = the same test taking the long (or short) idea every day regardless of signal.</p>
+    <div class="tablewrap"><table class="bt-t" id="t-lv"></table></div>
+  </section>
+
+  <section class="how">
+    <h2>Method</h2>
+    <ul id="method"></ul>
+    <p class="nfa-inline">Past results don't predict future ones. Not financial advice — for personal education only.</p>
+  </section>
+</main>
+<footer class="foot">
+  <p class="disclaimer">⚠ Not financial advice — for personal education only. Data from Yahoo Finance (unofficial, may be delayed or incomplete). Signals are mechanical rules, not predictions.</p>
+  <div class="foot-meta">SignalDeck v1 · backtest.json · <span id="src"></span></div>
+</footer>
+<script src="backtest.js"></script>
+</body>
+</html>

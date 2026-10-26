@@ -9,7 +9,9 @@ Personal, hobby-only stock signal dashboard. Dark-mode, one card per ticker, bui
 ## Layout
 ```
 config.json          tickers, timeframes, weights, options settings  <- edit this
+signals.py           shared indicator/signal/level logic (used by build_data.py AND backtest.py)
 build_data.py        fetches data (yfinance) and writes site/data.json
+backtest.py          1-year backtest of the same signals -> site/backtest.json (site/backtest.html)
 site/                static website (deploy this folder)
 screenshot.py        headless Playwright screenshot of the local site
 .github/workflows/refresh.yml   optional scheduled rebuild + GitHub Pages publish
@@ -29,6 +31,14 @@ The page must be served over HTTP (opening index.html as a file blocks `fetch("d
 ## Editing tickers
 Edit `"tickers"` in `config.json`, then rerun `python build_data.py`. Timeframe weights, indicator
 weights, the bias threshold and the options scan window (`max_dte`, strikes considered) live there too.
+
+## Backtest
+`python backtest.py` (~1 min) recomputes the daily signal for each of the last 252 trading days using only data up to
+that close (same 2-year trailing window as live) and the 60m signal over the last ~year, then scores forward returns
+(1/5/10 days; 1/4/7 bars) against baselines (share of up moves, chance with the same CALL/PUT mix) and tests the
+entry/exit levels. Results: `site/backtest.html`. The workflow reruns it once a day after the close
+(or via "Run workflow" with *backtest* ticked); if it fails, the last good `backtest.json` stays live.
+Past results don't predict future ones.
 
 ## Data
 * Source: Yahoo Finance via `yfinance` (unofficial; quotes may be ~15 min delayed; may break or rate-limit).

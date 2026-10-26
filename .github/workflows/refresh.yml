@@ -1,5 +1,7 @@
 # Rebuilds site/data.json and publishes ./site to GitHub Pages.
 # If the data build fails or returns no usable data, the committed site/data.json is deployed instead.
+# The backtest (backtest.py -> site/backtest.json) reruns once a day on the post-close schedule (or on demand);
+# other runs re-publish the newest valid backtest.json (currently live copy or committed copy).
 name: refresh-data
 on:
   schedule:
@@ -7,7 +9,12 @@ on:
     - cron: "15 22 * * 1-5"        # one post-close build (22:15 UTC)
   push:
     branches: [main]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      backtest:
+        description: "Also rerun the backtest (~1-2 min)"
+        type: boolean
+        default: false
 permissions:
   contents: read
   pages: write
@@ -20,8 +27,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12", cache: pip }
-      - name: Back up committed data.json
-        run: cp site/data.json "$RUNNER_TEMP/data.json.bak"
+      - name: Back up committed data.json / backtest.json
+        run: |
+          cp site/data.json "$RUNNER_TEMP/data.json.bak"
+          cp site/backtest.json "$RUNNER_TEMP/backtest.committed.json"
+          curl -fsS --max-time 20 "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/backtest.json" \
+            -o "$RUNNER_TEMP/backtest.live.json" || echo "no live backtest.json yet"
       - name: Install requirements
         id: install
         continue-on-error: true
@@ -49,6 +60,38 @@ jobs:
           if not ok:
               print("::warning::Data build failed or incomplete; deploying last committed data.json")
               shutil.copy(bak, "site/data.json")
+          PY
+      - name: Backtest (daily after close, or manual)
+        id: backtest
+        if: steps.install.outcome == 'success' && (github.event.schedule == '15 22 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.backtest))
+        continue-on-error: true
+        timeout-minutes: 15
+        run: python backtest.py
+      - name: Choose backtest.json (fresh if valid, else newest valid live/committed copy)
+        run: |
+          python - <<'PY'
+          import json, os, shutil
+          T = os.environ["RUNNER_TEMP"]
+          def load(p):
+              try:
+                  d = json.load(open(p)); t = d.get("tickers") or []
+                  ok = [x for x in t if x.get("status") == "ok"]
+                  return d if (t and len(ok) >= max(1, len(t) // 2) and d.get("summary")) else None
+              except Exception:
+                  return None
+          fresh = load("site/backtest.json") if "${{ steps.backtest.outcome }}" == "success" else None
+          if fresh:
+              print("using fresh backtest", fresh["generated_at"])
+          else:
+              if "${{ steps.backtest.outcome }}" == "failure":
+                  print("::warning::Backtest failed or invalid; keeping last good backtest.json")
+              cands = [(d["generated_at"], p) for p in (f"{T}/backtest.live.json", f"{T}/backtest.committed.json")
+                       if os.path.exists(p) and (d := load(p))]
+              # compare instants, not strings (offsets differ between local and runner builds)
+              from datetime import datetime
+              cands.sort(key=lambda c: datetime.fromisoformat(c[0]))
+              if cands:
+                  print("using", cands[-1][1], cands[-1][0]); shutil.copy(cands[-1][1], "site/backtest.json")
           PY
       - uses: actions/upload-pages-artifact@v3
         with: { path: site }
