@@ -1,5 +1,6 @@
 {
   "tickers": ["SPCX", "AMT", "CCI", "SBAC", "VZ", "T", "TMUS"],
+  "comparison_tickers": ["SPY", "QQQ", "IWM", "AAPL", "MSFT", "AMZN", "JPM", "XOM", "JNJ", "PG", "KO", "WMT", "HD", "CAT", "UNH", "NEE"],
   "timeframes": [
     {"key": "Main", "label": "Main (1D)", "interval": "1d",  "period": "2y",   "weight": 0.30},
     {"key": "60m",  "label": "60m",       "interval": "60m", "period": "730d", "weight": 0.20},

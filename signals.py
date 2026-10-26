@@ -133,17 +133,82 @@ SETUP = {
     "name": "Pullback", "side": "long",
     "trend_sma": 200,           # close > SMA(200) of daily closes
     "rsi_len": 2, "rsi_max": 10,  # RSI(2, Wilder) < 10
-    "adx_len": 14, "adx_min_grade_a": 25,  # grade A if ADX(14, Wilder) > 25
+    # Grade A (round 2, variant C2): ticker is in the top `mom_top` of the 23-ticker universe by 12-1 month
+    # momentum = close 21 trading days ago / close 252 trading days ago - 1, ranked at the LAST COMPLETED
+    # month-end close and applied from that close until the next month-end. Otherwise grade B.
+    "mom_lookback": 252, "mom_skip": 21, "mom_top": 10,
+    "adx_len": 14,              # ADX(14) is shown as information only (it no longer sets the grade)
     "exit_sma": 5, "max_hold": 10,  # exit: first daily close > SMA(5), or after 10 trading days
+    "atr_len": 14, "stop_atr_mult": 3,   # OPTIONAL disaster stop = signal close - 3 x ATR(14); not part of the rule
+    "size_risk_atr": 0.02, "size_cap": 2.0,  # size hint (research A12): weight = min(2, 2% / ATR%)
     "cost_per_side": 0.0005,     # 0.05% per side, applied to "net" numbers
     "oos_start": "2023-01-01",   # out-of-sample window used for all reported stats
     "min_trades": 30,            # fewer trades -> "too few to trust"
     "price_basis": "split- and dividend-adjusted daily bars (as in the research)",
 }
+UNIVERSE = CFG["tickers"] + CFG["comparison_tickers"]
 
 
-def setup_features(daily):
-    """Causal features for the Pullback setup: every value at bar t uses bars <= t only."""
+# ---------------- trading calendar (NYSE full-day holidays; used only to know if the last bar ends a month) ----------
+def _easter(y):
+    a = y % 19; b, c = divmod(y, 100); d, e = divmod(b, 4); g = (8 * b + 13) // 25
+    h = (19 * a + b - d - g + 15) % 30; j, k = divmod(c, 4); m = (a + 11 * h) // 319
+    r = (2 * e + 2 * j - k - h + m + 32) % 7; n = (h - m + r + 90) // 25; p = (h - m + r + n + 19) % 32
+    return pd.Timestamp(y, n, p)
+
+def nyse_holidays(year):
+    from pandas.tseries.holiday import USFederalHolidayCalendar
+    hs = USFederalHolidayCalendar().holidays(f"{year - 1}-12-01", f"{year + 1}-01-31")
+    drop = {pd.Timestamp(year, 10, d) for d in range(8, 15)} | {pd.Timestamp(year, 11, 10), pd.Timestamp(year, 11, 11), pd.Timestamp(year, 11, 12)}
+    out = {h for h in hs if h.year == year and h not in drop
+           and not (h.month == 12 and h.day == 31)}        # NYSE does not observe New Year's Day on the prior Friday
+    if year < 2022: out = {h for h in out if not (h.month == 6 and 18 <= h.day <= 21)}   # Juneteenth from 2022
+    out.add(_easter(year) - pd.Timedelta(days=2))          # Good Friday
+    return out
+
+def is_trading_day(d):
+    d = pd.Timestamp(d).normalize()
+    return d.weekday() < 5 and d not in nyse_holidays(d.year)
+
+def next_trading_day(d):
+    d = pd.Timestamp(d).normalize() + pd.Timedelta(days=1)
+    while not is_trading_day(d): d += pd.Timedelta(days=1)
+    return d
+
+
+# ---------------- 12-1 momentum rank across the universe (causal) -------------
+def momentum(close):
+    S = SETUP
+    return close.shift(S["mom_skip"]) / close.shift(S["mom_lookback"]) - 1
+
+def momentum_ranks(closes, last_bar_complete_month=None, overrides=None):
+    """closes: {symbol: adjusted daily close Series (completed sessions only, tz-naive dates)}.
+    Returns (rank, asof, mom_at_me): rank[s] at each date = rank (1 = strongest) of s among the universe by 12-1
+    momentum at the latest month-end close <= that date; asof = that month-end date; NaN before the first one.
+    Month-end = a bar whose next bar is in another month (as in the research). For the LAST bar, which has no next bar,
+    the trading calendar decides (so the last trading day of a month counts from its own close).
+    overrides: {symbol: momentum value} used at the latest month-end for symbols whose data could not be refreshed."""
+    idx = pd.DatetimeIndex(sorted(set().union(*[set(c.index) for c in closes.values()])))
+    MOM = pd.DataFrame({s: momentum(c) for s, c in closes.items()}).reindex(idx)
+    per = idx.to_period("M")
+    mend = np.r_[per[1:] != per[:-1], False]
+    if len(idx):
+        mend[-1] = next_trading_day(idx[-1]).month != idx[-1].month if last_bar_complete_month is None else bool(last_bar_complete_month)
+    ME = idx[mend]
+    M = MOM.loc[ME].copy()
+    if overrides and len(ME):
+        for s, v in overrides.items():
+            if s not in M.columns: M[s] = np.nan
+            if pd.isna(M.loc[ME[-1], s]) and v is not None: M.loc[ME[-1], s] = v
+    R = M.rank(axis=1, ascending=False)
+    rank = R.reindex(idx).ffill()
+    asof = pd.Series(pd.NaT, index=idx); asof[ME] = ME; asof = asof.ffill()
+    return rank, asof, M
+
+
+def setup_features(daily, mrank=None):
+    """Causal features for the Pullback setup: every value at bar t uses bars <= t only.
+    mrank: this ticker's momentum-rank Series (from momentum_ranks), aligned by date; None -> grade B everywhere."""
     S = SETUP; c = daily.Close
     f = pd.DataFrame(index=daily.index)
     f["c"] = c
@@ -151,10 +216,17 @@ def setup_features(daily):
     f["sma5"] = c.rolling(S["exit_sma"]).mean()
     f["rsi2"] = rsi(c, S["rsi_len"])
     f["adx"] = adx(daily, S["adx_len"])
+    f["atr"] = atr(daily, S["atr_len"])
+    f["mrank"] = (pd.Series(np.asarray(mrank.reindex(_naive(daily.index)), float), daily.index) if mrank is not None
+                  else pd.Series(np.nan, daily.index))
     f["fired"] = (f.c > f.sma200) & (f.rsi2 < S["rsi_max"])          # NaN comparisons -> False
-    f["grade_a"] = f.fired & (f.adx > S["adx_min_grade_a"])
+    f["grade_a"] = f.fired & (f.mrank <= S["mom_top"])
     f["uptrend"] = f.c > f.sma200                                     # same-exit random baseline entries
     return f
+
+
+def _naive(idx):
+    return idx.tz_localize(None).normalize() if getattr(idx, "tz", None) is not None else idx
 
 
 def pullback_trades(f, entries):
@@ -185,29 +257,38 @@ def trade_stats(trades):
             "avg_hold_days": num(np.mean([t["hold"] for t in trades]), 1), "few": n < SETUP["min_trades"]}
 
 
-def pullback_ticker_stats(daily, start=None):
+def pullback_ticker_stats(daily, mrank=None, start=None):
     """This ticker's own out-of-sample stats (entries from SETUP['oos_start'] on) for both grades plus
     the same-exit random baseline (enter on every uptrend close, same exit)."""
     start = pd.Timestamp(start or SETUP["oos_start"])
     if len(daily) and daily.index.tz is not None: start = start.tz_localize(daily.index.tz)
-    f = setup_features(daily)
+    f = setup_features(daily, mrank)
     res = {k: trade_stats([t for t in pullback_trades(f, f[col]) if t["entry"] >= start])
            for k, col in (("all", "fired"), ("grade_a", "grade_a"), ("random_same_exit", "uptrend"))}
     res["window"] = [str(start.date()), str(daily.index[-1].date())] if len(daily) else None
     return res
 
 
-def pullback_setup(daily):
+def pullback_setup(daily, mrank=None, rank_asof=None, rank_of=None):
     """State of the setup on the LAST bar of `daily` (pass completed sessions only)."""
     S = SETUP; n = len(daily)
     if n == 0: return {"status": "no_data"}
-    f = setup_features(daily); x = f.iloc[-1]
+    f = setup_features(daily, mrank); x = f.iloc[-1]
     last_fire = f.index[f.fired.values]
+    d0 = _naive(daily.index)[-1]
+    ra = rank_asof.get(d0) if rank_asof is not None else None
+    atrp = x.atr / x.c if x.c else np.nan
     out = {"bar_date": str(f.index[-1].date()), "bars": n, "close": num(x.c, 2), "sma200": num(x.sma200, 2),
            "sma5": num(x.sma5, 2), "rsi2": num(x.rsi2, 1), "adx": num(x.adx, 1),
+           "mom_rank": None if pd.isna(x.mrank) else int(round(x.mrank)), "mom_rank_of": rank_of,
+           "mom_asof": None if ra is None or pd.isna(ra) else str(pd.Timestamp(ra).date()),
+           "in_top": bool(x.mrank <= S["mom_top"]) if not pd.isna(x.mrank) else False,
+           "atr14": num(x.atr, 3), "atr_pct": num(atrp * 100, 2),
+           "stop_3atr": num(x.c - S["stop_atr_mult"] * x.atr, 2),
+           "size_mult": num(min(S["size_cap"], S["size_risk_atr"] / atrp), 2) if atrp and not pd.isna(atrp) else None,
            "last_fired": str(last_fire[-1].date()) if len(last_fire) else None}
     if n < S["trend_sma"] or pd.isna(x.sma200):
-        out.update(status="insufficient_history", fired=False,
+        out.update(status="insufficient_history", fired=False, grade=None,
                    reason=f"only {n} daily bars; SMA({S['trend_sma']}) needs {S['trend_sma']}")
         return out
     out.update(status="ok", above_sma200=bool(x.c > x.sma200), fired=bool(x.fired),
@@ -220,3 +301,60 @@ def completed_sessions(daily, now_ny):
     if len(daily) and daily.index[-1].date() == now_ny.date() and (now_ny.hour, now_ny.minute) < (16, 0):
         return daily.iloc[:-1]
     return daily
+
+
+# ---------------- intraday rows (round 3): 15m EMA9 vs EMA21, 5m/1m close vs session VWAP ----------------
+# Definitions copied from research/research3.py feats() + descriptors3.py states(); completed bars only.
+ROWS = {"15m": {"kind": "ema9_21", "minutes": 15}, "5m": {"kind": "vwap", "minutes": 5}, "1m": {"kind": "vwap", "minutes": 1}}
+
+def _to_ny(idx):
+    return idx.tz_convert(NY) if idx.tz is not None else idx.tz_localize(NY)
+
+def completed_bars(df, minutes, now_ny):
+    """Regular-session bars (09:30-16:00 ET) whose end time (start + bar length) is <= now. Excludes the bar still forming."""
+    if not len(df): return df
+    now_ny = pd.Timestamp(now_ny)
+    idx = _to_ny(df.index); df = df.set_axis(idx)
+    hm = idx.hour * 60 + idx.minute
+    df = df[(hm >= 570) & (hm < 960) & df.Close.notna()]
+    end = df.index + pd.Timedelta(minutes=minutes)
+    return df[end <= now_ny]
+
+def session_open(now_ny):
+    """True on a trading weekday between 09:30 and 16:00 ET."""
+    now_ny = pd.Timestamp(now_ny); hm = now_ny.hour * 60 + now_ny.minute
+    return is_trading_day(now_ny.tz_localize(None)) and 570 <= hm < 960
+
+def ema_state(df, minutes, now_ny):
+    """15m row: Up if EMA9 > EMA21 of completed-bar closes (EMAs run continuously across sessions), Down if below.
+    since = end time of the first bar of the current unbroken state run."""
+    b = completed_bars(df, minutes, now_ny)
+    if len(b) < 21: return {"kind": "ema9_21", "status": "insufficient", "score": None, "bars": len(b)}
+    e9, e21 = ema(b.Close, 9), ema(b.Close, 21)
+    st = np.sign((e9 - e21).values)
+    cur = st[-1]; j = len(st) - 1
+    while j > 0 and st[j - 1] == cur: j -= 1
+    end = lambda i: b.index[i] + pd.Timedelta(minutes=minutes)
+    return {"kind": "ema9_21", "status": "ok", "score": int(cur), "dir": int(cur),
+            "state": "Up" if cur > 0 else "Down" if cur < 0 else "Flat",
+            "ema9": num(e9.iloc[-1], 3), "ema21": num(e21.iloc[-1], 3),
+            "since": end(j).isoformat(), "since_is_lower_bound": bool(j == 0),
+            "last_bar_end": end(len(b) - 1).isoformat(), "bars": len(b)}
+
+def vwap_state(df, minutes, now_ny):
+    """5m/1m rows: close of the last completed bar vs session VWAP (typical price x volume, cumulative from 09:30 ET of
+    that bar's session; zero volume -> weight 1e-9 as in the research). Above = +1, Below = -1, exact tie = 0.
+    During market hours before today's first bar has closed -> status 'waiting' (no score)."""
+    b = completed_bars(df, minutes, now_ny)
+    if session_open(now_ny) and (not len(b) or b.index[-1].date() != now_ny.date()):
+        return {"kind": "vwap", "status": "waiting", "score": None, "session": str(now_ny.date())}
+    if not len(b): return {"kind": "vwap", "status": "insufficient", "score": None, "bars": 0}
+    day = b.index[-1].date(); s = b[b.index.date == day]
+    tp = (s.High + s.Low + s.Close) / 3; v = s.Volume.clip(lower=0).fillna(0); v = v.where(v > 0, 1e-9)
+    vw = float((tp * v).sum() / v.sum()); c = float(s.Close.iloc[-1])
+    sc = int(np.sign(c - vw))
+    return {"kind": "vwap", "status": "ok", "score": sc, "dir": sc,
+            "state": "Above" if sc > 0 else "Below" if sc < 0 else "At",
+            "vwap": num(vw, 3), "close": num(c, 3), "dist_pct": num((c / vw - 1) * 100, 2),
+            "session": str(day), "bars_today": len(s), "live_session": bool(day == now_ny.date() and session_open(now_ny)),
+            "last_bar_end": (s.index[-1] + pd.Timedelta(minutes=minutes)).isoformat()}

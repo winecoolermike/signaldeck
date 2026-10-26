@@ -9,7 +9,7 @@
 <body>
 <header class="top">
   <div class="brand"><span class="logo">◆</span> SignalDeck</div>
-  <nav><a href="#cards" class="on">Dashboard</a><a href="#how">How signals work</a><a href="backtest.html">Backtest</a></nav>
+  <nav><a href="index.html#cards" class="on">Dashboard</a><a href="scanner.html">Scanner</a><a href="#how">How signals work</a><a href="backtest.html">Backtest</a></nav>
   <div class="meta" id="meta">loading…</div>
 </header>
 <main id="cards" class="cards"></main>
@@ -23,12 +23,24 @@
     <li>close &gt; SMA(200) of daily closes, <b>and</b></li>
     <li>RSI(2, Wilder) &lt; 10.</li>
   </ul>
-  <p><b>Grade A</b> if ADX(14, Wilder) &gt; 25 as well, otherwise grade B. <b>Exit rule:</b> the first daily close above SMA(5), or after 10 trading days, whichever comes first. Long only: no PUT/short setups and no 60m setups survived testing. When the setup is not firing, the card shows a muted line with the current RSI(2) and whether price is above SMA200, so you can see how close it is.</p>
-  <p>The badge's statistics are <b>frozen out-of-sample results</b> (<code>setups.json</code>, derived from the research result files) — see <a href="backtest.html#setups">Backtest → Setups</a>. Each ticker's own line ("X itself") is recomputed on every build with the same fixed rule over 2023 → latest close; fewer than 30 trades is flagged "too few to trust". The rule parameters live in <code>signals.py</code> (<code>SETUP</code>) and are never re-tuned by the scheduled job. Losses ran bigger than wins, results are for stock moves after 0.05%/side costs (not options), and past results don't predict future ones.</p>
+  <p><b>Grade A</b> if the stock is also in the <b>top 10 of the 23-stock universe by 12-1 month momentum</b>, otherwise grade B. 12-1 momentum = close 21 trading days ago ÷ close 252 trading days ago − 1 (the last month is skipped), on adjusted closes. The ranking is taken at the <b>last completed month-end close</b> and used until the next one; on the last trading day of a month the new ranking applies from that day's close (same convention as the research). Stocks without 12 months of history are unranked (so ranks are currently "of 22"). ADX(14) is still shown, for information only. The universe is the 7 dashboard tickers plus SPY, QQQ, IWM, AAPL, MSFT, AMZN, JPM, XOM, JNJ, PG, KO, WMT, HD, CAT, UNH, NEE; all 23 are on the <a href="scanner.html">Scanner</a>.</p>
+  <p><b>Why momentum instead of ADX:</b> in round-2 testing (2005–22 to choose, 2023 → now to score) the top-10-momentum filter raised net per trade and cut the worst trade while keeping the hit rate; its figures (from <code>setups.json</code>) are in the card's table and on <a href="backtest.html#setups">Backtest → Setups</a>. Honest caveat: its p-value cleared the multiple-testing bar in force when it was tested, but against the stricter bar after round 3's extra tests it narrowly misses (exact numbers on the backtest page). On the 7 dashboard tickers alone it was not significant.</p>
+  <p><b>Exit rule:</b> the first daily close above SMA(5), or after 10 trading days, whichever comes first. Long only: no PUT/short setups and no intraday setups survived testing. The card also shows an <b>optional</b> 3×ATR(14) disaster-stop price (not part of the rule; it cut the worst losses but lowered the average) and a size hint based on the out-of-sample loss sizes. When the setup is not firing, the card shows a muted line with the current RSI(2), SMA200 position and momentum rank, so you can see how close it is.</p>
+  <p>The badge's statistics are <b>frozen out-of-sample results</b> (<code>setups.json</code>, derived from the research result files by <code>make_setups.py</code>) — see <a href="backtest.html#setups">Backtest → Setups</a>. Each ticker's own line ("X itself") is recomputed on every build with the same fixed rule over 2023 → latest close; fewer than 30 trades is flagged "too few to trust". The rule parameters live in <code>signals.py</code> (<code>SETUP</code>) and are never re-tuned by the scheduled job. Losses ran bigger than wins, results are for stock moves after 0.05%/side costs (not options), and past results don't predict future ones.</p>
 
-  <h3>1. Trend state per timeframe (rows Main, 60m, 30m, 15m, 5m, 1m)</h3>
-  <p>The CALL/PUT table is labelled <b>"Trend state, not a forecast"</b>: out of sample (2023–26, 23 stocks) the daily version was right about as often as chance (exact figures under the table, from <code>setups.json</code>). It describes the trend so far; don't read it as a prediction, and don't invert it either (fading high-confidence readings also failed).</p>
-  <p>For each timeframe we download bars (regular session only) and take the most recent completed bar. Four indicators each cast a vote of +1 (bullish), −1 (bearish) or 0:</p>
+  <h3 id="how-rows">1. Trend state per timeframe (rows Main, 60m, 30m, 15m, 5m, 1m)</h3>
+  <p>The table is labelled <b>"Trend state, not a forecast"</b>: it describes the trend so far and <b>does not predict the rest of the day</b>. Out of sample (2023–26, 23 stocks) the daily version was right about as often as chance (exact figures under the table). Don't read it as a prediction, and don't invert it either (fading high-confidence readings also failed). Rows use regular-session bars only.</p>
+  <p>Each row uses the indicator that described its timeframe best in testing (round 3, below):</p>
+  <table class="rules">
+    <tr><th>Row</th><th>What it shows</th><th>Score in Total</th></tr>
+    <tr><td>Main, 60m, 30m</td><td><span class="call">CALL</span> / <span class="put">PUT</span> / <span class="neut">NEUT</span> from the 4-vote score below (unchanged; on 60m/30m nothing tested beat it).</td><td><i>s</i> (−1…+1)</td></tr>
+    <tr><td>15m</td><td><b>Up</b> if EMA(9) &gt; EMA(21) of completed 15-minute closes, <b>Down</b> if below, with "since HH:MM ET" = end of the first bar of the current run. EMAs run continuously across sessions.</td><td>+1 / −1</td></tr>
+    <tr><td>5m, 1m</td><td><b>Above / Below VWAP</b>: last completed bar's close vs the session VWAP (typical price (H+L+C)/3 × volume, summed from 09:30 ET). The 5m row shows the distance in %. Before today's first bar closes it shows <i>waiting for first bar</i> and is left out of Total. An exact tie shows "At VWAP" and scores 0.</td><td>+1 / −1</td></tr>
+  </table>
+  <p>The bar still forming is never used on the 15m/5m/1m rows. Outside market hours they show the last session's state.</p>
+  <div id="rows-evidence"></div>
+  <p class="muted">Small-sample caveats: Yahoo only serves ~60 days of 15m/5m bars and ~7 days of 1m bars, so the scored ("test") windows are 30 sessions for 15m/5m and 10 for 1m. These are descriptive comparisons, not trading results. "Rest of day right" near the base rate means none of the rows forecasts where the day closes.</p>
+  <p><b>4-vote score</b> (Main, 60m, 30m). For each of those timeframes four indicators each cast a vote of +1 (bullish), −1 (bearish) or 0:</p>
   <table class="rules">
     <tr><th>Component</th><th>Rule</th><th>Weight</th></tr>
     <tr><td>EMA trend cross</td><td>EMA(20) &gt; EMA(50) → +1, otherwise −1. EMA uses α = 2/(n+1).</td><td>30%</td></tr>
@@ -39,10 +51,10 @@
   <p><b>Score</b> <i>s</i> = Σ(weight × vote) / Σ(weights of available components), so −1 ≤ <i>s</i> ≤ +1. A component needs enough bars (EMA cross 50, SMA200 200, RSI 30, MACD 35); if there aren't enough, it is skipped, the remaining weights are renormalised and the card lists it under "Data notes".</p>
   <p><b>Bias</b>: <i>s</i> ≥ +0.25 → <span class="call">CALL</span>; <i>s</i> ≤ −0.25 → <span class="put">PUT</span>; otherwise <span class="neut">NEUT</span>.<br>
   <b>Confidence</b>: CALL/PUT → 50 + 50·|<i>s</i>| (50–100%). NEUT → 50 + 50·(1 − |<i>s</i>|/0.25), i.e. 100% when the votes cancel exactly, ~50% when it's about to tip.</p>
-  <p><b>Trend-strength tag</b> next to each row is ADX(14, Wilder) on that timeframe: L &lt; 20 ≤ OK &lt; 25 ≤ H &lt; 40 ≤ V.H. It is informational and does not change the bias.</p>
+  <p><b>Trend-strength tag</b> next to the Main/60m/30m rows is ADX(14, Wilder) on that timeframe: L &lt; 20 ≤ OK &lt; 25 ≤ H &lt; 40 ≤ V.H. It is informational and does not change the bias. On the 15m/5m/1m rows that column shows the row's score (+1/−1).</p>
 
   <h3>2. Total row &amp; overall trend label</h3>
-  <p>Total score = weighted average of the timeframe scores: Main (daily) 30%, 60m 20%, 30m 15%, 15m 15%, 5m 10%, 1m 10% (renormalised if a timeframe is missing). Same bias/confidence thresholds as above. The trend label is Bullish / Bearish / Neutral from the Total bias and "Trend ~X%" = |Total score| × 100.</p>
+  <p>Total score = weighted average of the row scores: Main (daily) 30%, 60m 20%, 30m 15%, 15m 15%, 5m 10%, 1m 10% (renormalised if a row is missing or waiting). The 15m/5m/1m rows contribute +1 or −1. Same bias/confidence thresholds (±0.25) as above. The trend label is Bullish / Bearish / Neutral from the Total bias and "Trend ~X%" = |Total score| × 100. Like the rows, it describes the trend so far and does not predict the rest of the day.</p>
 
   <h3>3. Main daily signal score (0–100)</h3>
   <p>Daily score = 50 + 50 × <i>s</i><sub>daily</sub>. Labels: ≥ 70 Strong CALL, 58–69 Moderate CALL, 43–57 Neutral, 31–42 Moderate PUT, ≤ 30 Strong PUT.</p>
@@ -61,7 +73,7 @@
   <h3>5. Trade quality meter (0–100)</h3>
   <p>Quality = 40% × timeframe agreement + 30% × trend strength + 30% × options liquidity, where</p>
   <ul>
-    <li><b>Agreement</b> = |Σ w<sub>tf</sub>·sign(bias<sub>tf</sub>)| / Σ w<sub>tf</sub> (CALL = +1, PUT = −1, NEUT = 0). 1.0 = all timeframes point the same way.</li>
+    <li><b>Agreement</b> = |Σ w<sub>tf</sub>·sign<sub>tf</sub>| / Σ w<sub>tf</sub> (CALL / Up / Above = +1, PUT / Down / Below = −1, NEUT = 0). 1.0 = all timeframes point the same way.</li>
     <li><b>Trend strength</b> = min(daily ADX / 40, 1).</li>
     <li><b>Options liquidity</b> = max(0, 1 − avg relative spread / 20%), using the best OTM call &amp; put of the 3 nearest expiries. Relative spread = (ask − bid) / mid. No usable quotes → 0.</li>
   </ul>

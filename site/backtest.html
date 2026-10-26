@@ -9,7 +9,7 @@
 <body>
 <header class="top">
   <div class="brand"><span class="logo">◆</span> SignalDeck</div>
-  <nav><a href="./">Dashboard</a><a href="./#how">How signals work</a><a href="backtest.html" class="on">Backtest</a></nav>
+  <nav><a href="./">Dashboard</a><a href="scanner.html">Scanner</a><a href="./#how">How signals work</a><a href="backtest.html" class="on">Backtest</a></nav>
   <div class="meta" id="meta">loading…</div>
 </header>
 <main class="bt" id="bt">
@@ -48,10 +48,17 @@
 
   <section>
     <h2>60-minute signal on its own</h2>
-    <p class="muted">Same rules on 60m bars over the last ~year, forward 1 / 4 / 7 bars (7 bars ≈ one session).</p>
+    <p class="muted">Same 4-vote score on 60m bars over the last ~year, forward 1 / 4 / 7 bars (7 bars ≈ one session). The live 60m and 30m rows still use this score (nothing tested in round 3 described those timeframes better); the 15m, 5m and 1m rows now use EMA9/21 and VWAP states — see the next section.</p>
     <div class="tabs" id="tabs-60"></div>
     <div class="tablewrap"><table class="bt-t" id="t-60"></table></div>
     <div id="skipped" class="skipped"></div>
+  </section>
+
+  <section id="intraday-rows">
+    <h2>Intraday rows (15m / 5m / 1m): why EMA9/21 and VWAP</h2>
+    <p class="muted" id="r3-intro">Loading setups.json…</p>
+    <div class="tablewrap"><table class="bt-t" id="r3-rows"></table></div>
+    <p class="muted" id="r3-notes"></p>
   </section>
 
   <section>

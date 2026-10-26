@@ -33,6 +33,9 @@ jobs:
           cp site/backtest.json "$RUNNER_TEMP/backtest.committed.json"
           curl -fsS --max-time 20 "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/backtest.json" \
             -o "$RUNNER_TEMP/backtest.live.json" || echo "no live backtest.json yet"
+          # last good live data.json: tickers that fail to download this run keep these values, marked stale
+          curl -fsS --max-time 20 "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/data.json" \
+            -o "$RUNNER_TEMP/data.live.json" || echo "no live data.json yet"
       - name: Install requirements
         id: install
         continue-on-error: true
@@ -42,11 +45,14 @@ jobs:
         run: python tests/test_setup.py
       # The Pullback setup rule is frozen in signals.py (SETUP) and its research stats in the committed
       # site/setups.json. This job only recomputes per-ticker stats with new bars; it never re-tunes rules.
+      # Daily bars for all 23 universe tickers come from one batch download (per-ticker retry on failure).
       - name: Build data
         id: build
         if: steps.install.outcome == 'success'
         continue-on-error: true
         timeout-minutes: 10
+        env:
+          PREV_DATA: ${{ runner.temp }}/data.live.json
         run: python build_data.py
       - name: Validate data (fall back to committed data.json if bad)
         run: |
