@@ -110,7 +110,7 @@ def test_grade_a_matches_round2_if_present():
 # ---------------- momentum rank (Grade A) ----------------
 def test_momentum_ranks_match_research():
     E = J("expected_momentum.json"); C = closes23()
-    assert sorted(C) == sorted(UNIVERSE)
+    assert set(C) <= set(UNIVERSE) and len(C) == 23    # fixture = the original 23 (still part of the scan universe)
     rank, asof, M = momentum_ranks(C)
     for day, exp in E["ranks"].items():
         for s, r in exp.items():
@@ -195,6 +195,129 @@ def test_ema_row_state_and_since():
     b = completed_bars(d, 15, ny("2026-10-23 17:00")); sgn = np.sign((ema(b.Close, 9) - ema(b.Close, 21)).values)
     since = pd.Timestamp(st["since"]); k = list(b.index + pd.Timedelta(minutes=15)).index(since)
     assert (sgn[k:] == sgn[-1]).all() and sgn[k - 1] != sgn[-1]          # first bar of the current unbroken run
+
+
+# ---------------- round 4: scan universe, market calendar, home sections, freshness ----------------
+from signals import CFG, universe_from_config, early_close, close_minutes, session_open, market_status, calendar_lists, home_sections
+
+
+def test_universe_from_config():
+    U = universe_from_config(CFG); su = CFG["scan_universe"]
+    assert len(U) == len(set(U)) == 118 and UNIVERSE == U
+    assert U[:len(CFG["tickers"])] == CFG["tickers"]                      # This Week first, in config order
+    assert set(CFG["comparison_tickers"]) | set(su["etfs"]) | set(su["sp100"]) <= set(U)
+    assert len(su["sp100"]) == 100 and len(su["etfs"]) == 15
+    rel = ROOT / "research" / "fetch4_reliability.json"                    # the universe round 4 was validated on
+    if rel.exists():
+        assert set(json.loads(rel.read_text())["universe"]) == set(U)
+    cfg = {"tickers": ["A", "B"], "comparison_tickers": ["B", "C"], "scan_universe": {"etfs": ["C", "D"], "sp100": ["A", "E"]}}
+    assert universe_from_config(cfg) == ["A", "B", "C", "D", "E"]
+    assert universe_from_config({"tickers": ["A"], "comparison_tickers": ["B"]}) == ["A", "B"]   # no scan_universe -> old list
+
+
+def test_early_close_and_market_status():
+    for d in ["2026-11-27", "2026-12-24", "2025-07-03", "2025-11-28", "2025-12-24", "2027-11-26"]:
+        assert early_close(d) and close_minutes(pd.Timestamp(d)) == 780, d
+    for d in ["2026-07-03", "2026-11-26", "2026-12-25", "2026-10-26", "2027-12-24", "2026-11-28"]:
+        assert not early_close(d), d                                       # holidays / weekends / normal days
+    assert session_open(ny("2026-11-27 12:59")) and not session_open(ny("2026-11-27 13:00"))
+    assert session_open(ny("2026-10-26 15:59")) and not session_open(ny("2026-10-26 16:00"))
+    assert not session_open(ny("2026-10-26 09:29")) and session_open(ny("2026-10-26 09:30"))
+    M = lambda t: market_status(ny(t))
+    assert M("2026-10-26 10:00")["state"] == "open" and M("2026-10-26 10:00")["closes_at"] == "16:00 ET"
+    assert M("2026-11-27 10:00")["closes_at"] == "13:00 ET" and M("2026-11-27 10:00")["early_close"]
+    assert M("2026-11-27 14:00")["state"] == "after"
+    assert M("2026-10-26 08:00")["state"] == "pre" and M("2026-10-26 08:00")["next_open"] == "2026-10-26 09:30 ET"
+    assert M("2026-10-26 21:00")["state"] == "closed" and M("2026-10-26 21:00")["next_open"] == "2026-10-27 09:30 ET"
+    assert M("2026-10-24 12:00")["state"] == "closed" and M("2026-10-24 12:00")["next_open"] == "2026-10-26 09:30 ET"   # Saturday
+    assert M("2026-11-26 12:00")["state"] == "closed" and M("2026-11-26 12:00")["next_open"] == "2026-11-27 09:30 ET"   # Thanksgiving
+    C = calendar_lists([2026, 2027])
+    assert "2026-11-26" in C["holidays"] and "2026-07-03" in C["holidays"] and "2027-12-24" in C["holidays"]
+    assert C["early_closes"] == ["2026-11-27", "2026-12-24", "2027-11-26"]
+
+
+def test_home_sections():
+    R = [{"ticker": "X", "fired": True, "grade": "B", "mom_rank": 40}, {"ticker": "Y", "fired": True, "grade": "A", "mom_rank": 9},
+         {"ticker": "Z", "fired": False, "mom_rank": 1}, {"ticker": "W", "fired": True, "grade": "A", "mom_rank": 3},
+         {"ticker": "V", "fired": False, "mom_rank": 10}, {"ticker": "U", "fired": False, "mom_rank": 11},
+         {"ticker": "S", "fired": False, "mom_rank": None, "status": "insufficient_history"}]
+    S = {x["key"]: x for x in home_sections(R, ["S", "Q", "X"], 10)}
+    assert [x["key"] for x in home_sections(R, [], 10)] == ["firing", "leaders", "this_week"]
+    assert S["firing"]["tickers"] == ["W", "Y", "X"]                       # Grade A first, then by rank
+    assert S["leaders"]["tickers"] == ["Z", "W", "Y", "V"]                 # rank <= 10, by rank (11 excluded)
+    assert S["this_week"]["tickers"] == ["S", "Q", "X"] and S["this_week"]["missing"] == ["Q"]
+    assert home_sections([], ["A"], 10)[0]["tickers"] == []
+
+
+def test_u4_ranks_match_research4_if_present():
+    D4 = ROOT / "research" / "data4"
+    if not D4.exists(): print("  (research/data4 not present; skipped)"); return
+    raw = {s: pd.read_pickle(D4 / f"{s}_1d.pkl") for s in UNIVERSE if (D4 / f"{s}_1d.pkl").exists()}
+    assert len(raw) == 118
+    rank, asof, _ = momentum_ranks({s: x["Close"].dropna() for s, x in raw.items()})
+    # independent re-implementation of research4.load(): SPY calendar, 12-1 momentum, rank at each month-end
+    spy = raw["SPY"].loc["2003-01-01":]; ix = spy.index.to_series()
+    mend = pd.Series((ix.dt.to_period("M") != ix.shift(-1).dt.to_period("M")).values, spy.index); mend.iloc[-1] = False
+    MOM = pd.DataFrame({s: (x.Close.shift(21) / x.Close.shift(252) - 1) for s, x in raw.items()}).reindex(spy.index)
+    R = MOM.loc[spy.index[mend.values]].rank(axis=1, ascending=False)
+    R = R.loc["2005-01-01":]
+    L = rank.reindex(R.index)[R.columns]
+    both = R.notna() & L.notna()
+    assert both.values.sum() > 20000 and (R.notna() == L.notna()).values.all()
+    assert (R[both] == L[both]).values[both.values].all()
+    assert R.iloc[-1].notna().sum() == 117                                 # SPCX unranked (under a year of data)
+
+
+def test_build_cards_falls_back_to_previous_card():
+    import build_data as B
+    orig = B.build_ticker
+    def fake(sym, asof, U):
+        if sym.endswith("BAD"): raise RuntimeError("download failed")
+        if sym == "EMPTY": return {"ticker": sym, "status": "no_data"}
+        return {"ticker": sym, "status": "ok", "v": 2}
+    prev = {"tickers": [{"ticker": "BAD", "status": "ok", "v": 1, "notes": []}, {"ticker": "EMPTY", "status": "ok", "v": 1}]}
+    try:
+        B.build_ticker = fake
+        out = {c["ticker"]: c for c in B.build_cards(["OK", "BAD", "EMPTY", "NEW_BAD"], None, None, prev)}
+    finally:
+        B.build_ticker = orig
+    assert out["OK"] == {"ticker": "OK", "status": "ok", "v": 2}
+    assert out["BAD"]["v"] == 1 and out["BAD"]["stale"] and out["EMPTY"]["stale"] and out["EMPTY"]["v"] == 1
+    assert out["NEW_BAD"]["status"] == "no_data" and "stale" not in out["NEW_BAD"]  # nothing previous to fall back on
+    assert list(out) == ["OK", "BAD", "EMPTY", "NEW_BAD"]
+
+
+def test_freshness_decide():
+    from freshness import decide
+    u = lambda s: pd.Timestamp(s, tz=NY).tz_convert("UTC")                # times below are New York
+    dj = lambda g, bar="2026-10-26": {"generated_at": u(g).isoformat(), "scanner": {"bar_date": bar}}
+    bj = lambda g: {"generated_at": u(g).isoformat()}
+    # push / dispatch always build; backtest only when asked
+    assert decide(u("2026-10-26 12:00"), dj("2026-10-26 11:59"), bj("2026-10-26 11:00"), "push") == {"build": True, "backtest": False, "reason": "push: always build"}
+    assert decide(u("2026-10-26 12:00"), None, None, "workflow_dispatch", True)["backtest"]
+    # during the session: rebuild only if the live data is >= 20 min old; never the backtest
+    assert not decide(u("2026-10-26 12:00"), dj("2026-10-26 11:45"), None, "schedule")["build"]
+    r = decide(u("2026-10-26 12:00"), dj("2026-10-26 11:40"), None, "schedule"); assert r["build"] and not r["backtest"]
+    assert decide(u("2026-10-26 12:00"), None, None, "schedule")["build"]                   # live site unreachable
+    # after the close: the first slot builds + backtests, later slots skip (idempotent)
+    pre = dj("2026-10-26 15:50"), bj("2026-10-23 18:20")
+    assert decide(u("2026-10-26 16:10"), *pre, "schedule") == decide(u("2026-10-26 16:10"), *pre, "schedule")
+    r = decide(u("2026-10-26 16:10"), *pre, "schedule"); assert not r["build"] and not r["backtest"]   # close not settled yet (16:15): 15:50 data and Friday's backtest are current
+    r = decide(u("2026-10-26 18:17"), *pre, "schedule"); assert r["build"] and r["backtest"]
+    done = dj("2026-10-26 18:19"), bj("2026-10-26 18:20")
+    for t in ["2026-10-26 18:47", "2026-10-26 19:33", "2026-10-26 21:13", "2026-10-27 08:07", "2026-10-27 09:07"]:
+        assert decide(u(t), *done, "schedule")["build"] is False, t
+    # a build made after the close but still carrying the previous session's bar is stale
+    assert decide(u("2026-10-26 18:47"), dj("2026-10-26 18:19", bar="2026-10-23"), bj("2026-10-26 18:20"), "schedule")["build"]
+    # backtest missing / older than the close -> rerun even if data is fresh
+    r = decide(u("2026-10-26 18:47"), dj("2026-10-26 18:19"), None, "schedule"); assert r["build"] and r["backtest"]
+    # weekend / holiday: the last session is Friday / the day before
+    assert not decide(u("2026-10-31 12:00"), dj("2026-10-30 18:30", "2026-10-30"), bj("2026-10-30 18:31"), "schedule")["build"]
+    assert decide(u("2026-10-31 12:00"), dj("2026-10-30 15:00", "2026-10-30"), bj("2026-10-30 18:31"), "schedule")["build"]
+    assert not decide(u("2026-11-26 20:00"), dj("2026-11-25 17:00", "2026-11-25"), bj("2026-11-25 17:00"), "schedule")["build"]
+    # early close (13:00): settled at 13:15, so a 14:00 run builds and later ones skip
+    r = decide(u("2026-11-27 14:00"), dj("2026-11-27 12:50", "2026-11-27"), bj("2026-11-26 10:00"), "schedule"); assert r["build"] and r["backtest"]
+    assert not decide(u("2026-11-27 18:00"), dj("2026-11-27 14:01", "2026-11-27"), bj("2026-11-27 14:05"), "schedule")["build"]
 
 
 if __name__ == "__main__":

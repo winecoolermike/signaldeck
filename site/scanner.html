@@ -9,13 +9,14 @@
 <body>
 <header class="top">
   <div class="brand"><span class="logo">◆</span> SignalDeck</div>
-  <nav><a href="./">Dashboard</a><a href="scanner.html" class="on">Scanner</a><a href="./#how">How signals work</a><a href="backtest.html">Backtest</a></nav>
+  <nav><a href="./">Home</a><a href="scanner.html" class="on">Scanner</a><a href="./#how">How it works</a><a href="backtest.html">Backtest</a></nav>
   <div class="meta" id="meta">loading…</div>
 </header>
 <main class="bt scan">
   <section>
-    <h2>Pullback scanner · all 23 stocks</h2>
+    <h2>Pullback scanner · all <span id="sc-n">—</span> stocks</h2>
     <p class="muted" id="sc-intro">Loading data.json…</p>
+    <div class="sc-ctl"><input id="sc-q" type="search" placeholder="Find ticker" autocomplete="off" aria-label="Find ticker"><label><input type="checkbox" id="sc-fire"> Firing only</label><span class="muted" id="sc-count"></span></div>
     <div id="sc-list" class="sc-list"></div>
     <p class="muted" id="sc-notes"></p>
   </section>

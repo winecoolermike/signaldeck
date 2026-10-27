@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-25T22:02:58-07:00",
+ "generated_at": "2026-10-26T22:18:16-07:00",
  "frozen": true,
  "rule": {
   "name": "Pullback",
@@ -149,6 +149,14 @@
    "round3_desc": {
     "file": "research/results_round3_desc.json",
     "sha256": "eebad1ab707ec28656dcd0b16362da842549feff62df500bcff24d96a3641d4e"
+   },
+   "round4": {
+    "file": "research/results_round4.json",
+    "sha256": "8e8fc709b16c47d58fdc48f501216c3306adb2679911e0678be0caf858d2e26b"
+   },
+   "prereg4": {
+    "file": "research/PREREG4.md",
+    "sha256": "151bfb15b383db495ab5aeb89e8183b0250732dd24a0b4178e3658480bbd8e1a"
    }
   }
  },
@@ -2073,5 +2081,1269 @@
   "tests_cumulative": 123,
   "alpha_cumulative": 0.0004065040650406504,
   "grade_a_p": 0.00047689513734570357
+ },
+ "round4": {
+  "meta": {
+   "train": [
+    "2005-01-01",
+    "2022-12-31"
+   ],
+   "test": [
+    "2023-01-01",
+    "2026-12-31"
+   ],
+   "data_end": "2026-10-26",
+   "alpha": 0.0003968253968253968,
+   "tests_round4": 3,
+   "tests_cumulative": 126,
+   "n_universe": 118,
+   "missing": [],
+   "ranked_last_month_end": 117,
+   "rank_asof": "2026-09-30",
+   "ranked_2005": 96,
+   "ranked_2023": 115
+  },
+  "prereg": "research/PREREG4.md",
+  "rules": {
+   "R4-1 base pullback": {
+    "survives": true,
+    "U4": {
+     "train": {
+      "n": 14177,
+      "trades_per_ticker_year": 6.68,
+      "hit": 0.7011,
+      "same_exit_random_hit": 0.5898,
+      "p_hit_vs_same_exit": 3.453277858177225e-166,
+      "exp_net_pct": 0.345,
+      "same_exit_random_exp_net_pct": -0.003,
+      "avg_win_net": 1.67,
+      "avg_loss_net": -2.53,
+      "profit_factor_net": 1.43,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.8,
+      "t_clustered": 6.07,
+      "few": false
+     },
+     "test": {
+      "n": 3365,
+      "trades_per_ticker_year": 7.47,
+      "hit": 0.6918,
+      "same_exit_random_hit": 0.5999,
+      "p_hit_vs_same_exit": 1.2036425513273307e-28,
+      "exp_net_pct": 0.473,
+      "same_exit_random_exp_net_pct": 0.044,
+      "avg_win_net": 2.04,
+      "avg_loss_net": -2.76,
+      "profit_factor_net": 1.52,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 2.93,
+      "few": false
+     }
+    },
+    "new_names": {
+     "train": {
+      "n": 11246,
+      "trades_per_ticker_year": 6.58,
+      "hit": 0.7039,
+      "same_exit_random_hit": 0.5886,
+      "p_hit_vs_same_exit": 9.520162668045908e-142,
+      "exp_net_pct": 0.366,
+      "same_exit_random_exp_net_pct": -0.002,
+      "avg_win_net": 1.71,
+      "avg_loss_net": -2.59,
+      "profit_factor_net": 1.45,
+      "worst_trade_pct": -32.67,
+      "avg_hold_days": 3.8,
+      "t_clustered": 6.4,
+      "few": false
+     },
+     "test": {
+      "n": 2750,
+      "trades_per_ticker_year": 7.58,
+      "hit": 0.6927,
+      "same_exit_random_hit": 0.5991,
+      "p_hit_vs_same_exit": 1.5022153992935662e-24,
+      "exp_net_pct": 0.506,
+      "same_exit_random_exp_net_pct": 0.057,
+      "avg_win_net": 2.15,
+      "avg_loss_net": -2.91,
+      "profit_factor_net": 1.54,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 2.69,
+      "few": false
+     }
+    },
+    "old23": {
+     "train": {
+      "n": 2931,
+      "trades_per_ticker_year": 7.08,
+      "hit": 0.6905,
+      "same_exit_random_hit": 0.5943,
+      "p_hit_vs_same_exit": 2.4755394101638898e-27,
+      "exp_net_pct": 0.263,
+      "same_exit_random_exp_net_pct": -0.008,
+      "avg_win_net": 1.51,
+      "avg_loss_net": -2.31,
+      "profit_factor_net": 1.35,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.8,
+      "t_clustered": 3.98,
+      "few": false
+     },
+     "test": {
+      "n": 615,
+      "trades_per_ticker_year": 7.01,
+      "hit": 0.6878,
+      "same_exit_random_hit": 0.6033,
+      "p_hit_vs_same_exit": 8.496879820956507e-06,
+      "exp_net_pct": 0.326,
+      "same_exit_random_exp_net_pct": -0.012,
+      "avg_win_net": 1.56,
+      "avg_loss_net": -2.11,
+      "profit_factor_net": 1.46,
+      "worst_trade_pct": -15.27,
+      "avg_hold_days": 3.8,
+      "t_clustered": 3.53,
+      "few": false
+     }
+    },
+    "core7": {
+     "train": {
+      "n": 784,
+      "trades_per_ticker_year": 6.22,
+      "hit": 0.6849,
+      "same_exit_random_hit": 0.5867,
+      "p_hit_vs_same_exit": 8.727720858193533e-09,
+      "exp_net_pct": 0.323,
+      "same_exit_random_exp_net_pct": -0.01,
+      "avg_win_net": 1.58,
+      "avg_loss_net": -2.23,
+      "profit_factor_net": 1.44,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.8,
+      "t_clustered": 2.99,
+      "few": false
+     },
+     "test": {
+      "n": 115,
+      "trades_per_ticker_year": 4.3,
+      "hit": 0.6,
+      "same_exit_random_hit": 0.5916,
+      "p_hit_vs_same_exit": 0.46746084670779886,
+      "exp_net_pct": -0.022,
+      "same_exit_random_exp_net_pct": -0.098,
+      "avg_win_net": 1.75,
+      "avg_loss_net": -2.49,
+      "profit_factor_net": 0.98,
+      "worst_trade_pct": -9.24,
+      "avg_hold_days": 4.4,
+      "t_clustered": -0.08,
+      "few": false
+     }
+    },
+    "test_by_year": {
+     "2023": {
+      "n": 759,
+      "trades_per_ticker_year": 6.43,
+      "hit": 0.6733,
+      "same_exit_random_hit": 0.602,
+      "p_hit_vs_same_exit": 2.9263136684348882e-05,
+      "exp_net_pct": 0.277,
+      "same_exit_random_exp_net_pct": 0.035,
+      "avg_win_net": 1.93,
+      "avg_loss_net": -2.87,
+      "profit_factor_net": 1.28,
+      "worst_trade_pct": -17.62,
+      "avg_hold_days": 4.1,
+      "t_clustered": 0.65,
+      "few": false
+     },
+     "2024": {
+      "n": 1065,
+      "trades_per_ticker_year": 9.03,
+      "hit": 0.6864,
+      "same_exit_random_hit": 0.6087,
+      "p_hit_vs_same_exit": 8.247929521487864e-08,
+      "exp_net_pct": 0.474,
+      "same_exit_random_exp_net_pct": 0.051,
+      "avg_win_net": 1.86,
+      "avg_loss_net": -2.27,
+      "profit_factor_net": 1.62,
+      "worst_trade_pct": -19.44,
+      "avg_hold_days": 3.9,
+      "t_clustered": 3.41,
+      "few": false
+     },
+     "2025": {
+      "n": 802,
+      "trades_per_ticker_year": 6.8,
+      "hit": 0.717,
+      "same_exit_random_hit": 0.5993,
+      "p_hit_vs_same_exit": 2.377188792338992e-12,
+      "exp_net_pct": 0.531,
+      "same_exit_random_exp_net_pct": 0.032,
+      "avg_win_net": 2.01,
+      "avg_loss_net": -2.87,
+      "profit_factor_net": 1.61,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.7,
+      "t_clustered": 2.98,
+      "few": false
+     },
+     "2026": {
+      "n": 739,
+      "trades_per_ticker_year": 6.26,
+      "hit": 0.6915,
+      "same_exit_random_hit": 0.585,
+      "p_hit_vs_same_exit": 1.4952728198903114e-09,
+      "exp_net_pct": 0.609,
+      "same_exit_random_exp_net_pct": 0.063,
+      "avg_win_net": 2.44,
+      "avg_loss_net": -3.25,
+      "profit_factor_net": 1.58,
+      "worst_trade_pct": -28.31,
+      "avg_hold_days": 3.8,
+      "t_clustered": 0.22,
+      "few": false
+     }
+    }
+   },
+   "R4-2 pullback, top-10 momentum": {
+    "survives": true,
+    "U4": {
+     "train": {
+      "n": 1864,
+      "trades_per_ticker_year": 0.88,
+      "hit": 0.7001,
+      "same_exit_random_hit": 0.5922,
+      "p_hit_vs_same_exit": 3.0583984337442155e-22,
+      "exp_net_pct": 0.673,
+      "same_exit_random_exp_net_pct": 0.062,
+      "avg_win_net": 2.57,
+      "avg_loss_net": -3.51,
+      "profit_factor_net": 1.62,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.8,
+      "t_clustered": 4.89,
+      "few": false
+     },
+     "test": {
+      "n": 443,
+      "trades_per_ticker_year": 0.98,
+      "hit": 0.693,
+      "same_exit_random_hit": 0.6011,
+      "p_hit_vs_same_exit": 3.725895465553627e-05,
+      "exp_net_pct": 1.173,
+      "same_exit_random_exp_net_pct": 0.218,
+      "avg_win_net": 3.57,
+      "avg_loss_net": -4.06,
+      "profit_factor_net": 1.92,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.8,
+      "t_clustered": 2.11,
+      "few": false
+     }
+    },
+    "new_names": {
+     "train": {
+      "n": 1479,
+      "trades_per_ticker_year": 0.87,
+      "hit": 0.6944,
+      "same_exit_random_hit": 0.5901,
+      "p_hit_vs_same_exit": 6.824524482675235e-17,
+      "exp_net_pct": 0.696,
+      "same_exit_random_exp_net_pct": 0.055,
+      "avg_win_net": 2.68,
+      "avg_loss_net": -3.58,
+      "profit_factor_net": 1.61,
+      "worst_trade_pct": -29.78,
+      "avg_hold_days": 3.8,
+      "t_clustered": 4.35,
+      "few": false
+     },
+     "test": {
+      "n": 407,
+      "trades_per_ticker_year": 1.12,
+      "hit": 0.6978,
+      "same_exit_random_hit": 0.6019,
+      "p_hit_vs_same_exit": 3.697473470269252e-05,
+      "exp_net_pct": 1.211,
+      "same_exit_random_exp_net_pct": 0.24,
+      "avg_win_net": 3.67,
+      "avg_loss_net": -4.28,
+      "profit_factor_net": 1.91,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 2.12,
+      "few": false
+     }
+    },
+    "old23": {
+     "train": {
+      "n": 385,
+      "trades_per_ticker_year": 0.93,
+      "hit": 0.7221,
+      "same_exit_random_hit": 0.6,
+      "p_hit_vs_same_exit": 3.7966814724560563e-07,
+      "exp_net_pct": 0.585,
+      "same_exit_random_exp_net_pct": 0.089,
+      "avg_win_net": 2.15,
+      "avg_loss_net": -3.22,
+      "profit_factor_net": 1.62,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.7,
+      "t_clustered": 2.8,
+      "few": false
+     },
+     "test": {
+      "n": 36,
+      "trades_per_ticker_year": 0.41,
+      "hit": 0.6389,
+      "same_exit_random_hit": 0.5893,
+      "p_hit_vs_same_exit": 0.33491675359899054,
+      "exp_net_pct": 0.744,
+      "same_exit_random_exp_net_pct": -0.094,
+      "avg_win_net": 2.27,
+      "avg_loss_net": -1.96,
+      "profit_factor_net": 2.05,
+      "worst_trade_pct": -6.22,
+      "avg_hold_days": 3.5,
+      "t_clustered": 1.84,
+      "few": false
+     }
+    },
+    "core7": {
+     "train": {
+      "n": 132,
+      "trades_per_ticker_year": 1.05,
+      "hit": 0.7424,
+      "same_exit_random_hit": 0.5928,
+      "p_hit_vs_same_exit": 0.00023361436496499897,
+      "exp_net_pct": 0.425,
+      "same_exit_random_exp_net_pct": 0.114,
+      "avg_win_net": 2.04,
+      "avg_loss_net": -3.71,
+      "profit_factor_net": 1.41,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.8,
+      "t_clustered": 0.65,
+      "few": false
+     },
+     "test": {
+      "n": 8,
+      "trades_per_ticker_year": 0.3,
+      "hit": 0.625,
+      "same_exit_random_hit": 0.625,
+      "p_hit_vs_same_exit": 0.6513670086860645,
+      "exp_net_pct": 1.668,
+      "same_exit_random_exp_net_pct": -0.214,
+      "avg_win_net": 2.97,
+      "avg_loss_net": -0.51,
+      "profit_factor_net": 9.78,
+      "worst_trade_pct": -0.97,
+      "avg_hold_days": 3.8,
+      "t_clustered": 2.32,
+      "few": true
+     }
+    },
+    "test_by_year": {
+     "2023": {
+      "n": 116,
+      "trades_per_ticker_year": 0.98,
+      "hit": 0.6466,
+      "same_exit_random_hit": 0.6032,
+      "p_hit_vs_same_exit": 0.19584429093950528,
+      "exp_net_pct": 0.488,
+      "same_exit_random_exp_net_pct": 0.048,
+      "avg_win_net": 2.45,
+      "avg_loss_net": -3.11,
+      "profit_factor_net": 1.44,
+      "worst_trade_pct": -14.01,
+      "avg_hold_days": 4.2,
+      "t_clustered": 0.39,
+      "few": false
+     },
+     "2024": {
+      "n": 122,
+      "trades_per_ticker_year": 1.03,
+      "hit": 0.7541,
+      "same_exit_random_hit": 0.5977,
+      "p_hit_vs_same_exit": 0.00020762251795587865,
+      "exp_net_pct": 2.003,
+      "same_exit_random_exp_net_pct": 0.285,
+      "avg_win_net": 3.65,
+      "avg_loss_net": -2.63,
+      "profit_factor_net": 3.9,
+      "worst_trade_pct": -11.24,
+      "avg_hold_days": 3.6,
+      "t_clustered": 2.95,
+      "few": false
+     },
+     "2025": {
+      "n": 109,
+      "trades_per_ticker_year": 0.92,
+      "hit": 0.6697,
+      "same_exit_random_hit": 0.6115,
+      "p_hit_vs_same_exit": 0.12465706877729914,
+      "exp_net_pct": 0.545,
+      "same_exit_random_exp_net_pct": 0.061,
+      "avg_win_net": 3.21,
+      "avg_loss_net": -4.64,
+      "profit_factor_net": 1.35,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 1.02,
+      "few": false
+     },
+     "2026": {
+      "n": 96,
+      "trades_per_ticker_year": 0.81,
+      "hit": 0.6979,
+      "same_exit_random_hit": 0.5901,
+      "p_hit_vs_same_exit": 0.019196426014174775,
+      "exp_net_pct": 1.656,
+      "same_exit_random_exp_net_pct": 0.53,
+      "avg_win_net": 5.08,
+      "avg_loss_net": -6.25,
+      "profit_factor_net": 1.88,
+      "worst_trade_pct": -28.31,
+      "avg_hold_days": 3.7,
+      "t_clustered": 0.44,
+      "few": false
+     }
+    }
+   },
+   "R4-3 pullback, top-decile momentum": {
+    "survives": true,
+    "U4": {
+     "train": {
+      "n": 2078,
+      "trades_per_ticker_year": 0.98,
+      "hit": 0.7026,
+      "same_exit_random_hit": 0.5908,
+      "p_hit_vs_same_exit": 2.915801614038475e-26,
+      "exp_net_pct": 0.66,
+      "same_exit_random_exp_net_pct": 0.059,
+      "avg_win_net": 2.48,
+      "avg_loss_net": -3.43,
+      "profit_factor_net": 1.63,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.8,
+      "t_clustered": 4.82,
+      "few": false
+     },
+     "test": {
+      "n": 512,
+      "trades_per_ticker_year": 1.14,
+      "hit": 0.6992,
+      "same_exit_random_hit": 0.6026,
+      "p_hit_vs_same_exit": 3.459133743709662e-06,
+      "exp_net_pct": 1.159,
+      "same_exit_random_exp_net_pct": 0.214,
+      "avg_win_net": 3.42,
+      "avg_loss_net": -3.9,
+      "profit_factor_net": 1.96,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 2.24,
+      "few": false
+     }
+    },
+    "new_names": {
+     "train": {
+      "n": 1651,
+      "trades_per_ticker_year": 0.97,
+      "hit": 0.6978,
+      "same_exit_random_hit": 0.589,
+      "p_hit_vs_same_exit": 3.911295373074232e-20,
+      "exp_net_pct": 0.688,
+      "same_exit_random_exp_net_pct": 0.055,
+      "avg_win_net": 2.58,
+      "avg_loss_net": -3.49,
+      "profit_factor_net": 1.63,
+      "worst_trade_pct": -29.78,
+      "avg_hold_days": 3.8,
+      "t_clustered": 4.43,
+      "few": false
+     },
+     "test": {
+      "n": 471,
+      "trades_per_ticker_year": 1.3,
+      "hit": 0.707,
+      "same_exit_random_hit": 0.6026,
+      "p_hit_vs_same_exit": 1.5219107523725438e-06,
+      "exp_net_pct": 1.197,
+      "same_exit_random_exp_net_pct": 0.233,
+      "avg_win_net": 3.5,
+      "avg_loss_net": -4.14,
+      "profit_factor_net": 1.96,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 2.23,
+      "few": false
+     }
+    },
+    "old23": {
+     "train": {
+      "n": 427,
+      "trades_per_ticker_year": 1.03,
+      "hit": 0.7213,
+      "same_exit_random_hit": 0.5974,
+      "p_hit_vs_same_exit": 6.242825693442627e-08,
+      "exp_net_pct": 0.55,
+      "same_exit_random_exp_net_pct": 0.071,
+      "avg_win_net": 2.09,
+      "avg_loss_net": -3.2,
+      "profit_factor_net": 1.59,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.7,
+      "t_clustered": 2.85,
+      "few": false
+     },
+     "test": {
+      "n": 41,
+      "trades_per_ticker_year": 0.47,
+      "hit": 0.6098,
+      "same_exit_random_hit": 0.6026,
+      "p_hit_vs_same_exit": 0.5304117891865214,
+      "exp_net_pct": 0.723,
+      "same_exit_random_exp_net_pct": -0.068,
+      "avg_win_net": 2.29,
+      "avg_loss_net": -1.72,
+      "profit_factor_net": 2.08,
+      "worst_trade_pct": -6.22,
+      "avg_hold_days": 3.5,
+      "t_clustered": 2.22,
+      "few": false
+     }
+    },
+    "core7": {
+     "train": {
+      "n": 143,
+      "trades_per_ticker_year": 1.14,
+      "hit": 0.7343,
+      "same_exit_random_hit": 0.5928,
+      "p_hit_vs_same_exit": 0.00029398019302145375,
+      "exp_net_pct": 0.436,
+      "same_exit_random_exp_net_pct": 0.096,
+      "avg_win_net": 2.02,
+      "avg_loss_net": -3.52,
+      "profit_factor_net": 1.43,
+      "worst_trade_pct": -41.92,
+      "avg_hold_days": 3.7,
+      "t_clustered": 0.78,
+      "few": false
+     },
+     "test": {
+      "n": 11,
+      "trades_per_ticker_year": 0.41,
+      "hit": 0.5455,
+      "same_exit_random_hit": 0.6333,
+      "p_hit_vs_same_exit": 0.8216297448323366,
+      "exp_net_pct": 1.172,
+      "same_exit_random_exp_net_pct": -0.121,
+      "avg_win_net": 2.57,
+      "avg_loss_net": -0.5,
+      "profit_factor_net": 6.11,
+      "worst_trade_pct": -0.97,
+      "avg_hold_days": 3.7,
+      "t_clustered": 2.02,
+      "few": true
+     }
+    },
+    "test_by_year": {
+     "2023": {
+      "n": 134,
+      "trades_per_ticker_year": 1.14,
+      "hit": 0.6343,
+      "same_exit_random_hit": 0.6082,
+      "p_hit_vs_same_exit": 0.29963844568103326,
+      "exp_net_pct": 0.423,
+      "same_exit_random_exp_net_pct": 0.1,
+      "avg_win_net": 2.41,
+      "avg_loss_net": -3.02,
+      "profit_factor_net": 1.38,
+      "worst_trade_pct": -14.01,
+      "avg_hold_days": 4.1,
+      "t_clustered": 0.55,
+      "few": false
+     },
+     "2024": {
+      "n": 142,
+      "trades_per_ticker_year": 1.2,
+      "hit": 0.7606,
+      "same_exit_random_hit": 0.5958,
+      "p_hit_vs_same_exit": 2.6821084541458882e-05,
+      "exp_net_pct": 1.882,
+      "same_exit_random_exp_net_pct": 0.26,
+      "avg_win_net": 3.38,
+      "avg_loss_net": -2.53,
+      "profit_factor_net": 3.93,
+      "worst_trade_pct": -11.24,
+      "avg_hold_days": 3.7,
+      "t_clustered": 3.23,
+      "few": false
+     },
+     "2025": {
+      "n": 125,
+      "trades_per_ticker_year": 1.06,
+      "hit": 0.696,
+      "same_exit_random_hit": 0.6165,
+      "p_hit_vs_same_exit": 0.03975111749524235,
+      "exp_net_pct": 0.719,
+      "same_exit_random_exp_net_pct": 0.076,
+      "avg_win_net": 3.19,
+      "avg_loss_net": -4.54,
+      "profit_factor_net": 1.5,
+      "worst_trade_pct": -32.89,
+      "avg_hold_days": 3.9,
+      "t_clustered": 1.13,
+      "few": false
+     },
+     "2026": {
+      "n": 111,
+      "trades_per_ticker_year": 0.94,
+      "hit": 0.7027,
+      "same_exit_random_hit": 0.5873,
+      "p_hit_vs_same_exit": 0.007977815146343957,
+      "exp_net_pct": 1.619,
+      "same_exit_random_exp_net_pct": 0.464,
+      "avg_win_net": 4.8,
+      "avg_loss_net": -5.91,
+      "profit_factor_net": 1.92,
+      "worst_trade_pct": -28.31,
+      "avg_hold_days": 3.7,
+      "t_clustered": 0.26,
+      "few": false
+     }
+    }
+   }
+  },
+  "robust": {
+   "next_open": {
+    "U4": {
+     "train": {
+      "n": 1864,
+      "trades_per_ticker_year": 0.88,
+      "hit": 0.6883,
+      "same_exit_random_hit": 0.5696,
+      "p_hit_vs_same_exit": 4.284431216046228e-26,
+      "exp_net_pct": 0.533,
+      "same_exit_random_exp_net_pct": -0.034,
+      "avg_win_net": 2.41,
+      "avg_loss_net": -3.4,
+      "profit_factor_net": 1.48,
+      "worst_trade_pct": -41.71,
+      "avg_hold_days": 3.8,
+      "t_clustered": 4.81,
+      "few": false
+     },
+     "test": {
+      "n": 443,
+      "trades_per_ticker_year": 0.98,
+      "hit": 0.7133,
+      "same_exit_random_hit": 0.5807,
+      "p_hit_vs_same_exit": 5.0923930313934834e-09,
+      "exp_net_pct": 1.148,
+      "same_exit_random_exp_net_pct": 0.1,
+      "avg_win_net": 3.32,
+      "avg_loss_net": -3.96,
+      "profit_factor_net": 1.97,
+      "worst_trade_pct": -32.17,
+      "avg_hold_days": 3.8,
+      "t_clustered": 2.54,
+      "few": false
+     }
+    },
+    "new_names": {
+     "train": {
+      "n": 1479,
+      "trades_per_ticker_year": 0.87,
+      "hit": 0.6782,
+      "same_exit_random_hit": 0.5685,
+      "p_hit_vs_same_exit": 3.642199586396975e-18,
+      "exp_net_pct": 0.528,
+      "same_exit_random_exp_net_pct": -0.046,
+      "avg_win_net": 2.53,
+      "avg_loss_net": -3.48,
+      "profit_factor_net": 1.46,
+      "worst_trade_pct": -35.27,
+      "avg_hold_days": 3.8,
+      "t_clustered": 4.07,
+      "few": false
+     },
+     "test": {
+      "n": 407,
+      "trades_per_ticker_year": 1.12,
+      "hit": 0.7101,
+      "same_exit_random_hit": 0.5805,
+      "p_hit_vs_same_exit": 4.313628778142728e-08,
+      "exp_net_pct": 1.16,
+      "same_exit_random_exp_net_pct": 0.112,
+      "avg_win_net": 3.43,
+      "avg_loss_net": -4.15,
+      "profit_factor_net": 1.93,
+      "worst_trade_pct": -32.17,
+      "avg_hold_days": 3.9,
+      "t_clustered": 2.53,
+      "few": false
+     }
+    }
+   },
+   "stop_3atr": {
+    "U4": {
+     "train": {
+      "n": 1969,
+      "trades_per_ticker_year": 0.93,
+      "hit": 0.6973,
+      "same_exit_random_hit": 0.5941,
+      "p_hit_vs_same_exit": 1.3972901669480097e-21,
+      "exp_net_pct": 0.521,
+      "same_exit_random_exp_net_pct": 0.03,
+      "avg_win_net": 2.64,
+      "avg_loss_net": -4.1,
+      "profit_factor_net": 1.4,
+      "worst_trade_pct": -30.57,
+      "avg_hold_days": 3.5,
+      "t_clustered": 3.7,
+      "few": false
+     },
+     "test": {
+      "n": 458,
+      "trades_per_ticker_year": 1.02,
+      "hit": 0.69,
+      "same_exit_random_hit": 0.6042,
+      "p_hit_vs_same_exit": 8.593718806203895e-05,
+      "exp_net_pct": 1.049,
+      "same_exit_random_exp_net_pct": 0.187,
+      "avg_win_net": 3.64,
+      "avg_loss_net": -4.54,
+      "profit_factor_net": 1.73,
+      "worst_trade_pct": -22.22,
+      "avg_hold_days": 3.6,
+      "t_clustered": 1.86,
+      "few": false
+     }
+    },
+    "new_names": {
+     "train": {
+      "n": 1561,
+      "trades_per_ticker_year": 0.91,
+      "hit": 0.6919,
+      "same_exit_random_hit": 0.5918,
+      "p_hit_vs_same_exit": 1.8347622375857412e-16,
+      "exp_net_pct": 0.528,
+      "same_exit_random_exp_net_pct": 0.025,
+      "avg_win_net": 2.74,
+      "avg_loss_net": -4.2,
+      "profit_factor_net": 1.39,
+      "worst_trade_pct": -30.57,
+      "avg_hold_days": 3.5,
+      "t_clustered": 3.17,
+      "few": false
+     },
+     "test": {
+      "n": 420,
+      "trades_per_ticker_year": 1.16,
+      "hit": 0.6929,
+      "same_exit_random_hit": 0.6053,
+      "p_hit_vs_same_exit": 0.00011815511693626175,
+      "exp_net_pct": 1.098,
+      "same_exit_random_exp_net_pct": 0.211,
+      "avg_win_net": 3.76,
+      "avg_loss_net": -4.71,
+      "profit_factor_net": 1.74,
+      "worst_trade_pct": -22.22,
+      "avg_hold_days": 3.6,
+      "t_clustered": 1.94,
+      "few": false
+     }
+    }
+   },
+   "base_stop_3atr": {
+    "U4": {
+     "train": {
+      "n": 14859,
+      "trades_per_ticker_year": 7.0,
+      "hit": 0.6979,
+      "same_exit_random_hit": 0.5916,
+      "p_hit_vs_same_exit": 8.085538237391409e-159,
+      "exp_net_pct": 0.253,
+      "same_exit_random_exp_net_pct": -0.017,
+      "avg_win_net": 1.71,
+      "avg_loss_net": -2.86,
+      "profit_factor_net": 1.28,
+      "worst_trade_pct": -30.57,
+      "avg_hold_days": 3.5,
+      "t_clustered": 4.85,
+      "few": false
+     },
+     "test": {
+      "n": 3485,
+      "trades_per_ticker_year": 7.74,
+      "hit": 0.691,
+      "same_exit_random_hit": 0.6017,
+      "p_hit_vs_same_exit": 4.593812823756847e-28,
+      "exp_net_pct": 0.398,
+      "same_exit_random_exp_net_pct": 0.031,
+      "avg_win_net": 2.06,
+      "avg_loss_net": -3.01,
+      "profit_factor_net": 1.4,
+      "worst_trade_pct": -22.22,
+      "avg_hold_days": 3.6,
+      "t_clustered": 2.16,
+      "few": false
+     }
+    }
+   },
+   "base_atr_sizing": {
+    "U4": {
+     "train": {
+      "n": 14177,
+      "trades_per_ticker_year": 6.68,
+      "hit": 0.7011,
+      "same_exit_random_hit": 0.5898,
+      "p_hit_vs_same_exit": 3.453277858177225e-166,
+      "exp_net_pct": 0.316,
+      "same_exit_random_exp_net_pct": -0.015,
+      "avg_win_net": 1.65,
+      "avg_loss_net": -2.58,
+      "profit_factor_net": 1.39,
+      "worst_trade_pct": -33.53,
+      "avg_hold_days": 3.8,
+      "t_clustered": 5.88,
+      "few": false
+     },
+     "test": {
+      "n": 3365,
+      "trades_per_ticker_year": 7.47,
+      "hit": 0.6918,
+      "same_exit_random_hit": 0.5999,
+      "p_hit_vs_same_exit": 1.2036425513273307e-28,
+      "exp_net_pct": 0.351,
+      "same_exit_random_exp_net_pct": 0.014,
+      "avg_win_net": 1.7,
+      "avg_loss_net": -2.43,
+      "profit_factor_net": 1.44,
+      "worst_trade_pct": -18.45,
+      "avg_hold_days": 3.9,
+      "t_clustered": 3.35,
+      "few": false
+     }
+    }
+   }
+  },
+  "concentration": {
+   "n": 443,
+   "tickers_traded": 56,
+   "top5_by_net": [
+    "PLTR",
+    "AMD",
+    "AVGO",
+    "NVDA",
+    "GE"
+   ],
+   "top5_share_of_net": 0.502,
+   "without_top5": {
+    "n": 325,
+    "hit": 0.6738,
+    "exp_net_pct": 0.796
+   },
+   "median_net_pct": 1.564,
+   "worst": {
+    "ticker": "TSLA",
+    "entry": "2025-02-24",
+    "net_pct": -32.89
+   }
+  },
+  "prereg_text": "# Round 4 pre-registration: bigger scan universe (written before any round-4 result was computed)\nWritten: Oct 26, 2026 ~10:20 PM PT. Protocol identical to rounds 1-2 unless stated (research2.py engine reused unchanged).\n\n## Question\nDoes the live Pullback rule, and its momentum Grade A, still hold out of sample on a larger universe of liquid\nlarge caps and ETFs? If yes (and data/runtime are reliable), the live scanner may use the larger universe.\n\n## Universe U4 (fixed now, not edited after results)\n* S&P 100 constituents as listed on Wikipedia on Oct 26 2026 (101 symbols). GOOG dropped (duplicate share class of GOOGL);\n  BRK.B written BRK-B for Yahoo.\n* 15 ETFs: SPY QQQ IWM DIA XLK XLF XLE XLV XLI XLP XLY XLU XLB XLRE XLC.\n* Plus every one of the current 23 (adds SPCX, CCI, SBAC, which are not in the S&P 100).\n* Tickers with no Yahoo data are dropped and listed. Tickers join the momentum ranking once they have 252 bars (as before).\n\n## Data / protocol (unchanged)\nYahoo daily bars, split+dividend adjusted, max history, cached to research/data4/. TRAIN 2005-01-01..2022-12-31,\nTEST 2023-01-01..data end. Signals at close t use bars <= t; entry at the close (robustness: next open).\nExit first close > SMA(5) or 10 trading days. Cost 0.05% per side. Baseline: random entries with the same exit on\nevery day in the same context (uptrend, plus the momentum filter where the rule has one). n < 30 = too few.\n\n## Tests counted this round (3). Cumulative 123 + 3 = 126, Bonferroni alpha = 0.05/126 = 0.000397\nR4-1 base pullback (close > SMA200 & RSI(2) < 10) on U4\nR4-2 live Grade A rule: pullback & top 10 by 12-1 momentum at the last month-end, ranked among U4\nR4-3 pullback & top decile (ceil(10% of ranked names) at that month-end), ranked among U4\n\nSurvival (each test): OOS n >= 30, binomial p (hit vs same-exit random) < 0.000397, OOS net expectancy > 0,\nand TRAIN hit rate > TRAIN baseline (same direction in both periods).\n\n## Descriptive checks (not counted as tests, reported for whichever rule survives)\n* \"new names only\": U4 minus the 23 (does it work outside the names it was found on?)\n* core 7 subset; per-year OOS; next-open entry; 3xATR stop; worst trade, PF, avg win/loss.\n\n## Adoption rule for the live site (decided now)\nSwitch the live scanner/ranking to U4 only if ALL hold:\n1. R4-2 (the exact live rule, top 10) survives. R4-3 is informational and will NOT replace top 10 even if better.\n2. \"new names only\" R4-2 OOS hit > its baseline and net > 0 (descriptive, no p cut-off).\n3. Next-open entry OOS net > 0 for R4-2.\n4. Reliability: three batch downloads of all U4 daily bars each finish in <= 90 s with <= 2 tickers missing, and the\n   full local build (all tickers, scanner + cards) stays under 4 minutes.\nOtherwise keep the 23-ticker universe and say so.\n\n## Known bias (disclosed whatever the result)\nSurvivorship / selection: U4 is TODAY's S&P 100, so the backtest only contains companies that ended up large. This\ninflates absolute returns of any long rule, especially momentum. The random-entry baseline is drawn from the same\nsurvivor universe, so the hit-rate comparison is relative, but the absolute net per trade is likely overstated.\n",
+  "reliability": {
+   "downloads": [
+    {
+     "seconds": 8.3,
+     "missing": [],
+     "lagging": [],
+     "last": "2026-10-26"
+    },
+    {
+     "seconds": 7.8,
+     "missing": [],
+     "lagging": [],
+     "last": "2026-10-26"
+    },
+    {
+     "seconds": 8.2,
+     "missing": [],
+     "lagging": [],
+     "last": "2026-10-26"
+    }
+   ]
+  }
+ },
+ "live": {
+  "universe_key": "U4",
+  "source": "round 4 (research/results_round4.json)",
+  "n_universe": 118,
+  "test": [
+   "2023-01-01",
+   "2026-10-26"
+  ],
+  "alpha": 0.0003968253968253968,
+  "tests_cumulative": 126,
+  "grade_a": {
+   "test": {
+    "n": 443,
+    "trades_per_ticker_year": 0.98,
+    "hit": 0.693,
+    "same_exit_random_hit": 0.6011,
+    "p_hit_vs_same_exit": 3.725895465553627e-05,
+    "exp_net_pct": 1.173,
+    "same_exit_random_exp_net_pct": 0.218,
+    "avg_win_net": 3.57,
+    "avg_loss_net": -4.06,
+    "profit_factor_net": 1.92,
+    "worst_trade_pct": -32.89,
+    "avg_hold_days": 3.8,
+    "t_clustered": 2.11,
+    "few": false
+   },
+   "train": {
+    "n": 1864,
+    "trades_per_ticker_year": 0.88,
+    "hit": 0.7001,
+    "same_exit_random_hit": 0.5922,
+    "p_hit_vs_same_exit": 3.0583984337442155e-22,
+    "exp_net_pct": 0.673,
+    "same_exit_random_exp_net_pct": 0.062,
+    "avg_win_net": 2.57,
+    "avg_loss_net": -3.51,
+    "profit_factor_net": 1.62,
+    "worst_trade_pct": -41.92,
+    "avg_hold_days": 3.8,
+    "t_clustered": 4.89,
+    "few": false
+   },
+   "test_by_year": {
+    "2023": {
+     "n": 116,
+     "trades_per_ticker_year": 0.98,
+     "hit": 0.6466,
+     "same_exit_random_hit": 0.6032,
+     "p_hit_vs_same_exit": 0.19584429093950528,
+     "exp_net_pct": 0.488,
+     "same_exit_random_exp_net_pct": 0.048,
+     "avg_win_net": 2.45,
+     "avg_loss_net": -3.11,
+     "profit_factor_net": 1.44,
+     "worst_trade_pct": -14.01,
+     "avg_hold_days": 4.2,
+     "t_clustered": 0.39,
+     "few": false
+    },
+    "2024": {
+     "n": 122,
+     "trades_per_ticker_year": 1.03,
+     "hit": 0.7541,
+     "same_exit_random_hit": 0.5977,
+     "p_hit_vs_same_exit": 0.00020762251795587865,
+     "exp_net_pct": 2.003,
+     "same_exit_random_exp_net_pct": 0.285,
+     "avg_win_net": 3.65,
+     "avg_loss_net": -2.63,
+     "profit_factor_net": 3.9,
+     "worst_trade_pct": -11.24,
+     "avg_hold_days": 3.6,
+     "t_clustered": 2.95,
+     "few": false
+    },
+    "2025": {
+     "n": 109,
+     "trades_per_ticker_year": 0.92,
+     "hit": 0.6697,
+     "same_exit_random_hit": 0.6115,
+     "p_hit_vs_same_exit": 0.12465706877729914,
+     "exp_net_pct": 0.545,
+     "same_exit_random_exp_net_pct": 0.061,
+     "avg_win_net": 3.21,
+     "avg_loss_net": -4.64,
+     "profit_factor_net": 1.35,
+     "worst_trade_pct": -32.89,
+     "avg_hold_days": 3.9,
+     "t_clustered": 1.02,
+     "few": false
+    },
+    "2026": {
+     "n": 96,
+     "trades_per_ticker_year": 0.81,
+     "hit": 0.6979,
+     "same_exit_random_hit": 0.5901,
+     "p_hit_vs_same_exit": 0.019196426014174775,
+     "exp_net_pct": 1.656,
+     "same_exit_random_exp_net_pct": 0.53,
+     "avg_win_net": 5.08,
+     "avg_loss_net": -6.25,
+     "profit_factor_net": 1.88,
+     "worst_trade_pct": -28.31,
+     "avg_hold_days": 3.7,
+     "t_clustered": 0.44,
+     "few": false
+    }
+   },
+   "new_names": {
+    "n": 407,
+    "trades_per_ticker_year": 1.12,
+    "hit": 0.6978,
+    "same_exit_random_hit": 0.6019,
+    "p_hit_vs_same_exit": 3.697473470269252e-05,
+    "exp_net_pct": 1.211,
+    "same_exit_random_exp_net_pct": 0.24,
+    "avg_win_net": 3.67,
+    "avg_loss_net": -4.28,
+    "profit_factor_net": 1.91,
+    "worst_trade_pct": -32.89,
+    "avg_hold_days": 3.9,
+    "t_clustered": 2.12,
+    "few": false
+   },
+   "core7": {
+    "n": 8,
+    "trades_per_ticker_year": 0.3,
+    "hit": 0.625,
+    "same_exit_random_hit": 0.625,
+    "p_hit_vs_same_exit": 0.6513670086860645,
+    "exp_net_pct": 1.668,
+    "same_exit_random_exp_net_pct": -0.214,
+    "avg_win_net": 2.97,
+    "avg_loss_net": -0.51,
+    "profit_factor_net": 9.78,
+    "worst_trade_pct": -0.97,
+    "avg_hold_days": 3.8,
+    "t_clustered": 2.32,
+    "few": true
+   },
+   "old23": {
+    "n": 36,
+    "trades_per_ticker_year": 0.41,
+    "hit": 0.6389,
+    "same_exit_random_hit": 0.5893,
+    "p_hit_vs_same_exit": 0.33491675359899054,
+    "exp_net_pct": 0.744,
+    "same_exit_random_exp_net_pct": -0.094,
+    "avg_win_net": 2.27,
+    "avg_loss_net": -1.96,
+    "profit_factor_net": 2.05,
+    "worst_trade_pct": -6.22,
+    "avg_hold_days": 3.5,
+    "t_clustered": 1.84,
+    "few": false
+   },
+   "next_open_entry": {
+    "n": 443,
+    "trades_per_ticker_year": 0.98,
+    "hit": 0.7133,
+    "same_exit_random_hit": 0.5807,
+    "p_hit_vs_same_exit": 5.0923930313934834e-09,
+    "exp_net_pct": 1.148,
+    "same_exit_random_exp_net_pct": 0.1,
+    "avg_win_net": 3.32,
+    "avg_loss_net": -3.96,
+    "profit_factor_net": 1.97,
+    "worst_trade_pct": -32.17,
+    "avg_hold_days": 3.8,
+    "t_clustered": 2.54,
+    "few": false
+   },
+   "survives": true
+  },
+  "all": {
+   "test": {
+    "n": 3365,
+    "trades_per_ticker_year": 7.47,
+    "hit": 0.6918,
+    "same_exit_random_hit": 0.5999,
+    "p_hit_vs_same_exit": 1.2036425513273307e-28,
+    "exp_net_pct": 0.473,
+    "same_exit_random_exp_net_pct": 0.044,
+    "avg_win_net": 2.04,
+    "avg_loss_net": -2.76,
+    "profit_factor_net": 1.52,
+    "worst_trade_pct": -32.89,
+    "avg_hold_days": 3.9,
+    "t_clustered": 2.93,
+    "few": false
+   },
+   "train": {
+    "n": 14177,
+    "trades_per_ticker_year": 6.68,
+    "hit": 0.7011,
+    "same_exit_random_hit": 0.5898,
+    "p_hit_vs_same_exit": 3.453277858177225e-166,
+    "exp_net_pct": 0.345,
+    "same_exit_random_exp_net_pct": -0.003,
+    "avg_win_net": 1.67,
+    "avg_loss_net": -2.53,
+    "profit_factor_net": 1.43,
+    "worst_trade_pct": -41.92,
+    "avg_hold_days": 3.8,
+    "t_clustered": 6.07,
+    "few": false
+   },
+   "core7": {
+    "n": 115,
+    "trades_per_ticker_year": 4.3,
+    "hit": 0.6,
+    "same_exit_random_hit": 0.5916,
+    "p_hit_vs_same_exit": 0.46746084670779886,
+    "exp_net_pct": -0.022,
+    "same_exit_random_exp_net_pct": -0.098,
+    "avg_win_net": 1.75,
+    "avg_loss_net": -2.49,
+    "profit_factor_net": 0.98,
+    "worst_trade_pct": -9.24,
+    "avg_hold_days": 4.4,
+    "t_clustered": -0.08,
+    "few": false
+   },
+   "survives": true
+  },
+  "risk": {
+   "stop": {
+    "label": "3x ATR(14) below the signal close, resting stop (gap-through fills at the open)",
+    "all_pullbacks": {
+     "no_stop": {
+      "test": {
+       "n": 3365,
+       "hit": 0.6918,
+       "exp_net_pct": 0.473,
+       "pf": 1.52,
+       "worst_trade_pct": -32.89,
+       "avg_loss_pct": -2.76
+      },
+      "train": {
+       "n": 14177,
+       "hit": 0.7011,
+       "exp_net_pct": 0.345,
+       "pf": 1.43,
+       "worst_trade_pct": -41.92,
+       "avg_loss_pct": -2.53
+      }
+     },
+     "stop": {
+      "test": {
+       "n": 3485,
+       "hit": 0.691,
+       "exp_net_pct": 0.398,
+       "pf": 1.4,
+       "worst_trade_pct": -22.22,
+       "avg_loss_pct": -3.01
+      },
+      "train": {
+       "n": 14859,
+       "hit": 0.6979,
+       "exp_net_pct": 0.253,
+       "pf": 1.28,
+       "worst_trade_pct": -30.57,
+       "avg_loss_pct": -2.86
+      }
+     }
+    },
+    "grade_a": {
+     "no_stop": {
+      "test": {
+       "n": 443,
+       "hit": 0.693,
+       "exp_net_pct": 1.173,
+       "pf": 1.92,
+       "worst_trade_pct": -32.89,
+       "avg_loss_pct": -4.06
+      },
+      "train": {
+       "n": 1864,
+       "hit": 0.7001,
+       "exp_net_pct": 0.673,
+       "pf": 1.62,
+       "worst_trade_pct": -41.92,
+       "avg_loss_pct": -3.51
+      }
+     },
+     "stop": {
+      "test": {
+       "n": 458,
+       "hit": 0.69,
+       "exp_net_pct": 1.049,
+       "pf": 1.73,
+       "worst_trade_pct": -22.22,
+       "avg_loss_pct": -4.54
+      },
+      "train": {
+       "n": 1969,
+       "hit": 0.6973,
+       "exp_net_pct": 0.521,
+       "pf": 1.4,
+       "worst_trade_pct": -30.57,
+       "avg_loss_pct": -4.1
+      }
+     }
+    }
+   },
+   "sizing": {
+    "label": "weight = min(2, 2% / ATR%)",
+    "no_sizing": {
+     "test": {
+      "n": 3365,
+      "hit": 0.6918,
+      "exp_net_pct": 0.473,
+      "pf": 1.52,
+      "worst_trade_pct": -32.89,
+      "avg_loss_pct": -2.76
+     }
+    },
+    "atr_sizing": {
+     "test": {
+      "n": 3365,
+      "hit": 0.6918,
+      "exp_net_pct": 0.351,
+      "pf": 1.44,
+      "worst_trade_pct": -18.45,
+      "avg_loss_pct": -2.43
+     }
+    }
+   }
+  },
+  "concentration": {
+   "n": 443,
+   "tickers_traded": 56,
+   "top5_by_net": [
+    "PLTR",
+    "AMD",
+    "AVGO",
+    "NVDA",
+    "GE"
+   ],
+   "top5_share_of_net": 0.502,
+   "without_top5": {
+    "n": 325,
+    "hit": 0.6738,
+    "exp_net_pct": 0.796
+   },
+   "median_net_pct": 1.564,
+   "worst": {
+    "ticker": "TSLA",
+    "entry": "2025-02-24",
+    "net_pct": -32.89
+   }
+  }
+ },
+ "home_evidence": {
+  "b8": {
+   "name": "B8 XS momentum top 5 (monthly), all23, test",
+   "sharpe": 0.54,
+   "cagr_pct": 12.27,
+   "bench_sharpe": 0.95,
+   "bench_cagr_pct": 15.86,
+   "boot_p": 0.887
+  }
  }
 }

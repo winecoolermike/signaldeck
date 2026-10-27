@@ -1,6 +1,6 @@
 # SignalDeck v1
 
-Personal, hobby-only stock signal dashboard. Dark-mode, one card per ticker, built as a **static site**
+Personal, hobby-only stock signal dashboard. Dark-mode, mobile-first home page with expandable ticker cards, built as a **static site**
 (`site/index.html` + `style.css` + `app.js`) that reads a generated **`site/data.json`**.
 
 > **Not financial advice — for personal education only.** Signals are simple mechanical rules on
@@ -13,8 +13,9 @@ signals.py           shared indicator/signal/level logic (used by build_data.py 
 build_data.py        fetches data (yfinance) and writes site/data.json
 backtest.py          1-year backtest of the same signals -> site/backtest.json (site/backtest.html)
 make_setups.py       derives the FROZEN site/setups.json from local research results (research/, gitignored)
-tests/test_setup.py  unit tests: setup, momentum grading, intraday rows, no lookahead (small real-data fixtures in tests/fixtures/)
-site/                static website (deploy this folder): index.html (dashboard), scanner.html, backtest.html
+freshness.py         decides whether a workflow run needs to rebuild (idempotent schedule, see Workflow below)
+tests/test_setup.py  unit tests: setup, momentum grading, intraday rows, no lookahead, calendar, home sections, freshness
+site/                static website (deploy this folder): index.html (home), scanner.html, backtest.html
 screenshot.py        headless Playwright screenshot of the local site
 .github/workflows/refresh.yml   optional scheduled rebuild + GitHub Pages publish
 ```
@@ -31,30 +32,45 @@ python screenshot.py                       # -> screenshot.png (site must be ser
 The page must be served over HTTP (opening index.html as a file blocks `fetch("data.json")`).
 
 ## Editing tickers
-Edit `"tickers"` in `config.json`, then rerun `python build_data.py`. `"comparison_tickers"` are the other 16 stocks of the
-23-stock universe used for the momentum rank and the Scanner; changing either list changes the ranks (the research used exactly these 23). Timeframe weights, indicator
-weights, the bias threshold and the options scan window (`max_dte`, strikes considered) live there too.
+Edit `"tickers"` (the **This Week** list) in `config.json`, then rerun `python build_data.py`. The **scan universe** (momentum
+ranks, Scanner, "Setups firing now") is `tickers` + `comparison_tickers` + `scan_universe.etfs` + `scan_universe.sp100`,
+de-duplicated (118 tickers; `signals.universe_from_config`). Round 4 validated exactly this list; changing it changes
+the ranks, so re-run the research before trusting Grade A on a different list. `"home"` sets the sections, the leaders count
+(10), the parallel card workers and the staleness limit. Timeframe weights, indicator weights, the bias threshold and the
+options scan window (`max_dte`, strikes considered) live there too.
+
+## Home page
+* **Summary strip**: market status (open / pre-market / after hours / closed, with NYSE holidays and 13:00 early closes from
+  `data.json → home.calendar`), data time (bar date + build time in PT, flagged **stale** if older than 45 min during the
+  session or missing the last completed close), number of setups firing (Grade A / B), stocks scanned.
+* **Setups firing now**: every scan-universe stock where the Pullback setup fires (Grade A first).
+* **Momentum leaders**: current top 10 by 12-1 momentum (where Grade A comes from). A watchlist, not a buy list.
+* **This Week**: the user's own `tickers`, always shown.
+* Each row (ticker, This Week tag, setup pill, price/change, rank, 12-1, RSI(2), SMA200, trend state) expands into the full
+  card (signal table, levels, score, quality meter, options tabs). Filter by section, sort by rank / RSI(2) / change /
+  ticker. `index.html#card-MRK` opens a card directly (the Scanner links there).
+* Why these lists (all numbers rendered from `setups.json`) is under *How it works → Why the home page shows these lists*.
 
 ## Backtest
 `python backtest.py` (~1 min) recomputes the daily signal for each of the last 252 trading days using only data up to
 that close (same 2-year trailing window as live) and the 60m signal over the last ~year, then scores forward returns
 (1/5/10 days; 1/4/7 bars) against baselines (share of up moves, chance with the same CALL/PUT mix) and tests the
 entry/exit levels. Results: `site/backtest.html`. The workflow reruns it once a day after the close
-(or via "Run workflow" with *backtest* ticked); if it fails, the last good `backtest.json` stays live.
+(first post-close slot that runs, see Workflow; or via "Run workflow" with *backtest* ticked); if it fails, the last good `backtest.json` stays live.
 Past results don't predict future ones.
 
 ## Pullback setup (validated out of sample)
-The CALL/PUT table is a **trend state, not a forecast**: out of sample (2023–26, 23 stocks) the daily rule was right
+The CALL/PUT table is a **trend state, not a forecast**: out of sample (2023–26, the original 23 stocks) the daily rule was right
 about as often as chance. The rule that survived out-of-sample testing is shown as a separate badge:
 
 * **SETUP: Pullback** (long only) fires on the latest *completed* daily close when **close > SMA(200)** and
   **RSI(2, Wilder) < 10** (split- and dividend-adjusted daily bars).
-* **Grade A** if the stock is also in the **top 10 of the 23-stock universe by 12-1 month momentum**
+* **Grade A** if the stock is also in the **top 10 of the 118-ticker scan universe by 12-1 month momentum**
   (`close[t-21] / close[t-252] − 1`), ranked at the **last completed month-end close** and held until the next
   month-end; otherwise Grade B. On a month's last trading day the new rank applies from that close (the builder decides
   "last trading day" with a weekday + NYSE-holiday + Good Friday calendar in `signals.py`; unscheduled closures are not
   known in advance — a rare edge case that can only delay a re-rank by a day). Stocks with < 12 months of history (SPCX)
-  are unranked, so ranks are "of 22". ADX(14) is shown for information only (it was the old Grade A test).
+  are unranked (currently ranks are "of 117"). ADX(14) is shown for information only (it was the old Grade A test).
 * **Exit rule:** first daily close above **SMA(5)**, or after **10 trading days**.
 * **Optional disaster stop** shown on the card (not part of the rule): signal close − 3×ATR(14), resting stop.
   **Size hint**: out-of-sample loss sizes, plus the ATR weight `min(2, 2% / ATR%)` (research variant A12).
@@ -73,31 +89,54 @@ Why momentum for Grade A (round 2, `research/results_round2.json`; test 2023-01-
 
 Training half (2005–22): Grade A 1,636 trades, 70.5%, +0.42%/trade. Date-clustered t = 2.94. Caveats: p = 0.00048
 cleared the multiple-testing threshold in force when it was tested (0.05/75 = 0.00067) but **narrowly misses** the
-stricter threshold after round 3's 48 extra tests (0.05/123 = 0.00041). On the 7 dashboard tickers alone Grade A was
+stricter threshold after round 3's 48 extra tests (0.05/123 = 0.00041) — round 4 below re-tested it on more stocks. On the 7 This Week tickers alone Grade A was
 53 trades, 64.2% vs 59.5%, +0.26%/trade, t = 0.86 — not significant. The 3×ATR stop lowered net/trade (all pullbacks
 +0.32% → +0.25%, Grade A +0.41% → +0.31%) and cut the worst *training* loss (−41.9% → −19.4%); out of sample it cut the
 all-pullbacks worst trade (−15.3% → −10.6%) but not Grade A's (−9.2% → −10.6%). Losses ran bigger than wins, option
 pricing is ignored, and past results don't predict future ones.
 
+### Round 4: bigger universe (`research/PREREG4.md`, `research/results_round4.json`)
+Pre-registered before any result (same split, costs, random same-exit baseline; 3 new tests, 126 cumulative,
+Bonferroni p < 0.000397): the unchanged rules on the S&P 100 (Wikipedia list of 2026-10-26) + 15 ETFs + the This Week
+tickers = 118. Test 2023-01-01 → 2026-10-26:
+
+| | Trades | Right vs random same exit | p | Net / trade vs random | Avg win / loss | PF | Worst |
+|---|---|---|---|---|---|---|---|
+| Grade A (top-10 momentum) | 443 | 69.3% vs 60.1% | 3.7e-05 | +1.17% vs +0.22% | +3.57% / −4.06% | 1.92 | −32.9% |
+| All pullbacks | 3365 | 69.2% vs 60.0% | 1.2e-28 | +0.47% vs +0.04% | +2.04% / −2.76% | 1.52 | −32.9% |
+
+Adoption checks (all pre-set, all passed): the live rule survived; stocks not in the old 23 alone 69.8% vs
+60.2%, +1.21%/trade (n = 407); next-open entry +1.15%/trade; three batch downloads of all
+118 took 8.3, 7.8, 8.2 s with no missing tickers, full local build ≈ 19 s. So the live site scans this universe.
+**Caveats:** survivorship (today's S&P 100 → absolute returns likely overstated; the random baseline shares the bias);
+concentration (PLTR, AMD, AVGO, NVDA, GE = 50.2% of the net; without them 67.4%, +0.80%/trade);
+bigger losses than wins, worst −32.9% (TSLA, 2025-02-24); the 3×ATR stop cut the worst to
+−22.2% at +1.05%/trade; date-clustered t = 2.11. Holding momentum leaders (round 2 B8) did not beat buy & hold out of sample
+(Sharpe 0.54 vs 0.95), hence "watchlist, not a buy list". This Week 7 combined: all pullbacks 60.0% vs 59.2%,
+−0.02%/trade (n = 115) — no edge.
+
 * **Scanner** (`site/scanner.html`): one row per universe ticker — price, momentum rank, above/below SMA200, RSI(2),
-  ADX, setup status (Grade A / B / none); firing setups first; dashboard tickers link to their card.
+  ADX, setup status (Grade A / B / none), This Week / leader tags, ticker search and a firing-only filter; firing setups first; tickers with a home card link to it.
 * Tests: `python tests/test_setup.py` — known SPY triggers, momentum ranks on historical dates equal research2.py's,
   AMZN graded A at rank 10 (2023-08-17) and B at rank 14 (2023-09-19), no-lookahead checks (truncated history = full
   history, future prices can't change a rank, the forming bar can't change a row), VWAP/EMA values equal research3.py's,
-  exit rule, and — if the local research files exist — exact agreement with the research per-ticker numbers.
+  exit rule, and — if the local research files exist — exact agreement with the research per-ticker numbers and with
+  round 4's month-end ranks on all 118. Also: scan universe from config, NYSE early closes / market status, home sections,
+  card fallback to the previous build, and the workflow freshness decisions.
 
 ## Data
 * Source: Yahoo Finance via `yfinance` (unofficial; quotes may be ~15 min delayed; may break or rate-limit).
 * History limits: 1m ≈ last 7 days, 5m/15m/30m ≈ 60 days, 60m ≈ 730 days, daily 2 years (the Pullback setup uses full adjusted daily history).
-* Daily bars for all 23 universe tickers come from **one batch download** (`yf.download`, ~2 s); a ticker missing from the
+* Daily bars for all scan-universe tickers come from **one batch download** (`yf.download`, ~8 s for 118); a ticker missing from the
   batch is retried alone. If it still fails, its last good values (from the live site's `data.json`, passed as
   `PREV_DATA` by the workflow, or the local `site/data.json`) are kept and marked **stale**; a stale ticker's momentum is
-  still ranked if it was measured at the same month-end.
+  still ranked if it was measured at the same month-end. Home-page cards are built in parallel; a card that fails keeps the
+  previous build's card, marked stale.
 * Regular-session bars only. When the market is closed, everything reflects the last session; each card shows its timestamp.
 * Missing values are `null` in JSON and `—` on the page. Nothing is fabricated or interpolated.
 * A ticker that returns no history gets a "No data available" card.
 
-## Trend-state rules (also on the page under "How signals work")
+## Trend-state rules (also on the page under "How it works")
 Rows describe the trend so far; they **do not predict the rest of the day**. Each row uses the indicator that described
 its timeframe best in round 3 (`research/results_round3_desc.json`, test windows: 60m from 2025-07-01 = 332 sessions;
 30m/15m/5m from 2026-09-14 = 30 sessions; 1m from 2026-10-12 = 10 sessions):
@@ -152,6 +191,20 @@ tightest relative spread `(ask−bid)/mid`, ties → nearest strike. Tabs: 0 = n
 ## Hosting (recommended: GitHub Pages + GitHub Actions, free)
 1. Create a GitHub repo (public for free Pages; private needs a paid plan for Pages), push this folder.
 2. Settings → Pages → Source: **GitHub Actions**.
-3. `.github/workflows/refresh.yml` rebuilds `data.json` on every push to `main`, every 30 min during US market hours on weekdays plus once after close, and publishes `site/`. Run it manually via "Run workflow".
-Notes: GitHub cron is best-effort (can run minutes late); Yahoo may occasionally rate-limit cloud IPs — if the build fails or returns mostly empty data, the workflow deploys the last committed `site/data.json` instead of a broken page.
+3. `.github/workflows/refresh.yml` runs on every push to `main`, on "Run workflow", and on a schedule (all UTC, Mon–Fri):
+   `7,37 13-21` (every 30 min through US market hours in EDT and EST), post-close `17 22`, `47 22`, `33 23`, plus `13 1`
+   Tue–Sat as a late safety net. In Pacific time during daylight saving: every 30 min 6:07 AM–2:37 PM PT, then 3:17, 3:47,
+   4:33 and 6:13 PM PT (one hour earlier in Pacific during standard time, 5:07 AM–1:37 PM, 2:17, 2:47, 3:33, 5:13 PM PT).
+Notes: GitHub cron is best effort. On Mon Oct 26 2026 only 2 of the 18 `*/30` intraday slots ran (12:07 PM PT, and 4:16 PM PT
+1 h 46 min late), and the 22:15 UTC post-close slot ran at 6:28 PM PT, 3 h 13 min late. Runs at the top of the hour are the
+most delayed, so the slots are now on off-the-hour minutes, and there are several post-close slots. Every scheduled run first
+fetches the live `data.json` / `backtest.json` and asks `freshness.py`: during the session it rebuilds only if the live data is
+≥ 20 min old; outside it, only if no build has been published since the last session's close + 15 min (or that build lacks
+the session's bar), and it reruns the backtest only if the live backtest predates that close. Otherwise the run stops after the
+check (no build, no deploy), so the extra slots are harmless, and the first post-close slot that fires does the post-close
+build + backtest (no longer tied to one exact cron string). If `pip install` fails on a scheduled run, the live site is
+left as is. Push / manual runs always build. If the build fails or returns mostly empty data, the workflow deploys the
+last committed `site/data.json` instead of a broken page; Yahoo may occasionally rate-limit cloud IPs.
+GitHub disables scheduled workflows in a public repo after 60 days without repository activity (re-enable on the
+Actions tab). A fully reliable trigger would need an external scheduler calling `workflow_dispatch` with a token (not set up).
 Alternative: Cloudflare Pages / Netlify can host `site/`, but still need a scheduler (e.g. the same Action) to rebuild data.

@@ -2,11 +2,18 @@
 # If the data build fails or returns no usable data, the committed site/data.json is deployed instead.
 # The backtest (backtest.py -> site/backtest.json) reruns once a day on the post-close schedule (or on demand);
 # other runs re-publish the newest valid backtest.json (currently live copy or committed copy).
+# Scheduling: GitHub cron is best effort (on Oct 26 2026 only 2 of 18 intraday slots fired and the 22:15 UTC slot
+# started 3 h late), so there are several off-the-hour slots and every scheduled run first asks freshness.py whether
+# the LIVE site is already fresh. If it is, the run stops after that check (no build, no deploy), so extra slots are
+# harmless and the first post-close slot that actually fires does the post-close build + backtest.
 name: refresh-data
 on:
   schedule:
-    - cron: "*/30 13-21 * * 1-5"   # every 30 min, 13:00-21:30 UTC Mon-Fri (covers US market hours in EDT and EST)
-    - cron: "15 22 * * 1-5"        # one post-close build (22:15 UTC)
+    - cron: "7,37 13-21 * * 1-5"   # every 30 min at :07/:37, 13:07-21:37 UTC Mon-Fri (US market hours in EDT and EST)
+    - cron: "17 22 * * 1-5"        # post-close slots (first one that fires builds; later ones skip if fresh)
+    - cron: "47 22 * * 1-5"
+    - cron: "33 23 * * 1-5"
+    - cron: "13 1 * * 2-6"         # late safety net (01:13 UTC = evening of the previous US trading day)
   push:
     branches: [main]
   workflow_dispatch:
@@ -23,6 +30,8 @@ concurrency: { group: pages, cancel-in-progress: false }
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.go.outputs.publish }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -40,21 +49,31 @@ jobs:
         id: install
         continue-on-error: true
         run: pip install -r requirements.txt
-      - name: Setup-rule unit tests (fixture data only)
+      - name: Freshness check (skip scheduled runs when the live site is already fresh)
+        id: fresh
         if: steps.install.outcome == 'success'
+        run: python freshness.py "${{ github.event_name }}" "$RUNNER_TEMP/data.live.json" "$RUNNER_TEMP/backtest.live.json" "${{ github.event_name == 'workflow_dispatch' && inputs.backtest }}"
+      - name: Publish this run?
+        id: go
+        # scheduled: only if freshness says so (if install failed, keep the live site rather than deploy committed data)
+        run: echo "publish=${{ github.event_name != 'schedule' || steps.fresh.outputs.build == 'true' }}" >> "$GITHUB_OUTPUT"
+      - name: Setup-rule unit tests (fixture data only)
+        if: steps.install.outcome == 'success' && steps.go.outputs.publish == 'true'
         run: python tests/test_setup.py
       # The Pullback setup rule is frozen in signals.py (SETUP) and its research stats in the committed
       # site/setups.json. This job only recomputes per-ticker stats with new bars; it never re-tunes rules.
-      # Daily bars for all 23 universe tickers come from one batch download (per-ticker retry on failure).
+      # Daily bars for every scan-universe ticker (config.json scan_universe) come from one batch download
+      # (per-ticker retry on failure).
       - name: Build data
         id: build
-        if: steps.install.outcome == 'success'
+        if: steps.install.outcome == 'success' && steps.go.outputs.publish == 'true'
         continue-on-error: true
         timeout-minutes: 10
         env:
           PREV_DATA: ${{ runner.temp }}/data.live.json
         run: python build_data.py
       - name: Validate data (fall back to committed data.json if bad)
+        if: steps.go.outputs.publish == 'true'
         run: |
           python - <<'PY'
           import json, os, shutil, sys
@@ -72,13 +91,14 @@ jobs:
               print("::warning::Data build failed or incomplete; deploying last committed data.json")
               shutil.copy(bak, "site/data.json")
           PY
-      - name: Backtest (daily after close, or manual)
+      - name: Backtest (once per session after the close, or manual)
         id: backtest
-        if: steps.install.outcome == 'success' && (github.event.schedule == '15 22 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.backtest))
+        if: steps.install.outcome == 'success' && steps.go.outputs.publish == 'true' && steps.fresh.outputs.backtest == 'true'
         continue-on-error: true
         timeout-minutes: 15
         run: python backtest.py
       - name: Choose backtest.json (fresh if valid, else newest valid live/committed copy)
+        if: steps.go.outputs.publish == 'true'
         run: |
           python - <<'PY'
           import json, os, shutil
@@ -105,9 +125,11 @@ jobs:
                   print("using", cands[-1][1], cands[-1][0]); shutil.copy(cands[-1][1], "site/backtest.json")
           PY
       - uses: actions/upload-pages-artifact@v3
+        if: steps.go.outputs.publish == 'true'
         with: { path: site }
   deploy:
     needs: build
+    if: needs.build.outputs.publish == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

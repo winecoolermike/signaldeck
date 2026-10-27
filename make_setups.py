@@ -10,7 +10,7 @@ each ticker's own stats with new bars, via signals.pullback_ticker_stats).
 """
 import json, hashlib, datetime as dt
 from pathlib import Path
-from signals import SETUP
+from signals import SETUP, CFG, UNIVERSE
 
 ROOT = Path(__file__).parent; RD = ROOT / "research"; OUT = ROOT / "site" / "setups.json"
 FILES = {k: RD / f"results_{k}.json" for k in ("daily", "stage2", "cluster", "round2", "round2_robust", "round3", "round3_desc")}
@@ -134,5 +134,59 @@ out = {"generated_at": dt.datetime.now().astimezone().isoformat(timespec="second
                     "source_files": {k: {"file": f"research/{p.name}", "sha256": hashlib.sha256(p.read_bytes()).hexdigest()} for k, p in FILES.items()}},
        "current_rule_oos": {s: pick(cur[s]["test"]) | {"horizon_days": 5} for s in SETS},
        "versions": versions, "variants": rows, "variants_60m": h60, "ladder": ladder, "risk": risk, "round3": rows3}
+# round 4: the same rules re-validated on the bigger universe U4 (S&P 100 + ETFs + This Week; research/PREREG4.md)
+R4F = RD / "results_round4.json"
+R4 = json.loads(R4F.read_text()) if R4F.exists() else None
+if R4:
+    out["research"]["source_files"]["round4"] = {"file": f"research/{R4F.name}", "sha256": hashlib.sha256(R4F.read_bytes()).hexdigest()}
+    G, B, RO = R4["rules"]["R4-2 pullback, top-10 momentum"], R4["rules"]["R4-1 base pullback"], R4["robust"]
+    out["round4"] = {"meta": R4["meta"], "prereg": "research/PREREG4.md",
+                     "rules": {k: {"survives": v["survives"], **{st: {pn: pick2(v[st][pn]) for pn in ("train", "test")} for st in ("U4", "new_names", "old23", "core7")},
+                                   "test_by_year": {y: pick2(m) for y, m in v["U4"]["by_year"].items()}}
+                               for k, v in R4["rules"].items()},
+                     "robust": {k: {st: {pn: pick2(m) for pn, m in v[st].items()} for st in v} for k, v in RO.items()},
+                     "concentration": R4["concentration"]}
+    _pr, _rel = RD / "PREREG4.md", RD / "fetch4_reliability.json"
+    if _pr.exists():
+        out["round4"]["prereg_text"] = _pr.read_text()
+        out["research"]["source_files"]["prereg4"] = {"file": "research/PREREG4.md", "sha256": hashlib.sha256(_pr.read_bytes()).hexdigest()}
+    if _rel.exists():
+        out["round4"]["reliability"] = {"downloads": [{k: r[k] for k in ("seconds", "missing", "lagging", "last")} for r in json.loads(_rel.read_text())["runs"]]}
+
+def live_block():
+    """Stats the dashboard card shows, for the universe the live scanner actually uses (config scan_universe.key)."""
+    key = (CFG.get("scan_universe") or {}).get("key", "23")
+    if key == "U4" and R4:
+        m = R4["meta"]; r = out["round4"]["rules"]; ro = out["round4"]["robust"]
+        w = lambda x: {"n": x["n"], "hit": x["hit"], "exp_net_pct": x["exp_net_pct"], "pf": x.get("profit_factor_net"),
+                       "worst_trade_pct": x.get("worst_trade_pct"), "avg_loss_pct": x.get("avg_loss_net")}
+        ga, al = r["R4-2 pullback, top-10 momentum"], r["R4-1 base pullback"]
+        return {"universe_key": "U4", "source": "round 4 (research/results_round4.json)", "n_universe": m["n_universe"],
+                "test": [TEST0, m["data_end"]], "alpha": m["alpha"], "tests_cumulative": m["tests_cumulative"],
+                "grade_a": {"test": ga["U4"]["test"], "train": ga["U4"]["train"], "test_by_year": ga["test_by_year"],
+                            "new_names": ga["new_names"]["test"], "core7": ga["core7"]["test"], "old23": ga["old23"]["test"],
+                            "next_open_entry": ro["next_open"]["U4"]["test"], "survives": ga["survives"]},
+                "all": {"test": al["U4"]["test"], "train": al["U4"]["train"], "core7": al["core7"]["test"], "survives": al["survives"]},
+                "risk": {"stop": {"label": risk["stop"]["label"],
+                                  "all_pullbacks": {"no_stop": {"test": w(al["U4"]["test"]), "train": w(al["U4"]["train"])},
+                                                    "stop": {"test": w(ro["base_stop_3atr"]["U4"]["test"]), "train": w(ro["base_stop_3atr"]["U4"]["train"])}},
+                                  "grade_a": {"no_stop": {"test": w(ga["U4"]["test"]), "train": w(ga["U4"]["train"])},
+                                              "stop": {"test": w(ro["stop_3atr"]["U4"]["test"]), "train": w(ro["stop_3atr"]["U4"]["train"])}}},
+                         "sizing": {"label": risk["sizing"]["label"], "no_sizing": {"test": w(al["U4"]["test"])},
+                                    "atr_sizing": {"test": w(ro["base_atr_sizing"]["U4"]["test"])}}},
+                "concentration": R4["concentration"]}
+    v = out["versions"]   # original 23-ticker universe: round-1 "all" + round-2 C2 stats
+    return {"universe_key": "23", "source": "rounds 1-2", "n_universe": len(out["research"]["tickers"]["all23"]),
+            "test": out["research"]["test"], "alpha": risk["round2_alpha"], "tests_cumulative": rows3["tests_cumulative"],
+            "grade_a": {"test": v["grade_a"]["test"]["all23"], "train": v["grade_a"]["train"]["all23"], "core7": v["grade_a"]["test"]["core7"],
+                        "next_open_entry": v["grade_a"]["next_open_entry"]},
+            "all": {"test": v["all"]["test"]["all23"], "train": v["all"]["train"]["all23"], "core7": v["all"]["test"]["core7"]},
+            "risk": risk}
+TEST0 = D["params"]["test"][0]
+out["live"] = live_block()
+_b8 = R2["B"]["B8 XS momentum top 5 (monthly)"]["all23"]["test"]
+out["home_evidence"] = {"b8": {"name": "B8 XS momentum top 5 (monthly), all23, test", "sharpe": _b8["sharpe"], "cagr_pct": _b8["cagr_pct"],
+                               "bench_sharpe": _b8["bench"]["sharpe"], "bench_cagr_pct": _b8["bench"]["cagr_pct"], "boot_p": _b8["boot_p"]}}
 OUT.write_text(json.dumps(out, indent=1, default=str))
+print("live universe:", out["live"]["universe_key"], "grade A test n", out["live"]["grade_a"]["test"]["n"])
 print("wrote", OUT, "| survived:", [r["name"] for r in rows if r["survived"]], "| tested", n_tested, "alpha", alpha)

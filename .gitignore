@@ -4,3 +4,5 @@ __pycache__/
 /screenshot*.png
 /reference.png
 /research/
+/team/
+alert_state.json

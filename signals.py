@@ -146,7 +146,13 @@ SETUP = {
     "min_trades": 30,            # fewer trades -> "too few to trust"
     "price_basis": "split- and dividend-adjusted daily bars (as in the research)",
 }
-UNIVERSE = CFG["tickers"] + CFG["comparison_tickers"]
+def universe_from_config(cfg):
+    """Scan universe, config-driven and de-duplicated in order: This Week tickers, the 16 comparison tickers, then the
+    scan_universe ETFs and S&P 100 list (research round 4). Without a scan_universe block it is the original 23."""
+    su = cfg.get("scan_universe") or {}
+    return list(dict.fromkeys(cfg["tickers"] + cfg["comparison_tickers"] + su.get("etfs", []) + su.get("sp100", [])))
+
+UNIVERSE = universe_from_config(CFG)
 
 
 # ---------------- trading calendar (NYSE full-day holidays; used only to know if the last bar ends a month) ----------
@@ -320,10 +326,56 @@ def completed_bars(df, minutes, now_ny):
     end = df.index + pd.Timedelta(minutes=minutes)
     return df[end <= now_ny]
 
+def early_close(d):
+    """NYSE 13:00 ET early closes: July 3 (when it is a trading day), the day after Thanksgiving, Dec 24 (when a trading day)."""
+    d = pd.Timestamp(d).normalize()
+    if not is_trading_day(d): return False
+    nov = pd.date_range(f"{d.year}-11-01", f"{d.year}-11-30"); thanks = nov[nov.weekday == 3][3]
+    return (d.month, d.day) in ((7, 3), (12, 24)) or d == thanks + pd.Timedelta(days=1)
+
+def close_minutes(d):
+    """Regular-session close in minutes after midnight ET for trading day d (960 = 16:00, 780 = 13:00)."""
+    return 780 if early_close(d) else 960
+
 def session_open(now_ny):
-    """True on a trading weekday between 09:30 and 16:00 ET."""
-    now_ny = pd.Timestamp(now_ny); hm = now_ny.hour * 60 + now_ny.minute
-    return is_trading_day(now_ny.tz_localize(None)) and 570 <= hm < 960
+    """True on a trading day between 09:30 ET and the close (16:00, or 13:00 on early-close days)."""
+    now_ny = pd.Timestamp(now_ny); hm = now_ny.hour * 60 + now_ny.minute; d = now_ny.tz_localize(None).normalize()
+    return is_trading_day(d) and 570 <= hm < close_minutes(d)
+
+def market_status(now_ny):
+    """{state: open|pre|after|closed, label, next_open, closes_at}. Pre-market 04:00-09:30, after-hours to 20:00 ET."""
+    now_ny = pd.Timestamp(now_ny); d = now_ny.tz_localize(None).normalize(); hm = now_ny.hour * 60 + now_ny.minute
+    td = is_trading_day(d); cm = close_minutes(d) if td else None
+    if td and 570 <= hm < cm: st = "open"
+    elif td and 240 <= hm < 570: st = "pre"
+    elif td and cm <= hm < 1200: st = "after"
+    else: st = "closed"
+    nxt = d if td and hm < 570 else next_trading_day(d)
+    lab = {"open": "Market open", "pre": "Pre-market", "after": "After hours", "closed": "Market closed"}[st]
+    return {"state": st, "label": lab, "early_close": bool(td and cm == 780),
+            "closes_at": f"{cm // 60:02d}:{cm % 60:02d} ET" if st == "open" else None,
+            "next_open": f"{nxt.date()} 09:30 ET" if st != "open" else None}
+
+def calendar_lists(years):
+    """Holidays and early closes for the given years (the front end uses them for the live market-status chip)."""
+    hol = sorted(str(h.date()) for y in years for h in nyse_holidays(y))
+    days = pd.date_range(f"{min(years)}-01-01", f"{max(years)}-12-31")
+    return {"holidays": hol, "early_closes": [str(x.date()) for x in days if x.weekday() < 5 and early_close(x)]}
+
+
+# ---------------- home page sections (config "home") -------------
+def home_sections(rows, this_week, top):
+    """rows: scanner rows (ticker, fired, grade, mom_rank, status). Returns the ordered home sections:
+    firing  = every ticker whose pullback setup fires on the last completed close (Grade A first, then by rank),
+    leaders = the current top `top` by 12-1 momentum rank (where Grade A setups come from), by rank,
+    this_week = the user's own list, in config order (always shown, data or not)."""
+    by = {r["ticker"]: r for r in rows}
+    rk = lambda r: (r.get("mom_rank") is None, r.get("mom_rank") or 0, r["ticker"])
+    fire = sorted([r for r in rows if r.get("fired")], key=lambda r: (r.get("grade") != "A",) + rk(r))
+    lead = sorted([r for r in rows if r.get("mom_rank") is not None and r["mom_rank"] <= top], key=rk)
+    return [{"key": "firing", "tickers": [r["ticker"] for r in fire]},
+            {"key": "leaders", "tickers": [r["ticker"] for r in lead]},
+            {"key": "this_week", "tickers": list(this_week), "missing": [t for t in this_week if t not in by]}]
 
 def ema_state(df, minutes, now_ny):
     """15m row: Up if EMA9 > EMA21 of completed-bar closes (EMAs run continuously across sessions), Down if below.

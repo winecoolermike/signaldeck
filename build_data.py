@@ -17,7 +17,8 @@ warnings.filterwarnings("ignore")
 from signals import (ROOT, CFG, NY, num, ema, rsi, macd_hist, atr, adx, adx_label,
                      frame_signal, bias_conf, daily_label, history, levels,
                      SETUP, UNIVERSE, pullback_setup, pullback_ticker_stats, completed_sessions,
-                     momentum_ranks, ROWS, ema_state, vwap_state)
+                     momentum_ranks, ROWS, ema_state, vwap_state,
+                     market_status, calendar_lists, home_sections)
 
 OUT = ROOT / "site" / "data.json"
 OHLCV = ["Open", "High", "Low", "Close", "Volume"]
@@ -38,7 +39,7 @@ def load_prev():
     return best[1] if best else {}
 
 
-# ---------------- daily bars for the whole 23-ticker universe: one batch call, per-ticker retry -------------
+# ---------------- daily bars for the whole scan universe (config scan_universe): one batch call, per-ticker retry -------------
 def fetch_universe(syms):
     """Returns ({sym: adjusted daily OHLCV with tz-naive dates, or None}, {sym: how it was fetched})."""
     got, how = {}, {}
@@ -168,7 +169,7 @@ def build_ticker(sym, asof, U):
 
 def setup_block(sym, U):
     """Pullback setup on the latest COMPLETED daily close (adjusted bars, full history, as in the research), graded by
-    this ticker's 12-1 momentum rank in the 23-ticker universe. Rule parameters come from signals.SETUP and are never
+    this ticker's 12-1 momentum rank in the scan universe. Rule parameters come from signals.SETUP and are never
     changed here; only the stats are recomputed with new bars. If this ticker's bars could not be fetched, the previous
     good block is reused and marked stale."""
     d = U["daily"].get(sym)
@@ -183,7 +184,7 @@ def setup_block(sym, U):
 
 
 def universe(now_ny, prev):
-    """Batch-fetch the 23 tickers, compute momentum ranks (as in research2.py) and one scanner row per ticker."""
+    """Batch-fetch the scan universe, compute momentum ranks (as in research2.py) and one scanner row per ticker."""
     raw, how = fetch_universe(UNIVERSE)
     daily = {s: completed_sessions(d, now_ny.replace(tzinfo=None)) if d is not None else None for s, d in raw.items()}
     daily = {s: (d if d is not None and len(d) else None) for s, d in daily.items()}
@@ -222,12 +223,14 @@ def universe(now_ny, prev):
                      "above_sma200": st.get("above_sma200"), "rsi2": st["rsi2"], "adx": st["adx"],
                      "mom_12_1": num(mom * 100, 2), "mom_asof": st["mom_asof"], "mom_rank": st["mom_rank"],
                      "rank_of": rank_of, "in_top": st["in_top"], "fired": st.get("fired", False), "grade": st.get("grade"),
-                     "last_fired": st["last_fired"], "reason": st.get("reason")})
+                     "last_fired": st["last_fired"], "reason": st.get("reason"),
+                     "leader": bool(st["mom_rank"] is not None and st["mom_rank"] <= CFG.get("home", {}).get("leaders_top", 10))})
     order = {"A": 0, "B": 1, None: 2}
     rows.sort(key=lambda r: (order.get(r.get("grade"), 2), r.get("mom_rank") or 99, r["ticker"]))
     U["scanner"] = {"bar_date": str(last.date()) if last is not None else None,
                     "rank_asof": str(me.date()) if me is not None else None, "rank_of": rank_of,
-                    "top_n": SETUP["mom_top"], "universe": UNIVERSE, "rows": rows,
+                    "top_n": SETUP["mom_top"], "universe": UNIVERSE, "universe_key": (CFG.get("scan_universe") or {}).get("key", "23"),
+                    "universe_label": (CFG.get("scan_universe") or {}).get("label", "the 23 research tickers"), "rows": rows,
                     "fetch": {k: sum(v == k for v in how.values()) for k in ("batch", "retry", "failed")}}
     return U
 
@@ -250,6 +253,23 @@ def quality(frames, total, opts, daily):
             "options_liquidity": num(liq, 3), "avg_rel_spread": num(sum(spreads) / len(spreads), 4) if spreads else None}
 
 
+def build_cards(syms, asof, U, prev):
+    """Full cards for the home-page tickers, built in parallel (each card = its own yfinance calls). A card that fails
+    this run falls back to the previous good card for that ticker, marked stale."""
+    from concurrent.futures import ThreadPoolExecutor
+    prev_cards = {t["ticker"]: t for t in prev.get("tickers", []) if t.get("status") == "ok"}
+    def one(sym):
+        try:
+            c = build_ticker(sym, asof, U)
+        except Exception as e:
+            traceback.print_exc(); c = {"ticker": sym, "status": "no_data", "notes": [f"build error: {e}"]}
+        if c.get("status") != "ok" and sym in prev_cards:
+            c = {**prev_cards[sym], "stale": True, "notes": (prev_cards[sym].get("notes") or []) + ["card kept from the previous build (this run could not refresh it)"]}
+        return c
+    with ThreadPoolExecutor(max_workers=CFG.get("home", {}).get("card_workers", 4)) as ex:
+        return list(ex.map(one, syms))
+
+
 def main():
     asof = dt.datetime.now(ZoneInfo("America/New_York")).date()  # US market date, independent of runner TZ (UTC on GitHub)
     out = {"generated_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -260,13 +280,15 @@ def main():
     U = universe(now_ny, prev)
     out["scanner"] = U["scanner"]
     print("universe fetch:", U["scanner"]["fetch"], file=sys.stderr)
-    for sym in CFG["tickers"]:
-        print("building", sym, file=sys.stderr)
-        try:
-            out["tickers"].append(build_ticker(sym, asof, U))
-        except Exception as e:
-            traceback.print_exc()
-            out["tickers"].append({"ticker": sym, "status": "no_data", "notes": [f"build error: {e}"]})
+    H = CFG.get("home", {})
+    secs = home_sections(U["scanner"]["rows"], CFG["tickers"], H.get("leaders_top", 10))
+    syms = list(dict.fromkeys(t for sec in secs for t in sec["tickers"]))   # one full card per home ticker
+    t0 = dt.datetime.now()
+    out["tickers"] = build_cards(syms, asof, U, prev)
+    print(f"built {len(syms)} cards in {(dt.datetime.now() - t0).total_seconds():.0f}s", file=sys.stderr)
+    out["home"] = {"sections": secs, "leaders_top": H.get("leaders_top", 10),
+                   "stale_after_minutes_open": H.get("stale_after_minutes_open", 45),
+                   "market_at_build": market_status(now_ny), "calendar": calendar_lists([now_ny.year, now_ny.year + 1])}
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(out, indent=1))
     print("wrote", OUT, file=sys.stderr)

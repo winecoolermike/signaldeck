@@ -9,7 +9,7 @@
 <body>
 <header class="top">
   <div class="brand"><span class="logo">◆</span> SignalDeck</div>
-  <nav><a href="./">Dashboard</a><a href="scanner.html">Scanner</a><a href="./#how">How signals work</a><a href="backtest.html" class="on">Backtest</a></nav>
+  <nav><a href="./">Home</a><a href="scanner.html">Scanner</a><a href="./#how">How it works</a><a href="backtest.html" class="on">Backtest</a></nav>
   <div class="meta" id="meta">loading…</div>
 </header>
 <main class="bt" id="bt">
@@ -19,7 +19,7 @@
     <h2>Setups: what survived out-of-sample research</h2>
     <p class="muted" id="su-intro">Loading setups.json…</p>
     <div class="note-box" id="su-warn"></div>
-    <h3>The Pullback setup (shown on the dashboard only when it fires)</h3>
+    <h3>The Pullback setup (shown on the home page only when it fires)</h3>
     <div class="tablewrap"><table class="bt-t" id="su-versions"></table></div>
     <p class="muted" id="su-years"></p>
     <h3>Every rule tested: survived vs failed</h3>
@@ -28,6 +28,16 @@
     <h3>Hit rate vs number of trades</h3>
     <p class="muted" id="su-ladder-note">Pre-declared selectivity ladder.</p>
     <div class="tablewrap"><table class="bt-t" id="su-ladder"></table></div>
+  </section>
+
+  <section id="round4">
+    <h2>Round 4: re-test on a bigger universe (S&amp;P 100 + ETFs)</h2>
+    <p class="muted" id="r4-intro">Loading…</p>
+    <div class="tablewrap"><table class="bt-t" id="r4-rules"></table></div>
+    <h3>Grade A by year and robustness</h3>
+    <div class="tablewrap"><table class="bt-t" id="r4-robust"></table></div>
+    <div class="note-box" id="r4-warn"></div>
+    <details class="prereg"><summary>Pre-registration (written before any round-4 result)</summary><pre id="r4-prereg"></pre></details>
   </section>
 
   <section>

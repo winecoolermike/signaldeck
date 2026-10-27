@@ -9,10 +9,19 @@
 <body>
 <header class="top">
   <div class="brand"><span class="logo">◆</span> SignalDeck</div>
-  <nav><a href="index.html#cards" class="on">Dashboard</a><a href="scanner.html">Scanner</a><a href="#how">How signals work</a><a href="backtest.html">Backtest</a></nav>
+  <nav><a href="index.html" class="on">Home</a><a href="scanner.html">Scanner</a><a href="#how">How it works</a><a href="backtest.html">Backtest</a></nav>
   <div class="meta" id="meta">loading…</div>
 </header>
-<main id="cards" class="cards"></main>
+<div class="strip" id="strip" aria-live="polite"><span class="chip">loading…</span></div>
+<div class="controls" id="controls">
+  <div class="filters" role="group" aria-label="Show sections">
+    <button data-f="all" class="on">All</button><button data-f="firing">Firing</button><button data-f="leaders">Leaders</button><button data-f="this_week">This Week</button>
+  </div>
+  <label class="sort">Sort <select id="sort">
+    <option value="default">Default</option><option value="rank">Momentum rank</option><option value="rsi">RSI(2) low → high</option>
+    <option value="chg">Day change</option><option value="tk">Ticker A–Z</option></select></label>
+</div>
+<main id="home" class="home"></main>
 <section id="how" class="how">
   <h2>How signals work</h2>
   <p>Every number on this page is computed by <code>build_data.py</code> from Yahoo Finance data (via the open-source <code>yfinance</code> library). Nothing is estimated or filled in by hand — if a value can't be computed, it shows <b>—</b>. Rules are deliberately simple and fixed; they describe the current state of price, they do not predict it.</p>
@@ -23,8 +32,10 @@
     <li>close &gt; SMA(200) of daily closes, <b>and</b></li>
     <li>RSI(2, Wilder) &lt; 10.</li>
   </ul>
-  <p><b>Grade A</b> if the stock is also in the <b>top 10 of the 23-stock universe by 12-1 month momentum</b>, otherwise grade B. 12-1 momentum = close 21 trading days ago ÷ close 252 trading days ago − 1 (the last month is skipped), on adjusted closes. The ranking is taken at the <b>last completed month-end close</b> and used until the next one; on the last trading day of a month the new ranking applies from that day's close (same convention as the research). Stocks without 12 months of history are unranked (so ranks are currently "of 22"). ADX(14) is still shown, for information only. The universe is the 7 dashboard tickers plus SPY, QQQ, IWM, AAPL, MSFT, AMZN, JPM, XOM, JNJ, PG, KO, WMT, HD, CAT, UNH, NEE; all 23 are on the <a href="scanner.html">Scanner</a>.</p>
-  <p><b>Why momentum instead of ADX:</b> in round-2 testing (2005–22 to choose, 2023 → now to score) the top-10-momentum filter raised net per trade and cut the worst trade while keeping the hit rate; its figures (from <code>setups.json</code>) are in the card's table and on <a href="backtest.html#setups">Backtest → Setups</a>. Honest caveat: its p-value cleared the multiple-testing bar in force when it was tested, but against the stricter bar after round 3's extra tests it narrowly misses (exact numbers on the backtest page). On the 7 dashboard tickers alone it was not significant.</p>
+  <p><b>Grade A</b> if the stock is also in the <b>top 10 of the scan universe by 12-1 month momentum</b> (<span class="uv-n">118</span> stocks and ETFs, see <a href="#how-list">the list</a> below), otherwise grade B. 12-1 momentum = close 21 trading days ago ÷ close 252 trading days ago − 1 (the last month is skipped), on adjusted closes. The ranking is taken at the <b>last completed month-end close</b> and used until the next one; on the last trading day of a month the new ranking applies from that day's close (same convention as the research). Stocks without 12 months of history are unranked. ADX(14) is still shown, for information only. Every stock in the universe is on the <a href="scanner.html">Scanner</a>.</p>
+  <h3 id="how-list">Why the home page shows these lists</h3>
+  <div id="list-evidence"><p class="muted">Loading the research figures…</p></div>
+  <p><b>Why momentum instead of ADX:</b> in round-2 testing on the original 23 stocks (2005–22 to choose, 2023 → now to score) the top-10-momentum filter raised net per trade while keeping the hit rate, but its p-value narrowly missed the strictest multiple-testing bar. Round 4 re-tested the unchanged rule on the bigger universe with the same protocol, and there it cleared the stricter bar (figures in <a href="#how-list">the section above</a> and on <a href="backtest.html#round4">Backtest → Round 4</a>). On the 7 This Week tickers alone it was not significant.</p>
   <p><b>Exit rule:</b> the first daily close above SMA(5), or after 10 trading days, whichever comes first. Long only: no PUT/short setups and no intraday setups survived testing. The card also shows an <b>optional</b> 3×ATR(14) disaster-stop price (not part of the rule; it cut the worst losses but lowered the average) and a size hint based on the out-of-sample loss sizes. When the setup is not firing, the card shows a muted line with the current RSI(2), SMA200 position and momentum rank, so you can see how close it is.</p>
   <p>The badge's statistics are <b>frozen out-of-sample results</b> (<code>setups.json</code>, derived from the research result files by <code>make_setups.py</code>) — see <a href="backtest.html#setups">Backtest → Setups</a>. Each ticker's own line ("X itself") is recomputed on every build with the same fixed rule over 2023 → latest close; fewer than 30 trades is flagged "too few to trust". The rule parameters live in <code>signals.py</code> (<code>SETUP</code>) and are never re-tuned by the scheduled job. Losses ran bigger than wins, results are for stock moves after 0.05%/side costs (not options), and past results don't predict future ones.</p>
 
